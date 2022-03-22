@@ -9,8 +9,6 @@ class PaymentRegisterOption(models.TransientModel):
     payment_option = fields.Selection([('cash','Cash'),('bank','Bank'),('mixed','Mixed')], string="Payment Options", default='cash')
     cash_journal_id = fields.Many2one('account.journal', string='Cash Journal', domain="[('company_id', '=', company_id), ('type','=','cash')]")
     cash_amount = fields.Float(string='Cash Amount')
-    bank_payment_option = fields.Selection([('atm', 'ATM'), ('bank_transfer', 'Bank Transfer')],
-                                      string="Bank Payment By", default='atm')
     bank_journal_id = fields.Many2one('account.journal', string='Bank Journal', domain="[('company_id', '=', company_id), ('type','=','bank')]")
     bank_amount = fields.Float(string='Bank Amount')
 

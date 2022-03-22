@@ -18,25 +18,15 @@
     'license': 'LGPL-3',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'account', 'purchase', 'sale_stock'],
+    'depends': ['base', 'account','purchase'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         'report/purchaseorder_report_customizations.xml',
         'views/purchase_order.xml',
-        'views/stock.xml',
-        'report/goods_delivery_note_report_menu.xml',
-        'views/sale_order_view.xml',
+        'report/goods_delivery_note_report_menu.xml'
     ],
-    'assets': {
-            'web.report_assets_pdf': [
-                'khalifa_report_customizations/static/src/scss/**/*',
-            ],
-            'web.report_assets_common': [
-                'khalifa_report_customizations/static/src/scss/**/*',
-            ],
-        }
     # only loaded in demonstration mode
 
 }

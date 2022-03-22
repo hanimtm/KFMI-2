@@ -6,10 +6,9 @@ from odoo.exceptions import ValidationError
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    attention = fields.Char("Attention", required=True)
-    delivery_period = fields.Char("Delivery Period", required=True)
-    incoterm_id = fields.Many2one('account.incoterms', 'Mode of Delivery',
-                                  required=True,
+    attention = fields.Char("Attention")
+    delivery_period = fields.Char("Delivery Period")
+    incoterm_id = fields.Many2one('account.incoterms', 'Mode of Delivery', states={'done': [('readonly', True)]},
                                   help="International Commercial Terms are a series of predefined commercial terms used in international transactions.")
 
     def _get_vat_text(self):

@@ -64,8 +64,7 @@ Cancel Stock Move
     'support':'info@craftsync.com',
     'depends' : ['mrp','account'],
     'data': [
-        # 'views/res_config_settings_views.xml',
-	    'views/mrp_config_settings.xml',
+        'views/res_config_settings_views.xml',
 	    'views/view_manufacturing_order.xml',
     ],
     

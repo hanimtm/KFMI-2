@@ -8,7 +8,7 @@
             <field name="page_height">0</field>
             <field name="page_width">0</field>
             <field name="orientation">Portrait</field>
-            <field name="margin_top">35</field>
+            <field name="margin_top">40</field>
             <field name="margin_bottom">16</field>
             <field name="margin_left">2</field>
             <field name="margin_right">2</field>
@@ -41,16 +41,80 @@
 
     <template id="external_layout_standard_sale">
         <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
-            <span t-if="doc.state in ['draft','sent']">
-                <div class="text-center">
-                    <img src="/khalifa_sale_report_customizations/static/src/images/quotation.png" style="height: 220px;"/>
-                </div>
-            </span>
-            <span t-if="doc.state not in ['draft','sent']">
-                <div class="text-center">
-                    <img src="/khalifa_sale_report_customizations/static/src/images/sale_order.png" style="height: 220px;"/>
-                </div>
-            </span>
+            <table style="border:1pt solid white;width:100%;padding:2pt;font-family:'Cairo'n;border-bottom:0pt solid white;"
+                   class="table-condensed">
+                <tr>
+                    <td style="padding:10pt; text-align:left;color:black;width:32.5%;">
+                        <span style="font-size:20px" t-field="company.name"/>
+                        <br/>
+                        <span t-if="company.street">
+                                <span t-field="company.street"/> -
+                            </span>
+                            <span t-if="company.street2">
+                                <span t-field="company.street2"/> -
+                            </span>
+                            <span t-if="company.city">
+                                <span t-field="company.city"/> -
+                            </span>
+                            <span t-if="company.state_id">
+                                <span t-field="company.state_id.name"/> -
+                            </span>
+                            <span t-if="company.zip">
+                                -
+                                <span t-field="company.zip"/> -
+                            </span>
+                            <span t-if="company.country_id">
+                                <span t-field="company.country_id"/>
+                            </span>
+
+                        <br/>
+                        Tel.:<span t-field="company.phone"></span>
+                        Fax.:<span t-field="company.fax"></span>
+                        <br/>
+                        VAT No.:<span t-field="company.vat"/>
+                        <br/>
+                        CR No.:<span t-field="company.company_registry"/>
+                    </td>
+                    <td style="text-align:center;vertical-align:middle;width:35%;">
+                        <span>
+                            <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+                                 style="max-height: 150px;align:left"/>
+                        </span>
+                    </td>
+                    <td style="padding:10pt; text-align:right;width:32.5%;color:black;" class="arabic">
+
+                        <span style="font-size:20px" t-field="company.arabic"/>
+                        <br/>
+                        <span t-if="company.street">
+                                <span t-field="company.street_arabic"/> -
+                            </span>
+                            <span t-if="company.street2">
+                                <span t-field="company.street_arabic2"/> -
+                            </span>
+                            <span t-if="company.city_arabic">
+                                <span t-field="company.city_arabic"/> -
+                            </span>
+                            <span t-if="company.state_arabic">
+                                <span t-field="company.state_arabic"/> -
+                            </span>
+                            <span t-if="company.zip_arabic">
+                                -
+                                <span t-field="company.zip_arabic"/> -
+                            </span>
+                            <span t-if="company.country_arabic">
+                                <span t-field="company.country_arabic"/>
+                            </span>
+
+                        <br/>
+                        <span t-field="company.arabic_phone"></span>:هاتف
+                        <span t-field="company.arabic_fax"></span>:فاكس
+                        <br/>
+                        <span t-field="company.arabic_vat"/> :الرقم الضريبي
+                        <br/>
+                        <span t-field="company.arabic_cr"/> :رقم سجل الشركة
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"
@@ -84,22 +148,22 @@
     <template id="report_khalifa_saleorder_document">
         <t t-call="khalifa_sale_report_customizations.external_layout_sale">
             <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>
-            <div class="page" style="font-family:'Cairo'n;font-size:12px">
+            <div class="page" style="font-family:'Cairo'n;">
                 <div class="oe_structure"/>
-<!--                <div class="col-xs-3">-->
-<!--                    <center>-->
-<!--                        <table width="20%" style="border-radius: 5px;">-->
-<!--                            <tr style="border-radius: 5px;">-->
-<!--                                <td height="30%" class="text-center" style="border-radius: 5px;border:1px solid black">-->
-<!--                                    <h3>-->
-<!--                                        <span t-if="doc.state not in ['draft','sent']">Sale Order <br/> أمر مبيعات</span>-->
-<!--                                    <span t-if="doc.state in ['draft','sent']">Quotation <br/> تسعيرة</span>-->
-<!--                                    </h3>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                        </table>-->
-<!--                    </center>-->
-<!--                </div>-->
+                <div class="col-xs-3">
+                    <center>
+                        <table width="20%" style="border-radius: 5px;">
+                            <tr style="border-radius: 5px;">
+                                <td height="30%" class="text-center" style="border-radius: 5px;border:1px solid black">
+                                    <h3>
+                                        <span t-if="doc.state not in ['draft','sent']">Sale Order </span>
+                                    <span t-if="doc.state in ['draft','sent']">Quotation</span>
+                                    </h3>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                </div>
                 <table width="100%"
                        style="border-spacing: 1em .5em;padding: 0 2em 1em 0;border: 1px solid white;table-layout:fixed;border-collapse:collapse;">
                     <colgroup>
@@ -152,32 +216,17 @@
                     <tr>
                         <td>ATTN</td>
                         <td>
-                            <t t-if="doc.attention">
-                                <span t-field="doc.attention"/>
-                            </t>
-                            <t t-if="not doc.attention">
-                                N/A
-                            </t>
+                            <span t-field="doc.attention"/>
                         </td>
                         <td/>
                         <td class="text-center">
-                            <t t-if="doc.date_order">
-                                <span t-field="doc.date_order" t-options="{'widget': 'date'}"/>
-                            </t>
-                            <t t-if="not doc.date_order">
-                                N/A
-                            </t>
+                            <span t-field="doc.date_order" t-options="{'widget': 'date'}"/>
                         </td>
                     </tr>
                     <tr>
                         <td>Tel</td>
                         <td>
-                            <t t-if="doc.partner_id.phone">
-                                <span t-field="doc.partner_id.phone"/>
-                            </t>
-                            <t t-if="not doc.partner_id.phone">
-                                N/A
-                            </t>
+                            <span t-field="doc.partner_id.phone"/>
                         </td>
                         <td/>
                         <th class="text-center" style="border-bottom:1px solid black;">RFQ No.</th>
@@ -185,32 +234,17 @@
                     <tr>
                         <td>Mobile</td>
                         <td>
-                            <t t-if="doc.partner_id.mobile">
-                                <span t-field="doc.partner_id.mobile"/>
-                            </t>
-                            <t t-if="not doc.partner_id.mobile">
-                                N/A
-                            </t>
+                            <span t-field="doc.partner_id.mobile"/>
                         </td>
                         <td/>
                         <td class="text-center">
-                            <t t-if="doc.origin">
-                                <span t-field="doc.origin"/>
-                            </t>
-                            <t t-if="not doc.origin">
-                                N/A
-                            </t>
+                            <span t-field="doc.origin"/>
                         </td>
                     </tr>
                     <tr>
                         <td>Email Address</td>
                         <td>
-                            <t t-if="doc.partner_id.email">
-                                <span t-field="doc.partner_id.email"/>
-                            </t>
-                            <t t-if="not doc.partner_id.email">
-                                N/A
-                            </t>
+                            <span t-field="doc.partner_id.email"/>
                         </td>
                         <td/>
                         <td/>
@@ -236,7 +270,7 @@
                     <tr>
                         <td style="border: 1px solid black;" class="text-center">
                             <span t-if="doc.effective_date"
-                                  t-esc="datetime.datetime.strptime(str(doc.effective_date), '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y')"/>
+                                  t-esc="datetime.datetime.strptime(str(o.effective_date), '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y')"/>
                         </td>
                         <td style="border: 1px solid black;" class="text-center">
                             <span t-if="doc.incoterm_id" t-field="doc.incoterm_id.name"></span>
@@ -266,6 +300,7 @@
                             PRICE
                         </th>
                         <th style="border: 1px solid black;width:15%;" name="th_amount" class="text-center">TOTAL
+                            TAXABLE
                         </th>
                     </tr>
                     <tbody>
@@ -352,7 +387,7 @@
 
                         <tr style="border: 1px solid white;">
                             <td colspan="6" class="text-right font-weight-bold" style="border-top:none;">
-                                <span>TOTAL WITH VAT</span>
+                                <span>TOTAL</span>
                             </td>
                             <td style="border: 1px solid black;">
                                 <span t-field="doc.currency_id.symbol"></span>
@@ -384,13 +419,13 @@
                 </div>
 
                 <br/>
-                    <table style="width:100%;border: 1px solid black;">
+                    <table style="width:100%;">
                         <tr>
-                            <th style="width:50%;border:1px solid black;">
-                                <span><p>Sales Representative<br/></p></span>
+                            <th style="width:50%;border-bottom 1px solid black;">
+                                <span>Sales Representative</span>
                             </th>
-                            <th style="width:50%;border:1px solid black;">
-                                <span><p>Sales &amp; Marketing Manager<br/></p></span>
+                            <th style="width:50%;border-bottom 1px solid black;">
+                                <span>Sales &amp; Marketing Manager</span>
                             </th>
                         </tr>
                     </table>

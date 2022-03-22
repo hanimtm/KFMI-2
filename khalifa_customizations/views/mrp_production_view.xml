@@ -21,17 +21,8 @@
                     <field name="label"/>
                     <field name="line_no"/>
                 </xpath>
-                <xpath expr="//button[@name='button_unbuild']" position="attributes">
-                    <attribute name="groups">khalifa_customizations.allow_unbuild</attribute>
-                </xpath>
             </field>
         </record>
-        <menuitem id="mrp.menu_mrp_unbuild"
-          name="Unbuild Orders"
-          parent="mrp.menu_mrp_manufacturing"
-          action="mrp.mrp_unbuild"
-          groups="khalifa_customizations.allow_unbuild"
-          sequence="20"/>
 
     </data>
 </odoo>

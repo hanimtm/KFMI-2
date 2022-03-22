@@ -8,21 +8,31 @@
     'author': 'AMCL',
     'Category':'HR',
     'summary': """
-        This Module allows you to manage all type of expenses
+    This Module allows you to manage all type of expenses
     """,
-    'description': """
-        Payment, Vendor payment, Customer Payment, Request Payment 
-        """,
+    'description': """ 
+            Payment
+            Payment request
+
+		Vendor payment, 
+		Customer Payment,
+	 	Request Payment,
+		Payment,
+		Payment request
+		
+     """,
+
     'depends': [
-        'base', 'purchase','account'
+        'purchase','account'
+
     ],
     'data': [
         'security/ir.model.access.csv',
         'security/data.xml',
         'views/payment_request.xml',
         'report/payment_request_report.xml',
-        'report/report_request_for_payment.xml',
         'report/report.xml'
+
     ],
     'license': 'AGPL-3',
     'installable': True,

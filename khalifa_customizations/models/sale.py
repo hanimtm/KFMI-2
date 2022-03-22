@@ -1,48 +1,23 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
-import json
-import odoo.addons.decimal_precision as dp
+
 
 class Sale(models.Model):
     _inherit = 'sale.order'
-
-    @api.depends('order_line.price_total')
-    def _amount_all(self):
-        """
-        Compute the total amounts of the SO.
-        """
-        for order in self:
-            amount_untaxed = amount_tax = amount_discount = 0.0
-            for line in order.order_line:
-                amount_untaxed += line.price_subtotal
-                amount_tax += line.price_tax
-                amount_discount += (line.product_uom_qty * line.price_unit * line.discount) / 100
-            order.update({
-                'amount_untaxed': amount_untaxed,
-                'amount_tax': amount_tax,
-                'amount_discount': amount_discount,
-                'amount_total': amount_untaxed + amount_tax,
-            })
 
     show_request_bom = fields.Boolean(string='Show Request BOM', compute="set_show_request_bom")
     bom_request_id = fields.Many2one('bom.request', string='BOM Request', copy=False)
     total_delivered = fields.Float(string='Delivered', compute='get_total_delivered')
     state = fields.Selection(selection_add=[('bom_requested', 'BOM Requested'),('dm_approve', 'To DM Approve'),('sm_approve', 'To SM Approve'),('sent', 'Quotation Sent'),('approve','Approved'),('sale','Sales Order')])
-    discount_type = fields.Selection([('percent', 'Percentage'), ('amount', 'Amount')], string='Discount type',
-                                     readonly=True,
-                                     states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
-                                     default='percent')
-    discount_rate = fields.Float('Discount Rate', digits=dp.get_precision('Account'),
-                                 readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]})
-    amount_untaxed = fields.Monetary(string='Untaxed Amount', store=True, readonly=True, compute='_amount_all',
-                                     track_visibility='always')
-    amount_tax = fields.Monetary(string='Taxes', store=True, readonly=True, compute='_amount_all',
-                                 track_visibility='always')
-    amount_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_amount_all',
-                                   track_visibility='always')
-    amount_discount = fields.Monetary(string='Discount', store=True, readonly=True, compute='_amount_all',
-                                      digits=dp.get_precision('Account'), track_visibility='always')
+
+    # discount
+    discount_type = fields.Selection([('fixed_amount', 'Fixed Amount'),
+                                      ('percentage_discount', 'Percentage')],
+                                     string="Discount Type")
+    discount_rate = fields.Float(string="Discount Rate")
+    discount = fields.Monetary(string="Discount", compute='_compute_net_total')
+    net_total = fields.Monetary(string="Net Total", compute='_compute_net_total')
 
     @api.depends('order_line')
     def get_total_delivered(self):
@@ -180,49 +155,48 @@ class Sale(models.Model):
                     show = True
         self.show_request_bom = show
 
-    @api.onchange('discount_type', 'discount_rate', 'order_line')
-    def supply_rate(self):
-
-        for order in self:
-            if order.discount_type == 'percent':
-                for line in order.order_line:
-                    line.discount = order.discount_rate
+    # discount
+    @api.depends('discount_rate', 'amount_total', 'discount_type')
+    def _compute_net_total(self):
+        if self.discount_type == 'fixed_amount':
+            if self.discount_rate <= self.amount_total:
+                self.discount = self.discount_rate
             else:
-                total = discount = 0.0
-                for line in order.order_line:
-                    total += round((line.product_uom_qty * line.price_unit))
-                if order.discount_rate != 0:
-                    discount = (order.discount_rate / total) * 100
-                else:
-                    discount = order.discount_rate
-                for line in order.order_line:
-                    line.discount = discount
+                raise ValidationError(_("Discount Cannot be more than Total"))
+        elif self.discount_type == 'percentage_discount':
+            if self.discount_rate <= 100:
+                self.discount = (self.amount_total * self.discount_rate) / 100
+            else:
+                raise ValidationError(_("Discount rate cannot be more than 100%"))
+        self.net_total = (self.amount_total - self.discount)
 
-    def _prepare_invoice(self, ):
-        invoice_vals = super(Sale, self)._prepare_invoice()
-        invoice_vals.update({
-            'discount_type': self.discount_type,
-            'discount_rate': self.discount_rate,
-        })
-        return invoice_vals
-
-    def button_dummy(self):
-
-        self.supply_rate()
-        return True
-
-    # def _create_invoices(self, grouped=False, final=False, date=None):
-    #     res = super(Sale, self)._create_invoices()
-    #     print('Invoices :: ',res)
-    #     res.supply_rate()
-    #     return res
-#
-#
-class SaleOrderLine(models.Model):
-    _inherit = "sale.order.line"
-
-    discount = fields.Float(string='Discount (%)', digits=(16, 20), default=0.0)
-
-
+    def action_view_invoice(self):
+        invoices = self.mapped('invoice_ids')
+        action = self.env.ref('account.action_move_out_invoice_type').read()[0]
+        if len(invoices) > 1:
+            action['domain'] = [('id', 'in', invoices.ids)]
+        elif len(invoices) == 1:
+            action['views'] = [(self.env.ref('account.view_move_form').id, 'form')]
+            action['res_id'] = invoices.id
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        for invoice in invoices:
+            invoice.discount_type = self.discount_type
+            invoice.discount_rate = self.discount_rate
+            invoice.discount = self.discount
+            invoice.net_total = self.net_total
+        context = {
+            'default_move_type': 'out_invoice',
+        }
+        if len(self) == 1:
+            context.update({
+                'default_partner_id': self.partner_id.id,
+                'default_partner_shipping_id': self.partner_shipping_id.id,
+                'default_invoice_payment_term_id': self.payment_term_id.id,
+                'default_invoice_origin': self.mapped('name'),
+                'default_user_id': self.user_id.id,
+            })
+        action['context'] = context
+        return action
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

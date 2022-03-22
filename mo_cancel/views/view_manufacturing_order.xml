@@ -6,18 +6,8 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_cancel']" position="after">
-                <button name="sh_cancel" states="confirmed,done,progress" type="object" string="Cancel All"/>
+                <button name="action_cancel" states="done,progress" type="object" string="Cancel"/>
             </xpath>
-            <xpath expr="//header//button[14][@name='action_cancel']" position="attributes">
-                    <attribute name="attrs">
-                        {'invisible': ['|', '|', ('id', '=', False), ('state', 'in', ('confirmed','progress','done', 'cancel')), ('confirm_cancel', '=', True)]}
-                    </attribute>
-                </xpath>
-<!--            <xpath expr="//header//button[14][@name='action_cancel']" position="attributes">-->
-<!--                    <attribute name="attrs">-->
-<!--                        {'invisible': ['|', '|', ('id', '=', False), ('state', 'in', ('confirmed','progress','done', 'cancel')), ('confirm_cancel', '=', False)]}-->
-<!--                    </attribute>-->
-<!--                </xpath>-->
         </field>
     </record>
 </odoo>

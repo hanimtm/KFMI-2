@@ -7,46 +7,30 @@
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
-<!--                <xpath expr="//page[@id='invoice_tab']/group[1]" position="inside">-->
-<!--                    <group class="oe_left oe_inline" name="discount">-->
-<!--                        <label for="discount_type"/>-->
-<!--                        <field name="discount_type" nolabel="1" class="oe_subtotal_footer_separator"/>-->
-<!--&lt;!&ndash;                               attrs="{'readonly': ['|',('state','!=','draft'),('invoice_origin','!=',False)]}"/>&ndash;&gt;-->
-<!--                        <label for="discount_rate"/>-->
-<!--                        <field name="discount_rate" nolabel="1" widget="monetary" context="{'discount_rate':discount_rate}" class="oe_subtotal_footer_separator"/>-->
-<!--&lt;!&ndash;                               attrs="{'readonly': ['|',('state','!=','draft'),('invoice_origin','!=',False)]}"/>&ndash;&gt;-->
-
-<!--                    </group>-->
-<!--                </xpath>-->
+                <xpath expr="//page[@id='invoice_tab']/group[1]" position="inside">
+                    <group class="oe_left oe_inline" name="discount">
+                        <label for="discount_type"/>
+                        <field name="discount_type" nolabel="1" class="oe_subtotal_footer_separator"
+                               attrs="{'readonly': ['|',('state','!=','draft'),('invoice_origin','!=',False)]}"/>
+                        <label for="discount_rate"/>
+                        <field name="discount_rate" nolabel="1" widget="monetary"
+                               attrs="{'readonly': ['|',('state','!=','draft'),('invoice_origin','!=',False)]}"
+                               context="{'discount_rate':discount_rate}" class="oe_subtotal_footer_separator"/>
+                    </group>
+                </xpath>
                 <!--  replace narration field to display proper in a view-->
-                <xpath expr="//field[@name='discount']" position="attributes">
-                    <attribute name="digits">[16, 2]</attribute>
+                <xpath expr="//page[@id='invoice_tab']/group[1]/group[1]" position="replace"/>
+                <xpath expr="//page[@id='invoice_tab']/group" position="inside">
+                    <group colspan="3">
+                        <field name="narration" placeholder="Terms and Conditions" class="oe_inline" nolabel="1"/>
+                    </group>
                 </xpath>
-                <xpath expr="//field[@name='tax_totals_json']" position="after">
-                        <field name="amount_discount" invisible="1"/>
-                </xpath>
-                <xpath expr="//field[@name='narration']" position="before">
-                    <div>
-                        <label for="discount_type" string="Discount Type :"/>
-                        <field name="discount_type" class="oe_inline"/>
+                <field name="tax_totals_json" position="after">
+                    <field name="discount" widget="monetary"/>
+                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
                     </div>
-                    <div>
-                        <label for="discount_rate" string="Discount Rate :"/>
-                        <field name="discount_rate" class="oe_inline"/>
-                    </div>
-                </xpath>
-<!--                <xpath expr="//page[@id='invoice_tab']/group[1]/group[1]" position="replace"/>-->
-<!--                <xpath expr="//page[@id='invoice_tab']/group" position="inside">-->
-<!--                    <group colspan="3">-->
-<!--                        <field name="narration" placeholder="Terms and Conditions" class="oe_inline" nolabel="1"/>-->
-<!--                    </group>-->
-<!--                </xpath>-->
-<!--                <field name="tax_totals_json" position="after">-->
-<!--                    <field name="discount" widget="monetary"/>-->
-<!--                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">-->
-<!--                    </div>-->
-<!--                    <field name="net_total" widget="monetary" class="oe_subtotal_footer_separator"/>-->
-<!--                </field>-->
+                    <field name="net_total" widget="monetary" class="oe_subtotal_footer_separator"/>
+                </field>
             </field>
         </record>
 

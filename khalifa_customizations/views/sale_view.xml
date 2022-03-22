@@ -75,41 +75,23 @@
                     </div>
                 </field>
                 <!-- Adding discount fields -->
-                <xpath expr="//group[@name='note_group']" position="replace">
-                    <group name="note_group" col="6">
-                        <group name="discount" colspan="2">
-                            <field name="discount_type"/>
-                            <field name="discount_rate"/>
-                        </group>
-
-                        <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
-                            <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                            <field name="amount_discount" widget='monetary'
-                                   options="{'currency_field': 'currency_id'}"/>
-                            <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                            <div class="oe_subtotal_footer_separator oe_inline o_td_label">
-                                <label for="amount_total"/>
-                                <button name="button_dummy"
-                                        states="draft,sent" string="(update)" type="object"
-                                        class="oe_edit_only oe_link"/>
-                            </div>
-                            <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator"
-                                   widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                        </group>
-                        <group colspan="4">
-                            <field name="note" nolabel="1" placeholder="Terms and conditions..."/>
-                        </group>
-                        <div class="oe_clear"/>
+                <field name="note" position="before">
+                    <group class="oe_left oe_inline" name="discount">
+                        <label for="discount_type"/>
+                        <field name="discount_type" nolabel="1" class="oe_subtotal_footer_separator"
+                               attrs="{'readonly': [('state','!=','draft')]}"/>
+                        <label for="discount_rate"/>
+                        <field name="discount_rate" nolabel="1" context="{'discount_rate':discount_rate}"
+                               widget="monetary" class="oe_subtotal_footer_separator"
+                               attrs="{'readonly': [('state','!=','draft')]}"/>
                     </group>
-
-                </xpath>
-
-<!--                <field name="tax_totals_json" position="after">-->
-<!--                    <label for="amount_discount" groups="base.group_user"/>-->
-<!--                        <div class="text-nowrap" groups="base.group_user">-->
-<!--                            <field name="amount_discount" widget="monetary"/>-->
-<!--                        </div>-->
-<!--                </field>-->
+                </field>
+                <field name="tax_totals_json" position="after">
+                    <field name="discount" widget="monetary"/>
+                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                    </div>
+                    <field name="net_total" widget="monetary" class="oe_subtotal_footer_separator"/>
+                </field>
                 <xpath expr="//page[@name='order_lines']/field[@name='order_line']//tree//field[@name='product_id']" position="attributes">
                     <attribute name="context">{'search_alternative_code':True}</attribute>
                 </xpath>

@@ -34,14 +34,3 @@ class AccountMove(models.Model):
 
     def _constrains_date_sequence(self):
         return
-
-    @api.ondelete(at_uninstall=False)
-    def _unlink_forbid_parts_of_chain(self):
-        """ Moves with a sequence number can only be deleted if they are the last element of a chain of sequence.
-        If they are not, deleting them would create a gap. If the user really wants to do this, he still can
-        explicitly empty the 'name' field of the move; but we discourage that practice.
-        """
-        if (not self.journal_id.sequence_id or not self.journal_id.refund_sequence_id) and not self._context.get('force_delete') and not self.filtered(
-                lambda move: move.name != '/')._is_end_of_seq_chain():
-            raise UserError(
-                _("You cannot delete this entry, as it has already consumed a sequence number and is not the last one in the chain. Probably you should revert it instead."))

@@ -14,7 +14,6 @@
         'security/ir.model.access.csv',
         'views/res_config_settings_view.xml',
         'views/invoice_view.xml',
-        'views/journal_view.xml',
         'views/register_payment_option_view.xml',
     ],
     'installable': True,

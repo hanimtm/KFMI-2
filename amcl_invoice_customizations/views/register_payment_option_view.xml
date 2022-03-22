@@ -15,7 +15,6 @@
                         <group>
                             <field name="cash_journal_id" attrs="{'invisible':[('payment_option','in',['bank'])],'required':[('payment_option','in',['cash','mixed'])]}"/>
                             <field name="cash_amount" attrs="{'invisible':[('payment_option','in',['bank'])]}"/>
-                            <field name="bank_payment_option" widget="radio" options="{'horizontal': true}" attrs="{'invisible':[('payment_option','in',['cash'])],'required':[('payment_option','in',['bank','mixed'])]}"/>
                             <field name="bank_journal_id" attrs="{'invisible':[('payment_option','in',['cash'])],'required':[('payment_option','in',['bank','mixed'])]}"/>
                             <field name="bank_amount" attrs="{'invisible':[('payment_option','in',['cash'])]}"/>
                         </group>
