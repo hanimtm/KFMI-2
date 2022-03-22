@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_gdn" model="report.paperformat">
+            <field name="name">GDN INVOICE FORMAT</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">32</field>
+            <field name="margin_bottom">50</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">30</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="report_goods_delivery_note_report" model="ir.actions.report">
+            <field name="name">Goods Delivery Note</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">khalifa_report_customizations.report_goods_delivery_note</field>
+            <field name="report_file">khalifa_report_customizations.report_goods_delivery_note</field>
+            <field name="print_report_name">'Goods Delivery Note'</field>
+            <field name="binding_model_id" ref="stock.model_stock_picking"/>
+            <field name="paperformat_id" ref="khalifa_report_customizations.paperformat_gdn"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="report_goods_delivery_note">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="khalifa_report_customizations.report_goods_delivery_note_template"/>
+            </t>
+        </template>
+
+        <template id="external_layout_vat">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+
+            <t t-call="khalifa_report_customizations.external_layout_standard_vat">
+                <t t-raw="0"/>
+            </t>
+
+        </template>
+
+        <template id="external_layout_standard_vat">
+            <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+                <div class="text-center">
+                    <img src="/khalifa_report_customizations/static/src/images/header.png" style="height: 220px;"/>
+                </div>
+            </div>
+
+            <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"
+                 t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+                 t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <div class="pt-5">
+                    <!-- This div ensures that the address is not cropped by the header. -->
+                    <t t-call="web.address_layout"/>
+                </div>
+                <t t-raw="0"/>
+            </div>
+
+            <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+                <div class="text-center" style="border-top: 1px solid grey;color:#00;">
+                    <table style="width: 100%; border: 1px solid #000;font-family:'Arabic'n;font-size:11px;">
+                        <tr>
+                            <th width="25%" class="text-center"
+                                style="border-left:1px solid #000; border-right:1px solid #000;">المبيعات والتسويق
+                                <br/>
+                                Sales &amp; Marketing
+                            </th>
+                            <th width="25%" class="text-center"
+                                style="border-left:1px solid #000; border-right:1px solid #000;">توقيع أمين المتجر
+                                <br/>
+                                Store Keeper's Signature
+                            </th>
+                            <th width="25%" class="text-center"
+                                style="border-left:1px solid #000; border-right:1px solid #000;">شحنت بواسطة
+                                <br/>
+                                Dispatched By
+                            </th>
+                            <th width="25%" class="text-center"
+                                style="border-left:1px solid #000; border-right:1px solid #000;">المستلم<br/>Received By
+                            </th>
+                        </tr>
+                        <tr style="border:1px solid #000;">
+                            <td rowspan="3" style="border:1px solid #000;"/>
+                            <td rowspan="3" style="border:1px solid #000;"/>
+                            <td style="border:1px solid #000;" class="text-left">
+                                <div style="border-bottom : 1px; border-bottom-style: dotted;"><span>الاسم</span>:
+                                    <br/>
+                                    <span>Name:</span>
+                                </div>
+                                <div style="border-bottom : 1px; border-bottom-style: dotted;"><span>التوقيع</span>:
+                                    <br/>
+                                    <span>Sign:</span>
+                                </div>
+                                <div><span>التاريخ</span>:
+                                    <br/>
+                                    <span>Date:</span>
+                                </div>
+                            </td>
+                            <td style="border:1px solid #000;" class="text-left">
+                                <div style="border-bottom : 1px; border-bottom-style: dotted;"><span>الاسم</span>:
+                                    <br/>
+                                    <span>Name:</span>
+                                </div>
+                                <div style="border-bottom : 1px; border-bottom-style: dotted;"><span>التوقيع</span>:
+                                    <br/>
+                                    <span>Sign:</span>
+                                </div>
+                                <div><span>التاريخ</span>:
+                                    <br/>
+                                    <span>Date:</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="text-center">
+                        <img src="/khalifa_report_customizations/static/src/images/footer.png" style="height: 75px;"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="report_goods_delivery_note_template">
+            <t t-call="web.html_container">
+                <t t-call="khalifa_report_customizations.external_layout_vat">
+                    <div class="page" style="font-family:'Arabic'n;font-size: 11px;!important">
+                        <div class="oe_structure"/>
+                        <center>
+                            <table width="40%" style="border-radius: 5px;">
+                                <tr style="border-radius: 5px;">
+                                    <td height="30%" class="text-center"
+                                        style="border-radius: 5px;border:1px solid black">
+                                        <h4>
+                                            <center>
+                                                <span>سند تسليم بضاعة</span>
+                                            </center>
+                                            <center>
+                                                <span>Goods Delivery Note (GDN)</span>
+                                            </center>
+                                        </h4>
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
+                        <t t-set="sale_order_id"
+                           t-value="request.env['stock.picking'].search([('origin', '=', doc.origin)])"/>
+                        <br/>
+                        <div class="row mt32 mb32" id="informations">
+                            <div class="col-6" style="display: inline;">
+                                <span class="col-4" style=" padding: 3px; position: relative; margin-right: -20px;">
+                                    <div style="width: 210px; height: 60px; border: 1px solid #000;">
+                                        <strong style="color: #000; padding: 3px;">GDN No</strong>
+                                        <strong class="text-right"
+                                                style="position:absolute; padding-left: 60px!important; text-align:right;color: #000;">
+                                            رقم السند
+                                        </strong>
+                                        <p style="padding: 3px;" class="m-0" t-field="doc.name"/>
+                                    </div>
+                                </span>
+                                <span class=" col-4" style="  padding: 3px; position: relative; margin-right: -20px;">
+                                    <div style=" width: 210px; height: 60px; border: 1px solid #000;">
+                                        <strong style="color: #000; padding: 3px;">Date</strong>
+                                        <strong class="text-right"
+                                                style="position:absolute; padding-left: 115px!important; text-align:right;color: #000;">
+                                            التاريخ
+                                        </strong>
+                                        <p style="padding: 3px;" class="m-0" t-field="doc.date_done"
+                                           t-options="{&quot;format&quot;: &quot;d.MM.yyyy&quot;}"/>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="col-6" style="position: relative; margin-left: -1%;">
+                                <div style=" height: 120px; border: 1px solid #000; padding: 0;">
+                                    <strong class="text-right" style="color: #000;">Customer</strong>
+                                    <strong style="position:absolute; padding-left: 210px!important; text-align:right;color: #000;">
+                                        العميل
+                                    </strong>
+                                    <p style="padding: 3px;" class="text-center m-0"
+                                       t-field="sale_order_id.partner_id.name"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="width: 424px;border: 1px solid #000; position: relative; margin-top: -59px !important; margin-right: -30px;">
+                            <div style=" height: 60px; width: 100px; ">
+                                <div style="width: 100px;" class="text-center">
+                                    <strong>PO. No. &amp; Date</strong>
+                                    <strong style="position:absolute; padding-left: 165px!important; text-align:right;color: #000;">
+                                        ص. رقم والتاريخ
+                                    </strong>
+                                    <span class="m-0" t-field="doc.po_no"/>
+                                    /
+                                    <span class="m-0" t-field="doc.scheduled_date"
+                                          t-options="{&quot;format&quot;: &quot;d.MM.yyyy&quot;}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+
+                        <table width="100%"
+                               style="border: 1px solid black;">
+                            <thead>
+                                <tr style="border: 1px solid #000;">
+                                    <th width="8%" class="text-center"
+                                        style="color: #000; border-left:1px solid #000; border-right:1px solid #000;">
+                                        <span>الرقم</span>
+                                        <br/>
+                                        <span>No</span>
+                                    </th>
+                                    <th width="15%" class="text-center"
+                                        style="color: #000; border-left:1px solid #000; border-right:1px solid #000;">
+                                        <span>الكود</span>
+                                        <br/>
+                                        <span>Internal Reference</span>
+                                    </th>
+                                    <th width="35%" class="text-center"
+                                        style="color: #000; border-left:1px solid #000; border-right:1px solid #000;">
+                                        <span>البيان</span>
+                                        <br/>
+                                        <span>Details</span>
+                                    </th>
+                                    <th class="text-center"
+                                        style="color: #000; border-left:1px solid #000; border-right:1px solid #000;">
+                                        <span>الوحدة</span>
+                                        <br/>
+                                        <span>Unit</span>
+                                    </th>
+                                    <th class="text-center"
+                                        style="color: #000; border-left:1px solid #000; border-right:1px solid #000;">
+                                        <span>الكمية</span>
+                                        <br/>
+                                        <span>Quantity</span>
+                                    </th>
+                                    <th class="text-center"
+                                        style="color: #000; border-left:1px solid #000; border-right:1px solid #000;">
+                                        <span>الملاحظات</span>
+                                        <br/>
+                                        <span>Remarks</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="count" t-value="1"/>
+                                <t t-set="row" t-value="1"/>
+                                <t t-foreach="doc.move_line_ids_without_package" t-as="line">
+                                    <tr>
+                                        <td class="text-center"
+                                            style="border-left:1px solid #000; border-right:1px dashed #000;">
+                                            <t t-esc="count"/>
+                                        </td>
+                                        <td class="text-center"
+                                            style="border-left:1px dashed #000; border-right:1px dashed #000;">
+                                            <span t-field="line.product_id.default_code"/>
+                                        </td>
+                                        <td class="text-center"
+                                            style="border-left:1px dashed #000; border-right:1px dashed #000;">
+                                            <span t-field="line.product_id.name"/>
+                                        </td>
+                                        <td class="text-center"
+                                            style="border-left:1px dashed #000; border-right:1px dashed #000;">
+                                            <span t-field="line.product_id.uom_id.name"/>
+                                        </td>
+                                        <td class="text-center"
+                                            style="border-left:1px dashed #000; border-right:1px dashed #000;">
+                                            <span t-field="line.qty_done"/>
+                                        </td>
+                                        <td class="text-center"
+                                            style="border-left:1px dashed #000; border-right:1px solid #000;">
+                                            <span t-field="line.product_id.alternative_code"/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="count" t-value="count + 1"/>
+                                    <t t-set="row" t-value="row + 1"/>
+                                </t>
+                                <tr>
+                                    <td class="text-center" style="border-left:1px solid #000; border-right:1px dashed #000;">
+                                        <t t-esc="count"/>
+                                    </td>
+                                    <td class="text-center"
+                                        style="border-left:1px dashed #000; border-right:1px dashed #000;"/>
+                                    <td class="text-center"
+                                        style="border-left:1px dashed #000; border-right:1px dashed #000;">
+                                        **********Nothing Follows**********
+                                    </td>
+                                    <td class="text-center"
+                                        style="border-left:1px dashed #000; border-right:1px dashed #000;"/>
+                                    <td class="text-center"
+                                        style="border-left:1px dashed #000; border-right:1px dashed #000;"/>
+                                    <td class="text-center"
+                                        style="border-left:1px dashed #000; border-right:1px solid #000;"/>
+                                </tr>
+                                <t t-set="count" t-value="count + 1"/>
+                                <t t-set="row" t-value="row + 1"/>
+                                <t t-if="row &lt;= 20">
+                                    <t t-foreach="range(row,21)" t-as="line">
+                                        <tr>
+                                            <td class="text-center" style="border-left:1px solid #000; border-right:1px dashed #000;">
+                                                <t t-esc="count"/>
+                                            </td>
+                                            <td class="text-center" style="border-left:1px dashed #000; border-right:1px dashed #000;"/>
+                                            <td class="text-center" style="border-left:1px dashed #000; border-right:1px dashed #000;"/>
+                                            <td class="text-center" style="border-left:1px dashed #000; border-right:1px dashed #000;"/>
+                                            <td class="text-center" style="border-left:1px dashed #000; border-right:1px dashed #000;"/>
+                                            <td class="text-center" style="border-left:1px dashed #000; border-right:1px solid #000;"/>
+                                        </tr>
+                                        <t t-set="count" t-value="count + 1"/>
+                                        <t t-set="row" t-value="row + 1"/>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                        <table width="100%"
+                               style="border-spacing: 1em .5em;padding: 0 2em 1em 0;border: 1px solid black;table-layout:fixed;border-collapse:collapse;">
+                            <tr>
+                                <td width="50%" class="text-left">
+                                    Destination :
+                                </td>
+                                <td width="50%" class="text-right">
+                                    : وجهة الشحن
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

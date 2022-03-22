@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inherit_purchase_view_search" model="ir.ui.view">
+        <field name="name">purchase.report.search</field>
+        <field name="model">purchase.report</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_search"/>
+        <field name="arch" type="xml">
+            <filter name="user_id" position="before">
+                <filter name="branch" string="Branch"
+                        context="{'group_by' : 'branch_id'}"/>
+            </filter>
+        </field>
+    </record>
+
+</odoo>

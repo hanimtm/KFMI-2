@@ -1,0 +1,4 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_direct_material_transfer,access_direct_material_transfer,model_direct_material_transfer,base.group_user,1,1,1,1
+access_direct_material_line,access_direct_material_line,model_direct_material_line,base.group_user,1,1,1,1
+access_stock_expense_location,access_stock_expense_location,model_stock_expense_location,base.group_user,1,1,1,1

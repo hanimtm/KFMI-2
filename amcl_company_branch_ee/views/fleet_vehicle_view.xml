@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+<!--        <record id="inherit_fleet_vehicle_view_form" model="ir.ui.view">-->
+<!--            <field name="name">fleet.vehicle.form</field>-->
+<!--            <field name="model">fleet.vehicle</field>-->
+<!--            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='company_id']" position="after">-->
+<!--                    <field name="branch_id" required="1" domain="[('company_id', '=', company_id)]"-->
+<!--                           groups="amcl_company_branch_ee.group_multi_branches"-->
+<!--                           options="{'no_create':True,'no_edit':True}"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="inherit_fleet_vehicle_log_contract_view_form" model="ir.ui.view">-->
+<!--            <field name="name">fleet.vehicle.log.contract.form</field>-->
+<!--            <field name="model">fleet.vehicle.log.contract</field>-->
+<!--            <field name="inherit_id" ref="fleet.fleet_vehicle_log_contract_view_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='ins_ref']" position="after">-->
+<!--                    <field name="branch_id" required="1"-->
+<!--                           groups="amcl_company_branch_ee.group_multi_branches"-->
+<!--                           options="{'no_create':True,'no_edit':True}"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="inherit_fleet_vehicle_log_services_view_form" model="ir.ui.view">-->
+<!--            <field name="name">fleet.vehicle.log.services.form</field>-->
+<!--            <field name="model">fleet.vehicle.log.services</field>-->
+<!--            <field name="inherit_id" ref="fleet.fleet_vehicle_log_services_view_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='vendor_id']" position="after">-->
+<!--                    <field name="branch_id" required="1"-->
+<!--                           groups="amcl_company_branch_ee.group_multi_branches"-->
+<!--                           options="{'no_create':True,'no_edit':True}"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+    </data>
+</odoo>

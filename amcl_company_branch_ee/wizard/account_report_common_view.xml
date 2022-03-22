@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inherit_account_report_print_journal_view" model="ir.ui.view">
+        <field name="name">Print Journal Report</field>
+        <field name="model">account.print.journal</field>
+        <field name="inherit_id" ref="account.account_common_report_view"/>
+        <field name="arch" type="xml">
+            <field name="journal_ids" position="after">
+                <field name="branch_ids" widget="many2many_tags" options="{'no_create':True,'no_edit':True}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

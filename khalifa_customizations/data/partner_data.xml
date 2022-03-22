@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>        
+<odoo>
+    <data>
+
+        <record id="res_partner_vendor_x" model="res.partner">
+            <field name="name">Vendor X</field>
+            <!-- <field eval="[Command.set([ref('base.res_partner_category_14'), ref('base.res_partner_category_12')])]" name="category_id"/> -->
+            <field name="is_company">1</field>
+            <field name="supplier_rank">1</field>
+            <!-- <field name="street">7500 W Linne Road</field> -->
+            <!-- <field name="city">Tracy</field> -->
+            <!-- <field name="state_id" ref='state_us_5'/> -->
+            <!-- <field name="zip">95304</field> -->
+            <!-- <field name="country_id" ref="base.us"/> -->
+            <!-- <field name="email">ready.mat28@example.com</field> -->
+            <!-- <field name="phone">(803)-873-6126</field> -->
+            <!-- <field name="website">http://www.ready-mat.com/</field> -->
+            <!-- <field name="image_1920" type="base64" file="base/static/img/res_partner_4-image.png"/> -->
+        </record>
+    </data>
+</odoo>

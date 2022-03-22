@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="amcl_payment_register_form" model="ir.ui.view">
+            <field name="name">amcl.payment.register.form</field>
+            <field name="model">amcl.payment.register</field>
+            <field name="arch" type="xml">
+                <form name="payment_register_option" string="Register Payment Options">
+                    <group>
+                        <field name="company_id" invisible="1"/>
+                        <field name="payment_option" widget="radio" options="{'horizontal': true}"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="cash_journal_id" attrs="{'invisible':[('payment_option','in',['bank'])],'required':[('payment_option','in',['cash','mixed'])]}"/>
+                            <field name="cash_amount" attrs="{'invisible':[('payment_option','in',['bank'])]}"/>
+                            <field name="bank_payment_option" widget="radio" options="{'horizontal': true}" attrs="{'invisible':[('payment_option','in',['cash'])],'required':[('payment_option','in',['bank','mixed'])]}"/>
+                            <field name="bank_journal_id" attrs="{'invisible':[('payment_option','in',['cash'])],'required':[('payment_option','in',['bank','mixed'])]}"/>
+                            <field name="bank_amount" attrs="{'invisible':[('payment_option','in',['cash'])]}"/>
+                        </group>
+                        <group>
+                            <field name="payment_date" required="1"/>
+                            <field name="cash_memo" attrs="{'invisible':[('payment_option','in',['bank'])]}"/>
+                            <field name="bank_memo" attrs="{'invisible':[('payment_option','in',['cash'])]}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="register_payments" string="Create Payment" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="bom_request_form_view" model="ir.ui.view">
+            <field name="name">bom.request.form.view</field>
+            <field name="model">bom.request</field>
+            <field name="arch" type="xml">
+                <form name="bom_request" string="BOM Request">
+                    <header>
+                        <button name="assign_bom_request" string="Assign to" type="object" class="btn-primary"
+                                groups="khalifa_customizations.design_manager" attrs="{'invisible': [('state','not in',['draft'])]}"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="order_id" attrs="{'readonly': [('order_id','!=',False)]}"/>
+                            </group>
+                            <group>
+                                <field name="read_for_user" invisible="1"/>
+                                <field name="user_id" attrs="{'readonly': [('read_for_user','=',True)]}" context="{'filter_by_design': True}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="component" string="Component">
+                                <field name="bom_request_line_ids" options="{'no_open':True}">
+                                    <tree create="0">
+                                        <field name="product_id"/>
+                                        <field name="description"/>
+                                        <field name="label"/>
+                                        <field name="drawing" invisible="1"/>
+                                        <field name="quantity"/>
+                                        <field name="product_uom_id"/>
+                                        <field name="state"/>
+                                        <button name="create_or_view_bom_dummy" string="Create/View" type="object" class="btn-primary"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="bom_request_tree_view" model="ir.ui.view">
+            <field name="name">bom.request.tree.view</field>
+            <field name="model">bom.request</field>
+            <field name="arch" type="xml">
+                <tree name="bom_request" string="BOM Request">
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <field name="salesperson_id"/>
+                    <field name="order_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_bom_request" model="ir.actions.act_window">
+            <field name="name">BOM Request</field>
+            <field name="res_model">bom.request</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="bom_main_menu" name="BOM"
+                  groups="khalifa_customizations.design_user,khalifa_customizations.design_manager"/>
+        <menuitem id="bom_materials" name="BOM of Materials"
+                  parent="bom_main_menu" action="mrp.mrp_bom_form_action"
+                  groups="khalifa_customizations.design_user,khalifa_customizations.design_manager"/>
+        <menuitem id="bom_request_menu" name="BOM Request"
+                  parent="bom_main_menu" action="action_bom_request"
+                  groups="khalifa_customizations.design_user,khalifa_customizations.design_manager"/>
+
+    </data>
+</odoo>

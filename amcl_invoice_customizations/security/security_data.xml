@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="group_show_cash_bank_payment" model="res.groups">
+            <field name="name">Show Cash/Bank Payments</field>
+            <field name="comment">To show Cash/Bank and Mixed payment option in customer invoice.</field>
+        </record>
+
+    </data>
+</odoo>

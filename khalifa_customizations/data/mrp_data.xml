@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sequence_mrp_routing" model="ir.sequence">
+            <field name="name">Routing</field>
+            <field name="code">mrp.routing</field>
+            <field name="prefix">RO/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+    </data>
+</odoo>

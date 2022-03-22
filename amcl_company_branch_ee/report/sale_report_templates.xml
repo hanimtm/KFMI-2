@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="aspl_inherit_report_saleorder_document" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[hasclass('page')]/div[@id='informations']/div[6]" position="after">
+            <div name="branch" t-if="doc.branch_id" class="col-xs-3">
+                <strong>Branch:</strong>
+                <p t-field="doc.branch_id.name"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="aspl_inherit_report_purchaseorder_document" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//div[@id='informations']/div[3]" position="after">
+            <div t-if="o.branch_id" class="col-xs-3">
+                <strong>Branch:</strong>
+                <p t-field="o.branch_id.name"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="aspl_inherit_report_purchasequotation_document"
+              inherit_id="purchase.report_purchasequotation_document">
+        <xpath expr="//div[hasclass('page')]//h2" position="before">
+            <t t-if="o.branch_id">
+                <br/>
+                <strong>Branch:</strong>
+                <span t-field="o.branch_id.name"/>
+                <br/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="aspl_inherit_report_invoice_document" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[hasclass('page')]/div[hasclass('mt32')]" position="inside">
+            <div t-if="o.branch_id" class="col-xs-2" style="margin-left:15px">
+                <strong>Branch:</strong>
+                <p t-field="o.branch_id.name"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="aspl_inherit_report_payment_receipt" inherit_id="account.report_payment_receipt_document">
+        <xpath expr="//div[hasclass('page')]//div[hasclass('row')]" position="inside">
+            <div t-if="o.branch_id" class="col-xs-6" style="margin-left:14px">
+                <strong>Branch:</strong>
+                <span t-field="o.branch_id.name"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="aspl_inherit_report_picking" inherit_id="stock.report_picking">
+        <xpath expr="//div[hasclass('page')]//div[3]//div[3]" position="after">
+            <div>
+                <strong>Branch:</strong>
+                <p t-field="o.branch_id.name"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="aspl_inherit_report_delivery_document" inherit_id="stock.report_delivery_document">
+        <xpath expr="//div[hasclass('page')]/div/div[2]" position="after">
+            <div>
+                <strong>Branch:</strong>
+                <p t-field="o.branch_id.name"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>

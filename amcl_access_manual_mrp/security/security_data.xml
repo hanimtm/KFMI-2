@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id ="group_allow_manual_manufacture" model="res.groups">
+        <field name="category_id" ref="base.module_category_manufacturing_manufacturing"/>
+        <field name="name">Allow Manual Manufacture</field>
+    </record>
+
+</odoo>

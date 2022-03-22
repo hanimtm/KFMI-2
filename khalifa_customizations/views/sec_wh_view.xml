@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       
+        <record id="view_sec_wh_tree" model="ir.ui.view">
+            <field name="name">view.sec.wh.tree</field>
+            <field name="model">sec.wh</field>
+            <field name="arch" type="xml">
+                <tree string="Sec Wh">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_sec_wh_form" model="ir.ui.view">
+            <field name="name">view.sec.wh.form</field>
+            <field name="model">sec.wh</field>
+            <field name="arch" type="xml">
+                <form string="Sec Wh">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_sec_wh_view" model="ir.actions.act_window">
+            <field name="name">Wherehouse Name</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sec.wh</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="sale_menu_config_sec_wh"
+            action="action_sec_wh_view"
+            parent="sale.menu_sale_config"/>
+        
+    </data>
+</odoo>

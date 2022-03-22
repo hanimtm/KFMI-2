@@ -1,0 +1,44 @@
+<templates xml:space="preserve">
+
+    <t t-inherit="account.TaxTotalsField" t-inherit-mode="extension">
+        <xpath expr="//table/tbody" position="replace">
+            <t t-foreach="totals.value.subtotals" t-as="subtotal" t-key="subtotal['name']">
+                <tr>
+                    <td class="o_td_label">
+<!--                            <label class="o_form_label o_tax_total_label" t-esc="subtotal['name']"/>-->
+                         <label class="o_form_label o_tax_total_label">Total Taxable Amount (Excluding VAT) </label>
+                    </td>
+
+                    <td>
+                        <span t-att-name="subtotal['name']" style="white-space: nowrap; font-weight: bold;" t-esc="subtotal['formatted_amount']"/>
+                    </td>
+                </tr>
+
+                <t t-foreach="totals.value.groups_by_subtotal[subtotal['name']]" t-as="taxGroup" t-key="taxGroup.group_key">
+                    <TaxGroupComponent
+                        taxGroup="taxGroup"
+                        record="record"
+                        allowTaxEdition="totals.value.allow_tax_edition"
+                        t-on-change-tax-group="_onChangeTaxValueByTaxGroup"
+                    />
+                </t>
+            </t>
+            <!-- Total amount with all taxes-->
+            <tr>
+                <td class="o_td_label">
+<!--                        <label class="o_form_label o_tax_total_label">Total </label>-->
+                    <label class="o_form_label o_tax_total_label">Total Amount Due </label>
+                </td>
+                <td>
+                    <span
+                        name="amount_total"
+                        t-att-class="Object.keys(totals.value.groups_by_subtotal).length > 0 ? 'oe_subtotal_footer_separator' : ''"
+                        t-esc="totals.value.formatted_amount_total"
+                        style="white-space: nowrap; font-weight: bold; font-size: 1.3em;"
+                    />
+                </td>
+            </tr>
+        </xpath>
+    </t>
+
+</templates>

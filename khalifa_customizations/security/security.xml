@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Khalifa Other Group -->
+        <record model="ir.module.category" id="khalifa_other_group">
+            <field name="name">Other</field>
+        </record>
+
+
+        <record id="allow_unbuild" model="res.groups">
+            <field name="name">Allow UnBuild</field>
+            <field name="category_id" ref="khalifa_customizations.khalifa_other_group"/>
+        </record>
+
+        <record model="ir.module.category" id="khalifa_design">
+            <field name="name">Design</field>
+        </record>
+
+        <record id="design_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="khalifa_design"/>
+        </record>
+
+        <record id="design_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="khalifa_design"/>
+            <field name="implied_ids" eval="[(4, ref('khalifa_customizations.design_user'))]"/>
+        </record>
+
+        <record id="sale_order_approval" model="res.groups">
+            <field name="name">S. O. Approval</field>
+            <field name="category_id" ref="base.module_category_sales_sales"/>
+        </record>
+
+        <record id="bom_request_design_user" model="ir.rule">
+            <field name="name">BOM Request : Own Document</field>
+            <field name="model_id" ref="model_bom_request"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('khalifa_customizations.design_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="bom_request_design_manager" model="ir.rule">
+            <field name="name">BOM Request : All Document</field>
+            <field name="model_id" ref="model_bom_request"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('khalifa_customizations.design_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="mrp_bom_design_user" model="ir.rule">
+            <field name="name">Bill Of Material: Own Documents</field>
+            <field name="model_id" ref="model_mrp_bom"/>
+            <field name="domain_force">[('bom_dummy_id','!=',False),('bom_dummy_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('khalifa_customizations.design_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="mrp_bom_design_manager" model="ir.rule">
+            <field name="name">Bill Of Material: All Documents</field>
+            <field name="model_id" ref="model_mrp_bom"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('khalifa_customizations.design_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        
+        <!-- Allow Product Creation Group -->
+        <record id="allow_product_creation" model="res.groups">
+            <field name="name">Allow Product Creation</field>
+            <field name="category_id" ref="khalifa_customizations.khalifa_other_group"/>
+        </record>
+
+        <!-- Allow Scrap -->
+        <record id="allow_scrap" model="res.groups">
+            <field name="name">Allow Scrap</field>
+            <field name="category_id" ref="khalifa_customizations.khalifa_other_group"/>
+        </record>
+
+        <!-- Inventory Adjustment Manager -->
+        <record id="allow_inventory_adjustment_manager" model="res.groups">
+            <field name="name">Inventory Adjustment Manager</field>
+            <field name="category_id" ref="khalifa_customizations.khalifa_other_group"/>
+        </record>
+
+        <!-- Allow Return -->
+        <record id="allow_inventory_return" model="res.groups">
+            <field name="name">Allow Inventory Return</field>
+            <field name="category_id" ref="khalifa_customizations.khalifa_other_group"/>
+        </record>
+
+        <!-- Khalifa Product Group -->
+        <record model="ir.module.category" id="khalifa_product_group">
+            <field name="name">Product</field>
+        </record>
+
+        <!-- Edit Product Page -->
+        <record id="group_edit_product" model="res.groups">
+            <field name="name">Edit Product Page</field>
+            <field name="category_id" ref="khalifa_product_group"/>
+        </record>
+
+        <!-- Update Quantity -->
+        <record id="group_update_quantity" model="res.groups">
+            <field name="name">Update Quantity</field>
+            <field name="category_id" ref="khalifa_product_group"/>
+        </record>
+
+        <!-- Replenish -->
+        <record id="group_replenish" model="res.groups">
+            <field name="name">Replenish</field>
+            <field name="category_id" ref="khalifa_product_group"/>
+        </record>
+
+        <!-- Hide Sales Price -->
+        <record id="group_hide_sale_price" model="res.groups">
+            <field name="name">Hide Sales Price</field>
+            <field name="category_id" ref="khalifa_product_group"/>
+        </record>
+
+        <!-- Hide Cost -->
+        <record id="group_hide_cost" model="res.groups">
+            <field name="name">Hide Cost</field>
+            <field name="category_id" ref="khalifa_product_group"/>
+        </record>
+        <!-- Contact Manager -->
+<!--        <record id="allow_contact_manager" model="res.groups">-->
+<!--            <field name="name">Contact Manager</field>-->
+<!--            <field name="category_id" ref="khalifa_other_group"/>-->
+<!--        </record>-->
+
+
+    </data>
+</odoo>

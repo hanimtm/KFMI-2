@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--- name of the group -->
+    <record id ="group_show_checkbox_button" model="res.groups">
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="name">Allow Split Purchase RFQ</field>    
+    </record>
+</odoo>

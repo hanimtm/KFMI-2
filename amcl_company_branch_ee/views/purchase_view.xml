@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Purchase Order -->
+        <record id="inherit_purchase_order_form_view" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                    <field name="branch_id" required="1" domain="[('company_id', '=', company_id)]"
+                           groups="amcl_company_branch_ee.group_multi_branches"
+                           options="{'no_create':True,'no_edit':True}"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Product Product -->
+        <record id="inherit_product_product_form_view" model="ir.ui.view">
+            <field name="name">purchase.product.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="branch_id" required="1" domain="[('company_id', '=', company_id)]"
+                           groups="amcl_company_branch_ee.group_multi_branches"
+                           options="{'no_create':True,'no_edit':True}"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Purchase order search view -->
+        <record id="inherit_view_purchase_order_filter" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <filter name="vendor" position="before">
+                    <filter name="branch" string="Branch"
+                            context="{'group_by' : 'branch_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+    </data>
+</odoo>

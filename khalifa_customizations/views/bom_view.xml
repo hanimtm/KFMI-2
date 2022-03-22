@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="mrp_bom_form_view" model="ir.ui.view">
+            <field name="name">mrp_bom_form_view</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name="non_standard_bom" invisible="1"/>
+                    <field name="label"/>
+                    <field name="drawing" attrs="{'required': [('non_standard_bom','=',True)]}"/>
+                    <field name="dummy_bom_state" invisible="1"/>
+                    <field name="bom_dummy_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//page[@name='components']/field[@name='bom_line_ids']/tree/field[@name='product_qty']" position="after">
+                    <field name="qty_available"/>
+                    <field name="qty_reserve"/>
+                    <field name="purchase_price"/>
+                    <field name="product_value"/>
+                </xpath>
+                <xpath expr="//field[@name='type']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('dummy_bom_state','=','approve')]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='ready_to_produce']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('dummy_bom_state','=','approve')]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='consumption']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('dummy_bom_state','=','approve')]}</attribute>
+                </xpath>
+                <xpath expr="//sheet/group/group" position="inside">
+                    <field name="routing_id"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
