@@ -39,6 +39,7 @@
                                 <field name="lpo_num" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="payment_term" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="project" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                                <field name="method_of_payment" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                             </group>
                             <group>
                                 <field name="company" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
@@ -73,6 +74,8 @@
                         <label for="purchase_comment"/>
                         <field name="purchase_comment"
                                attrs="{'readonly': [('state', 'in', ('accounts_approval','manager_approval'))]}"/>
+                        <label for="reason" string="Payment Reason"/>
+                        <field name="reason"/>
 
                     </sheet>
                     <div class="oe_chatter">
