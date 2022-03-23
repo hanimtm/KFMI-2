@@ -113,6 +113,9 @@
                 <xpath expr="//page[@name='order_lines']/field[@name='order_line']//tree//field[@name='product_id']" position="attributes">
                     <attribute name="context">{'search_alternative_code':True}</attribute>
                 </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="before">
+                    <field name="bom_cost"/>
+                </xpath>
             </field>
         </record>
 
