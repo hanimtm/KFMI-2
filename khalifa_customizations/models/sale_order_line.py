@@ -6,12 +6,35 @@ from odoo import fields, models, api
 class Sale(models.Model):
     _inherit = 'sale.order.line'
 
+    @api.depends('product_id')
+    def compute_bom_cost(self):
+        """
+        Compute BOM Cost
+        :return:
+        """
+        for order_line in self:
+            bom_cost = 0
+            if order_line.product_id:
+                bom = self.env['mrp.bom']._bom_find(order_line.product_id)[order_line.product_id]
+                if bom:
+                    bom_cost = order_line.product_id._compute_bom_price(bom,)
+                else:
+                    bom = self.env['mrp.bom'].search(
+                        [('byproduct_ids.product_id', '=', order_line.product_id.id)],
+                        order='sequence, product_id, id', limit=1)
+                    if bom:
+                        price = order_line.product_id._compute_bom_price(bom, byproduct_bom=True)
+                        if price:
+                            bom_cost = price
+            order_line.bom_cost = bom_cost
+
     bom_id = fields.Many2one('mrp.bom', string='BOM', copy=False)
     label = fields.Char(string='Label', copy=False)
     drawing = fields.Char(string='Drawing', copy=False)
     sec_wh_id = fields.Many2one('sec.wh', string='SEC WH')
     line_no = fields.Char(string="Line No")
     non_standard_bom = fields.Boolean(related='product_id.non_standard_bom', string='Non Standard BOM')
+    bom_cost = fields.Float('BOM Cost', compute='compute_bom_cost')
 
     @api.onchange('product_id')
     def onchange_product_set_bom(self):
