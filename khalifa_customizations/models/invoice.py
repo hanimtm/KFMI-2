@@ -75,8 +75,10 @@ class AccountInvoice(models.Model):
                 sign = 1
             else:
                 sign = -1
-            if move.discount_type == 'percent':
-                move.amount_discount = sum((line.quantity * line.price_unit * line.discount) / 100 for line in move.invoice_line_ids)
+            if move.discount_type == 'percentage_discount':
+                move.amount_discount = sum((line.quantity * line.price_unit * line.discount) / 100 for line in
+                                           move.invoice_line_ids.filtered(lambda
+                                                                              line: line.price_unit > 0 and line.quantity > 0 and line.discount > 0))
             else:
                 move.amount_discount = move.discount_rate
             move.amount_untaxed = sign * (total_untaxed_currency if len(currencies) == 1 else total_untaxed)
@@ -116,8 +118,10 @@ class AccountInvoice(models.Model):
 
             move.payment_state = new_pmt_state
 
-    discount_type = fields.Selection([('percent', 'Percentage'), ('amount', 'Amount')], string='Discount Type',
-                                     readonly=True, states={'draft': [('readonly', False)]}, default='percent')
+    discount_type = fields.Selection([('fixed_amount', 'Fixed Amount'),
+                                      ('percentage_discount', 'Percentage')], string='Discount Type',
+                                     readonly=True, states={'draft': [('readonly', False)]},
+                                     default='percentage_discount')
     discount_rate = fields.Float('Discount Amount', digits=(16, 2), readonly=True,
                                  states={'draft': [('readonly', False)]})
     amount_discount = fields.Monetary(string='Discount', store=True, readonly=True, compute='_compute_amount',
@@ -126,7 +130,7 @@ class AccountInvoice(models.Model):
     @api.onchange('discount_type', 'discount_rate', 'invoice_line_ids')
     def supply_rate(self):
         for inv in self:
-            if inv.discount_type == 'percent':
+            if inv.discount_type == 'percentage_discount':
                 for line in inv.line_ids:
                     line.discount = inv.discount_rate
                     line._onchange_price_subtotal()
@@ -134,7 +138,7 @@ class AccountInvoice(models.Model):
                 total = discount = 0.0
                 for line in inv.invoice_line_ids:
                     total += (line.quantity * line.price_unit)
-                if inv.discount_rate != 0:
+                if inv.discount_rate != 0 and total > 0:
                     discount = (inv.discount_rate / total) * 100
                 else:
                     discount = inv.discount_rate

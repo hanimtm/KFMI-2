@@ -29,10 +29,12 @@ class Sale(models.Model):
     bom_request_id = fields.Many2one('bom.request', string='BOM Request', copy=False)
     total_delivered = fields.Float(string='Delivered', compute='get_total_delivered')
     state = fields.Selection(selection_add=[('bom_requested', 'BOM Requested'),('dm_approve', 'To DM Approve'),('sm_approve', 'To SM Approve'),('sent', 'Quotation Sent'),('approve','Approved'),('sale','Sales Order')])
-    discount_type = fields.Selection([('percent', 'Percentage'), ('amount', 'Amount')], string='Discount type',
+    discount_type = fields.Selection([('fixed_amount', 'Fixed Amount'),
+                                      ('percentage_discount', 'Percentage')],
+                                     string='Discount type',
                                      readonly=True,
                                      states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
-                                     default='percent')
+                                     default='percentage_discount')
     discount_rate = fields.Float('Discount Rate', digits=dp.get_precision('Account'),
                                  readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]})
     amount_untaxed = fields.Monetary(string='Untaxed Amount', store=True, readonly=True, compute='_amount_all',
@@ -184,7 +186,7 @@ class Sale(models.Model):
     def supply_rate(self):
 
         for order in self:
-            if order.discount_type == 'percent':
+            if order.discount_type == 'percentage_discount':
                 for line in order.order_line:
                     line.discount = order.discount_rate
             else:
