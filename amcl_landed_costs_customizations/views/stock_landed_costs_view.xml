@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+       <!-- Inherit Form View to Modify it -->
+       <record id="view_stock_landed_cost_form_inherit" model="ir.ui.view">
+           <field name="name">view.stock.landed.cost.form.inherit</field>
+           <field name="model">stock.landed.cost</field>
+           <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+           <field name="arch" type="xml">
+               <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='former_cost']" position="after">
+                   <field name="unit_former_cost"/>
+               </xpath>
+               <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='final_cost']" position="after">
+                   <field name="unit_final_cost"/>
+               </xpath>
+               <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='additional_landed_cost']" position="after">
+                   <field name="unit_additional_landed_cost"/>
+               </xpath>
+           </field>
+       </record>
+
+    </data>
+</odoo>
