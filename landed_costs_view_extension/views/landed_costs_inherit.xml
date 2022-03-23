@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="inherit_landed_cost_view_tree" model="ir.ui.view">
+            <field name="name">inherit_landed_cost_view_tree</field>
+            <field name="model">stock.landed.cost</field>
+            <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_tree"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='activity_exception_decoration']" position="after">
+                    <field name="picking_ids" widget="many2many_tags"/>
+                    <field name="vendor_id"/>
+                    <field name="vendor_bill_id"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
