@@ -17,7 +17,7 @@ class Sale(models.Model):
             if order_line.product_id:
                 bom = self.env['mrp.bom']._bom_find(order_line.product_id)[order_line.product_id]
                 if bom:
-                    bom_cost = order_line.product_id._compute_bom_price(bom,)
+                    bom_cost = order_line.product_id._compute_bom_price(bom, )
                 else:
                     bom = self.env['mrp.bom'].search(
                         [('byproduct_ids.product_id', '=', order_line.product_id.id)],
@@ -39,7 +39,8 @@ class Sale(models.Model):
     @api.onchange('product_id')
     def onchange_product_set_bom(self):
         if self.product_id.standard_bom:
-            bom = self.env['mrp.bom']._bom_find(self.product_id, company_id=self.company_id.id, bom_type='normal')[self.product_id]
+            bom = self.env['mrp.bom']._bom_find(self.product_id, company_id=self.company_id.id, bom_type='normal')[
+                self.product_id]
             if bom:
                 self.bom_id = bom.id
 

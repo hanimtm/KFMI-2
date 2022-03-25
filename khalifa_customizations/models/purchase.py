@@ -14,10 +14,11 @@ class PurchaseOrder(models.Model):
                                       ('percentage_discount', 'Percentage')],
                                      string="Discount Type",
                                      readonly=True,
-                                     states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+                                     # states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
                                      )
 
-    discount_rate = fields.Float('Discount Rate', digits=dp.get_precision('Account'), states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},)
+    discount_rate = fields.Float('Discount Rate', digits=dp.get_precision('Account'),
+                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, )
     amount_untaxed = fields.Monetary(string='Untaxed Amount', store=True, readonly=True, compute='_amount_all_new',
                                      track_visibility='onchange')
     amount_tax = fields.Monetary(string='Taxes', store=True, readonly=True, compute='_amount_all_new',
@@ -69,8 +70,14 @@ class PurchaseOrder(models.Model):
 
     def _prepare_invoice(self, ):
         invoice_vals = super(PurchaseOrder, self)._prepare_invoice()
+        discout_type = False
+        if self.discount_type == 'percentage_discount':
+            discout_type = 'percentage_discount'
+        if self.discount_type == 'fixed_amount':
+            discout_type = 'fixed_amount'
+
         invoice_vals.update({
-            'discount_type': self.discount_type,
+            'discount_type': discout_type,
             'discount_rate': self.discount_rate,
         })
         print('Invoice Values :: ', invoice_vals)
