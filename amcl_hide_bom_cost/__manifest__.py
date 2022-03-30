@@ -11,8 +11,8 @@
     'description': """
     Hide & Show Bom Structure Cost based on Group
     """,
-    'author': 'Acespritech Solutions Pvt. Ltd.',
-    'depends': ['base', 'mrp'],
+    'author': 'AMCL',
+    'depends': ['mrp'],
     'data': [
         'security/mrp_security.xml',
         'report/mrp_report_bom_structure.xml',
