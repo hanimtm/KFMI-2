@@ -13,8 +13,7 @@ class PaymentRequest(models.Model):
             return company.currency_id.id
         return False
 
-    name = fields.Char('Sequence', required=True, copy=False, readonly=True, index=True, default=lambda self: _('New'),
-                       track_visibility="onchange")
+    name = fields.Char('Sequence', required=True, copy=False, readonly=True, index=True, default=lambda self: _('New'))
     reference = fields.Char('Reference')
     lpo_num = fields.Many2one('purchase.order', string="LPO")
     company = fields.Many2one('res.partner', string="Company")
@@ -35,7 +34,7 @@ class PaymentRequest(models.Model):
         ('manager_reject', 'Manager Rejected'),
         ('accounts_reject', 'Accounts Rejected'),
         ('approved', 'Approved'),
-    ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', track_sequence=3,
+    ], string='Status', readonly=True, copy=False, index=True, track_sequence=3,
         default='draft')
     currency_id = fields.Many2one(
         'res.currency', string='Currency', default=get_currency, help="The payment's currency.")

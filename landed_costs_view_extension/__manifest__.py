@@ -24,4 +24,5 @@
     ],
     'qweb': [],
     'demo': [],
+    "license": "LGPL-3",
 }

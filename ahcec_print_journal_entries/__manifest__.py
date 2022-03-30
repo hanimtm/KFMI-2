@@ -15,4 +15,5 @@ print journal report app, print multiple journal module, print journal entry odo
 	"installable": True,
 	"application": True,
 	"auto_install": False,
+	"license": "LGPL-3",
 }
