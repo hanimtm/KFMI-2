@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- tree view -->
+        <record id="stock_analytic_location_tree" model="ir.ui.view">
+            <field name="name">stock.analytic.location.tree</field>
+            <field name="model">stock.analytic.location</field>
+            <field name="arch" type="xml">
+                <tree string="Location Analytic" editable="bottom">
+                    <field name="name"/>
+                    <field name="location_id" domain="[('usage','=','customer')]"/>
+                    <field name="analytic_account_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="stock_analytic_location_search" model="ir.ui.view">
+            <field name="name">stock.analytic.location.search</field>
+            <field name="model">stock.analytic.location</field>
+            <field name="arch" type="xml">
+                <search string="Membership Location">
+                    <field name="name"/>
+                    <separator/>
+                    <field name="location_id"/>
+                    <separator/>
+                    <field name="analytic_account_id"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_stock_analytic_location" model="ir.actions.act_window">
+            <field name="name">Consumables Analytic Settings</field>
+            <field name="res_model">stock.analytic.location</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new settings
+              </p><p>
+                New settings
+              </p>
+            </field>
+        </record>
+
+        <menuitem name="Consumables Analytic Settings" id="menu_stock_analytic_location" parent="stock.menu_warehouse_config"
+            action="action_stock_analytic_location" sequence="4"/>
+
+    </data>
+</odoo>
