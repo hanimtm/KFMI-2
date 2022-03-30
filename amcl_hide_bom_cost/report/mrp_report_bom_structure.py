@@ -17,8 +17,6 @@ class ReportBomStructure(models.AbstractModel):
             'show_bom_cost': self.env.user.user_has_groups(
                 'amcl_hide_bom_cost.group_show_bom_cost') or False,
         })
-
-        print(res)
         return res
 
     @api.model
