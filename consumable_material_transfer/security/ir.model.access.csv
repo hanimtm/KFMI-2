@@ -1,4 +1,0 @@
-id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-access_consumable_material_transfer,access.consumable.material.transfer,model_consumable_material_transfer,base.group_user,1,1,1,1
-access_stock_analytic_location,access.stock.analytic.location,model_stock_analytic_location,base.group_user,1,1,1,1
-access_consumable_material_line,access.consumable.material.line,model_consumable_material_line,base.group_user,1,1,1,1
