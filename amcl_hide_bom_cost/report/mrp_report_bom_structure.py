@@ -15,8 +15,10 @@ class ReportBomStructure(models.AbstractModel):
             bom_id, searchQty=searchQty, searchVariant=searchVariant)
         res.update({
             'show_bom_cost': self.env.user.user_has_groups(
-                'amcl_hide_bom_cost.group_show_bom_cost'),
+                'amcl_hide_bom_cost.group_show_bom_cost') or False,
         })
+
+        print(res)
         return res
 
     @api.model
@@ -26,7 +28,7 @@ class ReportBomStructure(models.AbstractModel):
         res['lines']['report_type'] = 'html'
         res['lines']['report_structure'] = 'all'
         res['lines']['show_bom_cost'] = self.env.user.user_has_groups(
-            'amcl_hide_bom_cost.group_show_bom_cost')
+            'amcl_hide_bom_cost.group_show_bom_cost') or False
         res['lines']['has_attachments'] = res['lines']['attachments'] or any(
             component['attachments'] for component in res['lines'][
                 'components'])
@@ -50,7 +52,7 @@ class ReportBomStructure(models.AbstractModel):
                 doc['report_type'] = 'pdf'
                 doc['report_structure'] = data and data.get('report_type') or 'all'
                 doc['show_bom_cost'] = self.env.user.user_has_groups(
-                    'amcl_hide_bom_cost.group_show_bom_cost')
+                    'amcl_hide_bom_cost.group_show_bom_cost') or False
                 docs.append(doc)
             if not candidates:
                 if data and data.get('childs'):
@@ -60,10 +62,19 @@ class ReportBomStructure(models.AbstractModel):
                 doc['report_type'] = 'pdf'
                 doc['report_structure'] = data and data.get('report_type') or 'all'
                 doc['show_bom_cost'] = self.env.user.user_has_groups(
-                    'amcl_hide_bom_cost.group_show_bom_cost')
+                    'amcl_hide_bom_cost.group_show_bom_cost') or False
                 docs.append(doc)
         return {
             'doc_ids': docids,
             'doc_model': 'mrp.bom',
             'docs': docs,
         }
+
+    @api.model
+    def get_bom(self, bom_id=False, product_id=False, line_qty=False, line_id=False, level=False):
+        lines = self._get_bom(bom_id=bom_id, product_id=product_id, line_qty=line_qty, line_id=line_id, level=level)
+        lines.update({
+            'show_bom_cost': self.env.user.user_has_groups(
+                'amcl_hide_bom_cost.group_show_bom_cost') or False,
+        })
+        return self.env.ref('mrp.report_mrp_bom_line')._render({'data': lines})
