@@ -151,7 +151,7 @@
                     <tbody>
                         <tr>
                             <td style="border: 1px solid black;" class="text-center">
-                                <t t-esc="o.method_of_payment"/>
+                                Transfer / تحويل
                             </td>
                         </tr>
                     </tbody>
@@ -169,9 +169,7 @@
                 <tbody>
                     <tr>
                         <td style="border: 1px solid black;" class="text-center">
-                            <t t-if="o.lpo_num">
-                                <t t-esc="o.lpo_num.partner_id.name"/>
-                            </t>
+                            a
                         </td>
                     </tr>
                 </tbody>
@@ -193,13 +191,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid black;width:70%">
-                            <t t-esc="o.reason"/>
-                        </td>
+                        <td style="border: 1px solid black;width:70%"/>
                         <td style="border: 1px solid black;" class="text-center">
-                            <t t-if="o.lpo_num and o.lpo_num.invoice_ids">
-                                <t t-esc="o.lpo_num.invoice_ids[0].number"/>
-                            </t>
+                            Inv
                         </td>
                     </tr>
                 </tbody>

@@ -2,12 +2,23 @@
 <odoo>
     <data>
 
-        <report id="action_report_payment_request"
-                string="Payment Request"
-                model="payment.request"
-                name="amcl_payment_request.report_payment_request"
-                file="amcl_payment_request.report_payment_request"
-                report_type="qweb-pdf"/>
+<!--        <report id="action_report_payment_request"-->
+<!--                string="Payment Request"-->
+<!--                model="payment.request"-->
+<!--                name="amcl_payment_request.report_payment_request"-->
+<!--                file="amcl_payment_request.report_payment_request"-->
+<!--                report_type="qweb-pdf"/>-->
+
+        <record id="action_report_payment_request" model="ir.actions.report">
+            <field name="name">Payment Request</field>
+            <field name="model">payment.request</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">amcl_payment_request.report_payment_request</field>
+            <field name="report_file">amcl_payment_request.report_payment_request</field>
+            <field name="print_report_name">'Request Payment - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="amcl_payment_request.model_payment_request"/>
+            <field name="binding_type">report</field>
+        </record>
 
         <record id="report_request_for_payment" model="ir.actions.report">
             <field name="name">Request for Payment</field>
