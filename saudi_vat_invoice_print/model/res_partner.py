@@ -6,6 +6,7 @@ from odoo.exceptions import ValidationError
 class res_partner(models.Model):
     _name = 'res.partner'
     _inherit = 'res.partner'
+    _rec_name = 'display_name'
 
     arabic = fields.Char(
         'Arabic Name'
@@ -25,6 +26,23 @@ class res_partner(models.Model):
     additional_no = fields.Char(
         'Additional No.'
     )
+
+    def name_get(self):
+        if self._context.get('partner_category_display') == 'short':
+            return super(res_partner, self).name_get()
+
+        res = []
+        for category in self:
+            names = []
+            current = category
+            while current:
+                if self.env.user.lang == 'en_US' or not current.arabic:
+                    names.append(current.name)
+                else:
+                    names.append(current.arabic)
+                current = current.parent_id
+            res.append((category.id, ' / '.join(reversed(names))))
+        return res
 
     @api.model
     def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
