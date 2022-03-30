@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Amcl Bom Structure Cost',
+    'name': 'AMCL - Bom Structure Cost',
     'category': 'mrp',
     'sequence': 5,
     'version': '15.0.1.0',
