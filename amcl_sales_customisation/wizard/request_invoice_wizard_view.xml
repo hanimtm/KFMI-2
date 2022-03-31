@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="request_invoice_wizard_form" model="ir.ui.view">
+        <field name="model">request.invoice.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Invoice Request">
+                <group>
+                    <group>
+                        <field name="requester"/>
+                        <field name="sale_order_id"/>
+                    </group>
+                    <group>
+                        <field name="invoice_details"/>
+                        <field name="supporting_document"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_request_invoice_wizard" model="ir.actions.act_window">
+        <field name="name">Request invoice</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">request.invoice.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <!-- TODO: check if we need this -->
+        <field name="binding_model_id" ref="sale.model_sale_order" />
+        <field name="binding_view_types">list</field>
+    </record>
+</odoo>

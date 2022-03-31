@@ -41,6 +41,9 @@ class PaymentRequest(models.Model):
     bank_id = fields.Many2one('res.bank', 'Bank Name')
     res_partner_bank_id = fields.Many2one('res.partner.bank', 'Account Number')
     bank_country_id = fields.Many2one('res.country', 'Bank Country')
+    method_of_payment = fields.Char('Method Of Payment')
+
+
 
     @api.depends('amount', 'lpo_num')
     def compute_balance_amount(self):
@@ -67,7 +70,7 @@ class PaymentRequest(models.Model):
             rec.amount = rec.lpo_num and rec.lpo_num.amount_total or 0
             #rec.project = rec.lpo_num.analytic_id.id
 
-   # @api.multi
+
     def action_confirm(self):
         self.write({'state': 'manager_approval', 'prepared': self.env.user.id})
         channel_all_employees = self.env.ref('amcl_payment_request.channel_all_payment_request').read()[0]
@@ -83,7 +86,7 @@ class PaymentRequest(models.Model):
             body = """Hello, Payment Request with number %s Sending to purchase department approval""" % (self.name)
             channel_id.message_post(body=body, subject='Payment Request',subtype_ids='mail.mt_comment')
 
-   # @api.multi
+
     def action_department_approve(self):
         self.write({'state': 'accounts_approval', 'approved': self.env.user.id})
         channel_all_employees = self.env.ref('amcl_payment_request.channel_all_to_approve_payment_request').read()[0]
@@ -99,7 +102,6 @@ class PaymentRequest(models.Model):
             body = """This payment request %s waiting for accounts approval""" % (self.name)
             channel_id.message_post(body=body, subject='Payment Request', subtype_ids='mail.mt_comment')
 
-   # @api.multi
     def action_department_reject(self):
         self.write({'state': 'manager_reject'})
         channel_all_employees = self.env.ref('amcl_payment_request.channel_all_payment_request').read()[0]
@@ -115,7 +117,7 @@ class PaymentRequest(models.Model):
             body = """This payment request %s get rejected by the purchase department manager""" % (self.name)
             channel_id.message_post(body=body, subject='Payment Request', subtype_ids='mail.mt_comment')
 
-   # @api.multi
+
     def action_accounts_approve(self):
         self.write({'state': 'approved', 'account_approve': self.env.user.id})
         channel_all_employees = self.env.ref('amcl_payment_request.channel_all_payment_request').read()[0]
@@ -131,7 +133,7 @@ class PaymentRequest(models.Model):
             body = """This payment request %s is approved by the accounts team""" % (self.name)
             channel_id.message_post(body=body, subject='Payment Request', subtype_ids='mail.mt_comment')
 
-   # @api.multi
+
     def action_accounts_reject(self):
         self.write({'state': 'accounts_reject'})
         channel_all_employees = self.env.ref('amcl_payment_request.channel_all_payment_request').read()[0]
