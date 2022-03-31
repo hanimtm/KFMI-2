@@ -20,9 +20,10 @@
         'security/ir.model.access.csv',
         'security/data.xml',
         'views/payment_request.xml',
+        'report/report.xml',
         'report/payment_request_report.xml',
         'report/report_request_for_payment.xml',
-        'report/report.xml'
+
     ],
     'license': 'AGPL-3',
     'installable': True,

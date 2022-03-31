@@ -8,7 +8,7 @@
     'summary': """Landed Costs""",
     'description': """Landed Costs Customizations""",
     'author': '',
-    'depends': ['base', 'stock_landed_costs'],
+    'depends': ['base', 'stock_landed_costs', 'purchase'],
     'data': [
         'views/stock_landed_costs_view.xml',
     ],
