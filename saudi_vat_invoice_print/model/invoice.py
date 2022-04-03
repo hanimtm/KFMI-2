@@ -50,7 +50,7 @@ class AccountMove(models.Model):
     amount_text = fields.Char(string='Amount In Words', compute='amount_to_words')
     amount_in_ar = fields.Char(string='Amount In Words', compute='amount_to_words')
     attention = fields.Many2one('res.partner', 'Attention', default=lambda self: self.partner_id.id)
-    approved_by = fields.Many2one('res.partner', 'Approved By', default=lambda self: self.env.user.id)
+    approved_by = fields.Many2one('res.partner', 'Approved By', default=lambda self: self.env.user.partner_id.id or False)
     vat_text = fields.Char('Vat Text', compute='_get_vat_text')
     vat_arabic_text = fields.Char('Vat Text(Arabic)', compute='_get_vat_text')
     discount = fields.Float('Discount', compute='_compute_all_price')
