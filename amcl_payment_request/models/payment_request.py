@@ -42,6 +42,7 @@ class PaymentRequest(models.Model):
     res_partner_bank_id = fields.Many2one('res.partner.bank', 'Account Number')
     bank_country_id = fields.Many2one('res.country', 'Bank Country')
     method_of_payment = fields.Char('Method Of Payment')
+    reason_for_payment = fields.Text('Reason for The Payment')
 
     @api.depends('amount', 'lpo_num')
     def compute_balance_amount(self):

@@ -10,7 +10,7 @@
                             <th style="float:left;">
                                 <img src="/amcl_payment_request/static/description/header.png" alt="Logo" style="max-width: 70%;"/>
                             </th>
-                            <th style="float:right;margin-top:-100px;font-size:25px;">
+                            <th style="float:right;margin-top:-100px;font-size:25px;" class="text-center">
                                 <span>PAYMENT REQUEST</span><br/>
                                 <span>طلب الدفع</span>
                             </th>
@@ -43,12 +43,11 @@
 <!--            </div>-->
             <hr style="height:2px; width:100%; border-width:0; color:black; background-color:black"/>
             <br/>
-            <br/>
             <div class="text-center" style="border: 1px solid black;border-left:none;border-right:none;">
-                <span>P.O. BOX 355 927 RIYADH 11383 Email: info@alkhalefahfactory.com Tel. No. +966 11 2650211 Fax. No.: +966 11 2650229</span>
+                <span>P.O. BOX 355 927 RIYADH 11383   Email: info@alkhalefahfactory.com   Tel. No. +966 11 2650211   Fax. No.: +966 11 2650229</span>
             </div>
             <div class="text-center" style="border: 1px solid black;background-color:#ffe599;border-left:none;border-right:none;">
-                <span>FM-KFMI 03-01-01; Iss.1 Rev.0; 01/2021</span>
+                <span>FM-KFMI 03-01-02;Iss.1 Rv0,01/2021</span>
             </div>
         </div>
     </template>
@@ -57,7 +56,7 @@
         <!-- Multicompany -->
         <div class="article">
             <t t-call="amcl_payment_request.rfp_custom_external_layout_header" />
-            <t t-raw="0" />
+            <t t-raw="0"/>
             <t t-call="amcl_payment_request.rfp_custom_external_layout_footer" />
         </div>
     </template>
@@ -67,14 +66,19 @@
             <div style="width:100%;">
                 <center>
                     <div class="col-8 border-bottom border-dark" style="width:100%">
-                        <strong>Department / قسم، أقسام</strong>
+                        <strong>القسم / Department</strong>
                     </div>
-                    <div class="col-8 border-bottom border-dark mt-2" style="width:100%">
-                        Purchasing / شراء
+                    <div class="col-8 border-bottom border-dark mt-1" style="width:100%">
+                        Purchasing / المشتريات
                         <br/>
                         <strong>Payment Request No. / رقم طلب الدفع</strong>
                     </div>
-                    <div class="col-8 border-bottom border-dark mt-2" style="width:100%">
+                    <div class="col-8 border-bottom border-dark mt-1" style="width:100%">
+                        <t t-esc="o.name"/>
+                        <br/>
+                        <strong>P.O # / Reference</strong>
+                    </div>
+                    <div class="col-8 border-bottom border-dark mt-1" style="width:100%">
                         <t t-if="o.lpo_num">
                             <t t-esc="o.lpo_num.name"/>
                         </t>
@@ -82,14 +86,14 @@
                             <t t-esc="o.reference"/>
                         </t>
                         <br/>
-                        <strong>Date / تاريخ</strong>
+                        <strong>التاريخ / Date</strong>
                     </div>
-                    <div class="col-8 mt-2" style="width:100%">
+                    <div class="col-8 mt-1" style="width:100%">
                         <t t-esc="o.create_date.date()"/>
                     </div>
                 </center>
             </div>
-            <div class="row mt-2">
+            <div class="row mt-1">
                 <div class="col-6">
                     <strong>Please approve the payment detailed as follows :</strong>
                 </div>
@@ -97,11 +101,11 @@
                     <strong>الرجاء الموافقة على الدفع المفصل على النحو التالي</strong>
                 </div>
             </div>
-            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;">
+            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;">
                 <thead>
                     <tr>
                         <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">
-                            Amount in Words / المبلغ بالكلمات
+                            Amount in Words / المبلغ كتابة
                         </th>
                         <th style="border: 1px solid black;width:15%;" name="th_amount_in_figures" class="text-center">
                             Amount in Figures / المبلغ بالأرقام
@@ -117,21 +121,36 @@
                             <t t-esc="o.amount"/>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="border: 0px"></td>
+                        <td style="border: 1px solid black;" class="text-center">
+                            BALANCE PAYMENT
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px"></td>
+                        <td style="border: 1px solid black;" class="text-center">
+                            <t t-esc="o.balance_amount"/>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
             <center>
-                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:80%">
+                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;width:80%">
                     <thead>
                         <tr>
-                            <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">
-                                Currency / عملة
+                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_currency" class="text-left">
+                                Currency
+                            </th>
+                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_currency" class="text-right">
+                                العمله
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="border: 1px solid black;" class="text-center">
+                            <td style="border: 1px solid black;" class="text-center" colspan="2">
                                 <t t-esc="o.currency_id.name"/>
                             </td>
                         </tr>
@@ -139,61 +158,131 @@
                 </table>
             </center>
 
+            <!-- Account -->
             <center>
-                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:80%">
+                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;width:80%">
                     <thead>
                         <tr>
-                            <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">
-                                Method of Payment / طريقة الدفع
+                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_currency" class="text-left">
+                                BENEFICIARY ACCOUNT NUMBER
+                            </th>
+                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_currency" class="text-right">
+                                رقم حساب المستفيد
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="border: 1px solid black;" class="text-center">
-                                Transfer / تحويل
+                            <td style="border: 1px solid black;" class="text-center" colspan="2">
+                                <t t-if="o.res_partner_bank_id">
+                                    <t t-esc="o.res_partner_bank_id.acc_number"/>
+                                </t>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </center>
 
-            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:100%">
-                <thead>
-                    <tr>
-                        <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">
-                            In The Order of / في ترتيب
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="border: 1px solid black;" class="text-center">
-                            a
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <center>
+                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;width:80%">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_ac_mo" class="text-left">
+                                BANK NAME
+                            </th>
+                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_ac_no" class="text-right">
+                                اسم البنك
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid black;" class="text-center" colspan="2">
+                                <t t-if="o.bank_id">
+                                    <t t-esc="o.bank_id.name"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
 
-            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:100%">
+            <center>
+                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;width:80%">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_ac_mo" class="text-left">
+                                BENEFICIARY NAME
+                            </th>
+                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_ac_no" class="text-right">
+                                اسم المستفيد
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid black;" class="text-center" colspan="2">
+                                <t t-if="o.res_partner_bank_id">
+                                    <t t-if="o.res_partner_bank_id.acc_holder_name">
+                                        <t t-esc="o.res_partner_bank_id.acc_holder_name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-if="o.res_partner_bank_id.partner_id">
+                                            <t t-esc="o.res_partner_bank_id.partner_id.name"/>
+                                        </t>
+                                    </t>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+
+<!--            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:100%">-->
+<!--                <thead>-->
+<!--                    <tr>-->
+<!--                        <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">-->
+<!--                            In The Order of / في ترتيب-->
+<!--                        </th>-->
+<!--                    </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                    <tr>-->
+<!--                        <td style="border: 1px solid black;" class="text-center">-->
+<!--                            a-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+
+            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;width:100%">
                 <thead>
                     <tr>
-                        <th colspan="2" style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">
-                            Reason for The Payment / سبب الدفع
+                        <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_ac_mo" class="text-left">
+                            Reason for The Payment
+                        </th>
+                        <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_ac_no" class="text-right">
+                            الغرض من الدفع
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="border: 1px solid black;width:70%"/>
+                        <td style="border: 1px solid black;width:70%" class="text-center" rowspan="2">
+                            <t t-esc="o.reason_for_payment"/>
+                        </td>
                         <td style="border: 1px solid black;" class="text-center">
                             Proforma Invoice No:
                         </td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid black;width:70%"/>
+<!--                        <td style="border: 1px solid black;width:70%"/>-->
                         <td style="border: 1px solid black;" class="text-center">
-                            Inv
+                            <t t-if="o.lpo_num">
+                                <t t-if="o.lpo_num.invoice_ids">
+                                    <t t-esc="o.lpo_num.invoice_ids[0].name"/>
+                                </t>
+                            </t>
                         </td>
                     </tr>
                 </tbody>
@@ -218,36 +307,36 @@
 <!--                </div>-->
 <!--            </div>-->
 
-            <table class="table table-sm o_main_table mt-5" style="width:100%">
+            <table class="table table-sm o_main_table mt-1" style="width:100%">
                 <thead>
                     <tr>
-                        <th style="width:25%;" class="text-center border-0  border-bottom border-dark">
-                            <span>موافقة المدير العام</span><br/>
+                        <th style="width:25%;" class="text-center border-0 border-bottom border-dark p-0">
+                            <span> إعتماد المدير العام</span><br/>
                             Approval of the GM
                         </th>
-                        <th style="width:25%;" class="text-center border-0  border-bottom border-dark">
-                            <span>تدقيق محاسب</span><br/>
+                        <th style="width:25%;" class="text-center border-0  border-bottom border-dark p-0">
+                            <span>مراجعة الإدارة المالية</span><br/>
                             Accountant Audit
                         </th>
-                        <th style="width:25%;" class="text-center border-0 border-bottom border-dark">
-                            <span>معتمد من قبل مدير الدائرة</span><br/>
+                        <th style="width:25%;" class="text-center border-0 border-bottom border-dark p-0">
+                            <span> الموافقه من قبل مدير الإدارة</span><br/>
                             Approved By Dept. Manager
                         </th>
-                        <th style="width:25%;" class="text-center border-0 border-bottom border-dark">
-                            <span>أعدت بواسطة</span><br/>
+                        <th style="width:25%;" class="text-center border-0 border-bottom border-dark p-0">
+                            <span>معد الطلب</span><br/>
                             Prepared By
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="border: 1px solid black;" class="text-center pt-3 pb-3">
+                        <td style="border: 1px solid black;" class="text-center pt-4 pb-4">
                         </td>
-                        <td style="border: 1px solid black;" class="text-center pt-3 pb-3">
+                        <td style="border: 1px solid black;" class="text-center pt-4 pb-4">
                         </td>
-                        <td style="border: 1px solid black;" class="text-center pt-3 pb-3">
+                        <td style="border: 1px solid black;" class="text-center pt-4 pb-4">
                         </td>
-                        <td style="border: 1px solid black;" class="text-center pt-3 pb-3">
+                        <td style="border: 1px solid black;" class="text-center pt-4 pb-4">
                         </td>
                     </tr>
                 </tbody>

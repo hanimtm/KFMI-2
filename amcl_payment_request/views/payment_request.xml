@@ -74,7 +74,9 @@
                         <label for="purchase_comment"/>
                         <field name="purchase_comment"
                                attrs="{'readonly': [('state', 'in', ('accounts_approval','manager_approval'))]}"/>
-
+                        <label for="reason_for_payment"/>
+                        <field name="reason_for_payment"
+                               attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
