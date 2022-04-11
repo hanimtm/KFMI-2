@@ -138,7 +138,7 @@ class AccountMove(models.Model):
                 'line_ids': [
                     (0, 0, {
                         'name': 'Cash Payment',
-                        'debit': self.net_total,
+                        'debit': self.amount_total,
                         'credit': 0.0,
                         'quantity': 1.0,
                         'currency_id': self.currency_id.id,
@@ -147,7 +147,7 @@ class AccountMove(models.Model):
                     }),
                     (0, 0, {
                         'name': 'Cash Payment',
-                        'credit': self.net_total,
+                        'credit': self.amount_total,
                         'debit': 0.0,
                         'quantity': 1.0,
                         'currency_id': self.currency_id.id,
