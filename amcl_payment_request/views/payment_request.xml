@@ -49,7 +49,7 @@
                                 <field name="bank_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="res_partner_bank_id"
                                        domain="[('bank_id', '=', bank_id), ('partner_id', '=', company)]"
-                                       context="{'default_partner_id': company}"
+                                       context="{'default_partner_id': company, 'default_bank_id': bank_id, 'default_currency_id': currency_id}"
                                        attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="bank_country_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                             </group>

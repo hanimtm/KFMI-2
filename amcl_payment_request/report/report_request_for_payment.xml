@@ -221,16 +221,21 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="border: 1px solid black;" class="text-center" colspan="2">
-                                <t t-if="o.res_partner_bank_id">
-                                    <t t-if="o.res_partner_bank_id.acc_holder_name">
-                                        <t t-esc="o.res_partner_bank_id.acc_holder_name"/>
-                                    </t>
-                                    <t t-else="">
-                                        <t t-if="o.res_partner_bank_id.partner_id">
+                            <td style="border: 1px solid black;width:50%;border-right:0px;" class="text-left">
+                                <t t-if="o.res_partner_bank_id and o.res_partner_bank_id.partner_id">
+<!--                                    <t t-if="o.res_partner_bank_id.acc_holder_name">-->
+<!--                                        <t t-esc="o.res_partner_bank_id.acc_holder_name"/>-->
+<!--                                    </t>-->
+<!--                                    <t t-else="">-->
+<!--                                        <t t-if="o.res_partner_bank_id.partner_id">-->
                                             <t t-esc="o.res_partner_bank_id.partner_id.name"/>
-                                        </t>
-                                    </t>
+<!--                                        </t>-->
+<!--                                    </t>-->
+                                </t>
+                            </td>
+                            <td style="border: 1px solid black;width:50%;border-left:0px;" class="text-right">
+                                <t t-if="o.res_partner_bank_id and o.res_partner_bank_id.partner_id">
+                                    <t t-esc="o.res_partner_bank_id.partner_id.arabic"/>
                                 </t>
                             </td>
                         </tr>
