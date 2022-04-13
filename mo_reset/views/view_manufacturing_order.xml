@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='components_availability']" position="after">
-                <field name="set_to_draft" invisbile="1"/>
+                <field name="set_to_draft"/>
             </xpath>
             <xpath expr="//button[@name='action_cancel']" position="before">
                 <button name="action_draft" states="cancel" type="object" string="Set to Draft"/>

@@ -12,7 +12,7 @@
     'website': 'https://www.craftsync.com/',
     'license': 'OPL-1',
     'support':'info@craftsync.com',
-     'depends' : ['sh_mrp_cancel'],
+     'depends' : ['mrp'],
     'data': [
 	    'views/view_manufacturing_order.xml',
     ],
