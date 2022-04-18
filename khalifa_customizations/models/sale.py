@@ -45,6 +45,10 @@ class Sale(models.Model):
                                    track_visibility='always')
     amount_discount = fields.Monetary(string='Discount', store=True, readonly=True, compute='_amount_all',
                                       digits=dp.get_precision('Account'), track_visibility='always')
+    is_sceco_order = fields.Boolean('Is SCECO Order ?')
+    sceco_order_doc_name = fields.Char('SCECO Name')
+    sceco_order_doc = fields.Binary('SCECO')
+    sec_po_no = fields.Char('Sec P.O No.')
 
     @api.depends('order_line')
     def get_total_delivered(self):

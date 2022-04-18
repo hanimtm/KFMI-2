@@ -11,7 +11,8 @@ class SaleOrder(models.Model):
     incoterm_id = fields.Many2one('account.incoterms', 'Mode of Delivery',
                                   required=True,
                                   help="International Commercial Terms are a series of predefined commercial terms used in international transactions.")
-
+    rfq_attachment_name = fields.Char('RFQ Attachment Name')
+    rfq_attachment = fields.Binary('RFQ Attachment')
     def _get_vat_text(self):
         vat = ''
         arab = ''
