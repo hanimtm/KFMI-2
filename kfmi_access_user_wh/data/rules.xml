@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="warehouse_users_access_right" model="ir.rule">
+        <field name="name">WareHouse Users Access Right</field>
+        <field name="model_id" ref="model_stock_warehouse"/>
+        <field name="domain_force">[('user_ids', 'in', [user.id])]</field>
+    </record>
+
+    <record id="picking_type_users_access_right" model="ir.rule">
+        <field name="name">Picking Type Users Access Right</field>
+        <field name="model_id" ref="model_stock_picking_type"/>
+        <field name="domain_force">[('user_ids', 'in', [user.id])]</field>
+    </record>
+
+    <record id="picking_users_access_right" model="ir.rule">
+        <field name="name">Picking Users Access Right</field>
+        <field name="model_id" ref="model_stock_picking"/>
+        <field name="domain_force">[('picking_type_id.user_ids', 'in', [user.id])]</field>
+    </record>
+</odoo>
