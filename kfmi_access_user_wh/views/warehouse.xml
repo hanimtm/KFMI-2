@@ -7,19 +7,21 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='code']" position="after">
                 <field name="user_ids" widget="many2many_tags"
-                       options="{'no_create':True}"/>
+                       options="{'no_create':True}"
+                       groups="base.group_erp_manager"/>
             </xpath>
         </field>
     </record>
 
-     <record id="stock_picking_type_form_view_inherit" model="ir.ui.view">
+    <record id="stock_picking_type_form_view_inherit" model="ir.ui.view">
         <field name="name">stock_picking_type_form_view_inherit</field>
         <field name="model">stock.picking.type</field>
         <field name="inherit_id" ref="stock.view_picking_type_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='warehouse_id']" position="after">
                 <field name="user_ids" widget="many2many_tags"
-                       options="{'no_create':True}"/>
+                       options="{'no_create':True}"
+                       groups="base.group_erp_manager"/>
             </xpath>
         </field>
     </record>

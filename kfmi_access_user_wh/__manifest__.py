@@ -8,7 +8,7 @@
     'license': 'OPL-1',
 
     'author': 'Ibrahim',
-    'depends': ['stock'],
+    'depends': ['stock', 'base'],
     'data': [
         'views/warehouse.xml',
         'data/rules.xml'

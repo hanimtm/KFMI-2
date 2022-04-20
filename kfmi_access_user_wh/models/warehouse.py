@@ -12,3 +12,6 @@ class StockPickingTypeInherit(models.Model):
 
     user_ids = fields.Many2many('res.users', string='User')
 
+
+class StockPickingInherit(models.Model):
+    _inherit = 'stock.picking'
