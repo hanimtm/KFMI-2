@@ -70,9 +70,10 @@
                         <field name="sceco_order_doc_name" invisible="1"/>
                         <field name="sceco_order_doc" class="o_address_city"
                                filename="sceco_order_doc_name"
-                               attrs="{'required': [('is_sceco_order', '=', True)]}"/>
+                               attrs="{'required': [('is_sceco_order', '=', True)], 'invisible': [('is_sceco_order', '!=', True)]}"/>
                     </div>
-                    <field name="sec_po_no" class="o_address_city" attrs="{'required': [('is_sceco_order', '=', True)]}"/>
+                    <field name="sec_po_no" class="o_address_city"
+                           attrs="{'required': [('is_sceco_order', '=', True)], 'invisible': [('is_sceco_order', '!=', True)]}"/>
                 </field>
                 <xpath expr="//field[@name='team_id']" position="replace"/>
                 <xpath expr="//group[@name='sale_shipping']" position="replace"/>
