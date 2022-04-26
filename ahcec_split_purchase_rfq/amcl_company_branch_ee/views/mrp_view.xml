@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+<!--        <record id="inherit_mrp_production_form_view" model="ir.ui.view">-->
+<!--            <field name="name">mrp.production.form</field>-->
+<!--            <field name="model">mrp.production</field>-->
+<!--            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='company_id']" position="after">-->
+<!--                    <field name="branch_id" required="1" domain="[('company_id', '=', company_id)]"-->
+<!--                           groups="amcl_company_branch_ee.group_multi_branches"-->
+<!--                           options="{'no_create':True,'no_edit':True}"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="inherit_mrp_unbuild_form_view" model="ir.ui.view">-->
+<!--            <field name="name">mrp.unbuild.form</field>-->
+<!--            <field name="model">mrp.unbuild</field>-->
+<!--            <field name="inherit_id" ref="mrp.mrp_unbuild_form_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='company_id']" position="after">-->
+<!--                    <field name="branch_id" required="1" domain="[('company_id', '=', company_id)]"-->
+<!--                           groups="amcl_company_branch_ee.group_multi_branches"-->
+<!--                           options="{'no_create':True,'no_edit':True}"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="inherit_stock_scrap_form_view" model="ir.ui.view">
+            <field name="name">stock.scrap.form</field>
+            <field name="model">stock.scrap</field>
+            <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="branch_id" required="1" domain="[('company_id', '=', current_company_id)]"
+                           groups="amcl_company_branch_ee.group_multi_branches"
+                           options="{'no_create':True,'no_edit':True}"/>
+                </xpath>
+            </field>
+        </record>
+
+<!--        <record id="inherit_mrp_bom_form_view" model="ir.ui.view">-->
+<!--            <field name="name">mrp.bom.form</field>-->
+<!--            <field name="model">mrp.bom</field>-->
+<!--            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='company_id']" position="after">-->
+<!--                    <field name="branch_id" required="1" domain="[('company_id', '=', company_id)]"-->
+<!--                           groups="amcl_company_branch_ee.group_multi_branches"-->
+<!--                           options="{'no_create':True,'no_edit':True}"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="inherit_mrp_workorder_tree_view" model="ir.ui.view">-->
+<!--            <field name="name">mrp.workorder.tree</field>-->
+<!--            <field name="model">mrp.workorder</field>-->
+<!--            <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_editable_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='duration']" position="after">-->
+<!--                    <field name="branch_id" required="1"-->
+<!--                           groups="amcl_company_branch_ee.group_multi_branches"-->
+<!--                           options="{'no_create':True,'no_edit':True}"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="inherit_mrp_workcenter_form_view" model="ir.ui.view">-->
+<!--            <field name="name">mrp.workcenter.form</field>-->
+<!--            <field name="model">mrp.workcenter</field>-->
+<!--            <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='company_id']" position="after">-->
+<!--                    <field name="branch_id" required="1" domain="[('company_id', '=', company_id)]"-->
+<!--                           groups="amcl_company_branch_ee.group_multi_branches"-->
+<!--                           options="{'no_create':True,'no_edit':True}"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="inherit_mrp_routing_workcenter_form_view" model="ir.ui.view">-->
+<!--            <field name="name">mrp.route.workcenter.form</field>-->
+<!--            <field name="model">mrp.routing.workcenter</field>-->
+<!--            <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='company_id']" position="after">-->
+<!--                    <field name="branch_id" required="1" domain="[('company_id', '=', company_id)]"-->
+<!--                           groups="amcl_company_branch_ee.group_multi_branches"-->
+<!--                           options="{'no_create':True,'no_edit':True}"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+    </data>
+</odoo>

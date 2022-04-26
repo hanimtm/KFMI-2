@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sequence_bom_request" model="ir.sequence">
+            <field name="name">BOM Request</field>
+            <field name="code">bom.request</field>
+            <field name="prefix">BOM/RST/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="sequence_bom_dummy" model="ir.sequence">
+            <field name="name">BOM Dummy</field>
+            <field name="code">bom.dummy</field>
+            <field name="prefix"></field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_move_form_payment_options" model="ir.ui.view">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <field name="show_register_payment" invisible="1"/>
+                    <button name="action_register_with_payment_options" type="object"
+                        string="Register Payment" class="oe_highlight"
+                        groups="amcl_invoice_customizations.group_show_cash_bank_payment"
+                        attrs="{'invisible':['|', '|', ('state', '!=', 'posted'), ('payment_state', 'not in', ('not_paid', 'partial')),('move_type', 'not in', ('out_invoice'))]}"/>
+                </xpath>
+                <xpath expr="//button[@name='action_register_payment']" position="attributes">
+                    <attribute name="attrs">{'invisible':[('show_register_payment','=',False)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_reference']" position="after">
+                    <field name="payment_option" widget="radio" options="{'horizontal': true}" attrs="{'invisible':[('move_type','!=','out_invoice')]}" groups="amcl_invoice_customizations.group_show_cash_bank_payment"/>
+                    <field name="cash_journal_id" attrs="{'invisible':['|',('payment_option','in',['bank']),('move_type','!=','out_invoice')]}" options="{'no_open': True, 'no_create': True}" groups="amcl_invoice_customizations.group_show_cash_bank_payment"/>
+                    <field name="cash_amount" attrs="{'invisible':['|',('payment_option','in',['bank']),('move_type','!=','out_invoice')]}" groups="amcl_invoice_customizations.group_show_cash_bank_payment"/>
+                    <field name="bank_journal_id" attrs="{'invisible':['|',('payment_option','in',['cash']),('move_type','!=','out_invoice')]}" options="{'no_open': True, 'no_create': True}" groups="amcl_invoice_customizations.group_show_cash_bank_payment"/>
+                    <field name="bank_amount" attrs="{'invisible':['|',('payment_option','in',['cash']),('move_type','!=','out_invoice')]}" groups="amcl_invoice_customizations.group_show_cash_bank_payment"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

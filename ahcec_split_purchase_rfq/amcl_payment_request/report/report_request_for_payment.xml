@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="rfp_custom_external_layout_header">
+        <div class="header">
+            <div class="row">
+                <table class="table-sm o_main_table" style="width:100%;text-transform: uppercase;" >
+                    <thead>
+                        <tr>
+                            <th style="float:left;">
+                                <img src="/amcl_payment_request/static/description/header.png" alt="Logo" style="max-width: 70%;"/>
+                            </th>
+                            <th style="float:right;margin-top:-100px;font-size:25px;">
+                                <span>PAYMENT REQUEST</span><br/>
+                                <span>طلب الدفع</span>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <template id="rfp_custom_external_layout_footer">
+        <div class="footer o_standard_footer" style="width:100%;font-size:12px;">
+<!--            <div style="width:100%;">-->
+<!--                <div style="width:25%;float:left;">-->
+<!--&lt;!&ndash;                    <span class="text-center">Approval of the GM</span><br/>&ndash;&gt;-->
+<!--                    <span class="text-center">Approval of the GM</span>-->
+<!--                </div>-->
+<!--                <div style="width:25%;float:left;">-->
+<!--&lt;!&ndash;                    <span class="text-center">Accountant Audit</span><br/>&ndash;&gt;-->
+<!--                    <span class="text-center">Accountant Audit</span>-->
+<!--                </div>-->
+<!--                <div style="width:25%;float:left;">-->
+<!--&lt;!&ndash;                    <span class="text-center">Approved By Dept. Manager</span><br/>&ndash;&gt;-->
+<!--                    <span class="text-center">Approved By Dept. Manager</span>-->
+<!--                </div>-->
+<!--                <div style="width:25%;float:left;">-->
+<!--&lt;!&ndash;                    <span class="text-center">Prepared By</span><br/>&ndash;&gt;-->
+<!--                    <span class="text-center">Prepared By</span>-->
+<!--                </div>-->
+<!--            </div>-->
+            <hr style="height:2px; width:100%; border-width:0; color:black; background-color:black"/>
+            <br/>
+            <br/>
+            <div class="text-center" style="border: 1px solid black;border-left:none;border-right:none;">
+                <span>P.O. BOX 355 927 RIYADH 11383 Email: info@alkhalefahfactory.com Tel. No. +966 11 2650211 Fax. No.: +966 11 2650229</span>
+            </div>
+            <div class="text-center" style="border: 1px solid black;background-color:#ffe599;border-left:none;border-right:none;">
+                <span>FM-KFMI 03-01-01; Iss.1 Rev.0; 01/2021</span>
+            </div>
+        </div>
+    </template>
+
+    <template id="rfp_custom_external_layout">
+        <!-- Multicompany -->
+        <div class="article">
+            <t t-call="amcl_payment_request.rfp_custom_external_layout_header" />
+            <t t-raw="0" />
+            <t t-call="amcl_payment_request.rfp_custom_external_layout_footer" />
+        </div>
+    </template>
+
+    <template id="report_request_for_payment_document">
+        <t t-call="amcl_payment_request.rfp_custom_external_layout">
+            <div style="width:100%;">
+                <center>
+                    <div class="col-8 border-bottom border-dark" style="width:100%">
+                        <strong>Department / قسم، أقسام</strong>
+                    </div>
+                    <div class="col-8 border-bottom border-dark mt-2" style="width:100%">
+                        Purchasing / شراء
+                        <br/>
+                        <strong>Payment Request No. / رقم طلب الدفع</strong>
+                    </div>
+                    <div class="col-8 border-bottom border-dark mt-2" style="width:100%">
+                        <t t-if="o.lpo_num">
+                            <t t-esc="o.lpo_num.name"/>
+                        </t>
+                        <t t-else="">
+                            <t t-esc="o.reference"/>
+                        </t>
+                        <br/>
+                        <strong>Date / تاريخ</strong>
+                    </div>
+                    <div class="col-8 mt-2" style="width:100%">
+                        <t t-esc="o.create_date.date()"/>
+                    </div>
+                </center>
+            </div>
+            <div class="row mt-2">
+                <div class="col-6">
+                    <strong>Please approve the payment detailed as follows :</strong>
+                </div>
+                <div class="col-6 text-right">
+                    <strong>الرجاء الموافقة على الدفع المفصل على النحو التالي</strong>
+                </div>
+            </div>
+            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">
+                            Amount in Words / المبلغ بالكلمات
+                        </th>
+                        <th style="border: 1px solid black;width:15%;" name="th_amount_in_figures" class="text-center">
+                            Amount in Figures / المبلغ بالأرقام
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid black;" class="text-center">
+                            <t t-esc="o.get_num2words(o.amount)"/>
+                        </td>
+                        <td style="border: 1px solid black;" class="text-center">
+                            <t t-esc="o.amount"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <center>
+                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:80%">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">
+                                Currency / عملة
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid black;" class="text-center">
+                                <t t-esc="o.currency_id.name"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+
+            <center>
+                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:80%">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">
+                                Method of Payment / طريقة الدفع
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid black;" class="text-center">
+                                <t t-esc="o.method_of_payment"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+
+            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:100%">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">
+                            In The Order of / في ترتيب
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid black;" class="text-center">
+                            <t t-if="o.lpo_num">
+                                <t t-esc="o.lpo_num.partner_id.name"/>
+                            </t>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:100%">
+                <thead>
+                    <tr>
+                        <th colspan="2" style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">
+                            Reason for The Payment / سبب الدفع
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid black;width:70%"/>
+                        <td style="border: 1px solid black;" class="text-center">
+                            Proforma Invoice No:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black;width:70%">
+                            <t t-esc="o.reason"/>
+                        </td>
+                        <td style="border: 1px solid black;" class="text-center">
+                            <t t-if="o.lpo_num and o.lpo_num.invoice_ids">
+                                <t t-esc="o.lpo_num.invoice_ids[0].number"/>
+                            </t>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+<!--            <div style="width:100%;">-->
+<!--                <div style="width:25%;float:left;">-->
+<!--&lt;!&ndash;                    <span class="text-center">Approval of the GM</span><br/>&ndash;&gt;-->
+<!--                    <span class="text-center"></span>-->
+<!--                </div>-->
+<!--                <div style="width:25%;float:left;">-->
+<!--&lt;!&ndash;                    <span class="text-center">Accountant Audit</span><br/>&ndash;&gt;-->
+<!--                    <span class="text-center"></span>-->
+<!--                </div>-->
+<!--                <div style="width:25%;float:left;">-->
+<!--&lt;!&ndash;                    <span class="text-center">Approved By Dept. Manager</span><br/>&ndash;&gt;-->
+<!--                    <span class="text-center">A</span>-->
+<!--                </div>-->
+<!--                <div style="width:25%;float:left;">-->
+<!--&lt;!&ndash;                    <span class="text-center">Prepared By</span><br/>&ndash;&gt;-->
+<!--                    <span class="text-center"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <table class="table table-sm o_main_table mt-5" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width:25%;" class="text-center border-0  border-bottom border-dark">
+                            <span>موافقة المدير العام</span><br/>
+                            Approval of the GM
+                        </th>
+                        <th style="width:25%;" class="text-center border-0  border-bottom border-dark">
+                            <span>تدقيق محاسب</span><br/>
+                            Accountant Audit
+                        </th>
+                        <th style="width:25%;" class="text-center border-0 border-bottom border-dark">
+                            <span>معتمد من قبل مدير الدائرة</span><br/>
+                            Approved By Dept. Manager
+                        </th>
+                        <th style="width:25%;" class="text-center border-0 border-bottom border-dark">
+                            <span>أعدت بواسطة</span><br/>
+                            Prepared By
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid black;" class="text-center pt-3 pb-3">
+                        </td>
+                        <td style="border: 1px solid black;" class="text-center pt-3 pb-3">
+                        </td>
+                        <td style="border: 1px solid black;" class="text-center pt-3 pb-3">
+                        </td>
+                        <td style="border: 1px solid black;" class="text-center pt-3 pb-3">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </t>
+    </template>
+
+    <template id="report_request_for_payment">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="amcl_payment_request.report_request_for_payment_document" />
+            </t>
+        </t>
+    </template>
+
+</odoo>

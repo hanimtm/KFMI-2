@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="company_branch_tree_view" model="ir.ui.view">
+            <field name="name">company.branch.tree</field>
+            <field name="model">company.branch</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="company_branch_form_view" model="ir.ui.view">
+            <field name="name">company.branch.form</field>
+            <field name="model">company.branch</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group col="4">
+                            <field name="name"/>
+                            <field name="company_id"/>
+                            <field name="parent_id" options="{'no_create':True,'no_edit':True}"/>
+                            <field name="phone"/>
+                            <label for="street" string="Address"/>
+                            <div class="o_address_format">
+                                <field name="street" placeholder="Street..." class="o_address_street"/>
+                                <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="city" placeholder="City" class="o_address_city"/>
+                                <field name="state_id" class="o_address_state" placeholder="State"
+                                       options="{&quot;no_open&quot;: True}"
+                                       context="{'country_id': country_id, 'zip': zip}"/>
+                                <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="country_id" placeholder="Country" class="o_address_country"
+                                       options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                            </div>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_company_branch" model="ir.actions.act_window">
+            <field name="name">Branch</field>
+            <field name="res_model">company.branch</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menuitem_company_branch" action="action_view_company_branch"
+                  parent="base.menu_users" sequence="20"/>
+
+        <!-- Users -->
+        <record id="inherit_res_user_form_view" model="ir.ui.view">
+            <field name="name">res.users.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='access_rights']//group" position="after">
+                    <group string="Multi Branches" groups="amcl_company_branch_ee.group_multi_branches">
+                        <field name="branch_ids" widget="many2many_tags"
+                               options="{'no_create':True,'no_edit':True}"
+                               groups="amcl_company_branch_ee.group_multi_branches"/>
+                        <field name="branch_id" context="{'user_preference': 0}"
+                               domain="[('company_id', '=', company_id)]"
+                               options="{'no_create':True,'no_edit':True}"
+                               groups="amcl_company_branch_ee.group_multi_branches"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_res_users_preferences_form" model="ir.ui.view">
+            <field name="name">view.res.preferences.users.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+            <field name="arch" type="xml">
+                <field name="email" position="after">
+                    <field name="branch_ids" widget="many2many_tags" invisible="1"
+                           readonly="0" options="{'no_create':True,'no_edit':True}"/>
+                    <field name="branch_id" readonly="0" domain="[('id','in', branch_ids)]"
+                           options="{'no_create': True}" groups="amcl_company_branch_ee.group_multi_branches"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

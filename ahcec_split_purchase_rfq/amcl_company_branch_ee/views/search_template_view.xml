@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="search_template_branch_filter">
+            <button type="button" class="o_dropdown_toggler_btn btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                <span class="fa fa-filter"/>
+                Branches:
+                <t t-set="selected_branches" t-value="', '.join(branch.get('name') for branch in options['branches'] if branch.get('selected'))"/>
+                <t t-if="selected_branches">
+                    <t t-esc="selected_branches"/>
+                </t>
+                <t t-else="">
+                    All
+                </t>
+            </button>
+            <div class="dropdown-menu o_filter_menu" role="menu">
+                <t t-foreach="options['branches']" t-as="branch">
+                    <t t-if="branch.get('id') == 'divider'">
+                        <div role="separator" class="dropdown-divider"/>
+                        <b role="menuitem" class="ml4 dropdown-item-text"><t t-esc="branch.get('name')"/></b>
+                        <div role="separator" class="dropdown-divider"/>
+                    </t>
+                    <t t-if="branch.get('id') != 'divider'">
+                        <t t-if="branch.get('id') == 'group'">
+                            <a role="menuitem" class="dropdown-item js_account_report_group_choice_filter" data-filter="branches" t-att-data-id="branch.get('id')" t-att-data-member-ids="branch.get('ids')">
+                                <t t-esc="branch.get('name')"/>
+                            </a>
+                        </t>
+                        <t t-else="">
+                            <a role="menuitem" class="dropdown-item js_account_report_choice_filter" t-att-title="branch.get('name')" t-att-data-id="branch.get('id')" data-filter="branches">
+                                <t t-esc="branch.get('name')"/>
+                            </a>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </template>
+
+        <template id="search_template" inherit_id="account_reports.search_template">
+            <xpath expr="." position="inside">
+                <div class="btn-group o_dropdown o_account_reports_filter_branch" t-if="options.get('branches') != None">
+                    <t t-call="amcl_company_branch_ee.search_template_branch_filter"/>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

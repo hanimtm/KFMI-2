@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='options']" position='inside'>
+                <span class="d-inline-block">
+                    <field name="standard_bom"/>
+                    <label for="standard_bom"/>
+                </span>
+                <span class="d-inline-block">
+                    <field name="non_standard_bom"/>
+                    <label for="non_standard_bom"/>
+                </span>
+                <span class="d-inline-block" invisible="1">
+                    <field name="hide_sales"/>
+                    <label for="hide_sales"/>
+                </span>
+                <span class="d-inline-block" invisible="1">
+                    <field name="hide_cost"/>
+                    <label for="hide_cost"/>
+                </span>
+            </xpath>
+            <xpath expr="//group[@name='group_standard_price']" position='inside'>
+                <field name="alternative_code"/>
+                <field name="kfmi_code"/>
+                <field name="abb_code"/>
+                <field name="sec_code"/>
+            </xpath>
+            <label for="list_price" class="mt-1" position="attributes">
+                <attribute name="attrs">{'invisible': [('hide_sales','=',True)]}</attribute>
+            </label>
+            <xpath expr="//div[@name='pricing']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hide_sales','=',True)]}</attribute>
+            </xpath>
+            <label for="standard_price" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}" position="attributes">
+                <attribute name="attrs">{'invisible': [('hide_cost','=',True)]}</attribute>
+            </label>
+            <div name="standard_price_uom" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}" class="o_row" position="attributes">
+                <attribute name="attrs">{'invisible': [('hide_cost','=',True)]}</attribute>
+            </div>
+            <xpath expr="//h1/div[hasclass('d-flex')]" position="inside">
+                <field class="o_text_overflow" style="margin-left:20px;" name="arabic_name" help="Arabic Product Name" placeholder="e.g. برجر جبن"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_variant_easy_edit_view" model="ir.ui.view">
+        <field name="name">product.product.form.easy_inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='pricing']" position="inside">
+                <field name="hide_sales" invisible="1"/>
+                <field name="hide_cost" invisible="1"/>
+            </xpath>
+            <label for="lst_price" position="attributes">
+                <attribute name="attrs">{'invisible': [('hide_sales','=',True)]}</attribute>
+            </label>
+            <div class="o_row col-5 pl-0">
+                <attribute name="attrs">{'invisible': [('hide_sales','=',True)]}</attribute>
+            </div>
+            <xpath expr="//field[@name='standard_price']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hide_cost','=',True)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_kanban_view" model="ir.ui.view">
+        <field name="name">product.template.kanban.view.inherited</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_variant_count']" position="after">
+                <field name="hide_sales" invisible="1"/>
+            </xpath>
+            <xpath expr="//div[@name='product_lst_price']" position="attributes">
+                <attribute name="attrs">{'invisible': [('hide_sales','=',True)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_kanban_view" model="ir.ui.view">
+        <field name="name">product.kanban.view.inherited</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lst_price']" position="after">
+                <field name="hide_sales" invisible="1"/>
+            </xpath>
+            <xpath expr="//ul" position="attributes">
+                <attribute name="attrs">{'invisible': [('hide_sales','=',True)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_product_tree_view" model="ir.ui.view">
+        <field name="name">product.product.tree.view.inherited</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="hide_sales" invisible="1"/>
+                <field name="hide_cost" invisible="1"/>
+            </xpath>
+            <field name="lst_price" optional="show" position="replace">
+                <field name="lst_price" string="Sales Price" attrs="{'invisible': [('hide_sales','=',True)]}"/>
+            </field>
+            <field name="standard_price" optional="show" position="replace">
+                <field name="standard_price" attrs="{'invisible': [('hide_cost','=',True)]}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_template_tree_view" model="ir.ui.view">
+        <field name="name">product.template.tree.view.inherited</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="hide_sales" invisible="1"/>
+                <field name="hide_cost" invisible="1"/>
+            </xpath>
+            <xpath expr="field[@name='list_price']" position="replace">
+                <field name="list_price" string="Sales Price" widget="monetary" options="{'currency_field': 'currency_id'}" decoration-muted="not sale_ok" attrs="{'invisible': [('hide_sales','=',True)]}"/>
+            </xpath>
+            <xpath expr="field[@name='standard_price']" position="replace">
+                <field name="standard_price" widget="monetary" options="{'currency_field': 'cost_currency_id'}" readonly="1" attrs="{'invisible': [('hide_cost','=',True)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_product_view_form_easy_inherit_stock" model="ir.ui.view">
+        <field name="name">product.product.view.form.easy.inherited</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_product_view_form_easy_inherit_stock"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_update_quantity_on_hand']" position="attributes">
+                <attribute name="groups">khalifa_customizations.group_update_quantity</attribute>
+            </xpath>
+            <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="attributes">
+                <attribute name="groups">khalifa_customizations.group_replenish</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- view used for product.product only -->
+    <record model="ir.ui.view" id="product_form_view_procurement_button">
+        <field name="name">product.product.procurement.inherited</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_update_quantity_on_hand']" position="attributes">
+                <attribute name="groups">khalifa_customizations.group_update_quantity</attribute>
+            </xpath>
+            <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="attributes">
+                <attribute name="groups">khalifa_customizations.group_replenish</attribute>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- view used for product.template only -->
+    <record model="ir.ui.view" id="product_template_form_view_procurement_button">
+        <field name="name">product.template_procurement.inherited</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_update_quantity_on_hand']" position="attributes">
+                <attribute name="groups">khalifa_customizations.group_update_quantity</attribute>
+            </xpath>
+            <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="attributes">
+                <attribute name="groups">khalifa_customizations.group_replenish</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

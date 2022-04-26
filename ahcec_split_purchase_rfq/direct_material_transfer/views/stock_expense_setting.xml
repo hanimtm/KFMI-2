@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="stock_expense_location_tree" model="ir.ui.view">
+            <field name="name">stock.expense.location.tree</field>
+            <field name="model">stock.expense.location</field>
+            <field name="arch" type="xml">
+                <tree string="Location Expense" editable="bottom">
+                    <field name="name"/>
+                    <field name="location" domain="[('usage','=','customer')]"/>
+                    <field name="expense_account"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="stock_expense_location_form" model="ir.ui.view">
+            <field name="name">stock.expense.location.form</field>
+            <field name="model">stock.expense.location</field>
+            <field name="arch" type="xml">
+                <form string="Membership Location">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="location" domain="[('usage','=','customer')]"/>
+                            <field name="expense_account"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="stock_expense_location_search" model="ir.ui.view">
+            <field name="name">stock.expense.location.search</field>
+            <field name="model">stock.expense.location</field>
+            <field name="arch" type="xml">
+                <search string="Membership Location">
+                    <field name="name"/>
+                    <separator/>
+                    <field name="location"/>
+                    <separator/>
+                    <field name="expense_account"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_stock_expense_location" model="ir.actions.act_window">
+            <field name="name">Location Expense account Settings</field>
+            <field name="res_model">stock.expense.location</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new settings
+              </p><p>
+                New settings
+              </p>
+            </field>
+        </record>
+        <menuitem name="Location Expense account Settings" id="menu_stock_expense_location" parent="stock.menu_warehouse_config"
+            action="action_stock_expense_location" sequence="4"/>
+    </data>
+</odoo>

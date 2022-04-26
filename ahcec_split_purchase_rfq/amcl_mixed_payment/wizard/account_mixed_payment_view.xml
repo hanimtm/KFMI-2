@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_mixed_payment_form_view" model="ir.ui.view">
+        <field name="name">account.mixed.payment.form.view</field>
+        <field name="model">account.mixed.payment</field>
+        <field name="arch" type="xml">
+            <form string="Account Mixed Payment">
+                <group>
+                    <group>
+                        <field name="payment_type" widget="radio" options="{'horizontal': True}"/>
+                        <field name="partner_id"/>
+                        <field name="company_id" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="date"/>
+                        <field name="ref"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Cash">
+                        <field name="cash_amount"/>
+                        <field name="cash_journal_id"/>
+                    </group>
+                    <group string="Bank">
+                        <field name="bank_amount"/>
+                        <field name="bank_journal_id"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="create_mixed_payment" string="Create Payment"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_mixed_payment" model="ir.actions.act_window">
+        <field name="name">Mixed Payment</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.mixed.payment</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_account_mixed_payment" name="Mixed Payment"
+              action="action_account_mixed_payment"
+              sequence="16"
+              parent="account.menu_finance_receivables"/>
+</odoo>

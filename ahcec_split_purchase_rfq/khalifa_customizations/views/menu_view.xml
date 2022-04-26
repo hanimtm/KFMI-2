@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Contact -->
+        <record id="contacts.menu_contacts" model="ir.ui.menu">
+            <field name="name">Contacts</field>
+            <field name="sequence">20</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('base.group_partner_manager')])]"/>
+        </record>
+
+        <!-- Inventory Adjustment Manager -->
+        <record id="stock.menu_action_inventory_tree" model="ir.ui.menu">
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('khalifa_customizations.allow_inventory_adjustment_manager')])]"/>
+        </record>
+
+<!--        &lt;!&ndash; Product Creation &ndash;&gt;-->
+<!--        <record id="" model="ir.ui.menu">-->
+<!--            <field name="groups_id"-->
+<!--                   eval="[(6, 0, [ref('khalifa_customizations.allow_inventory_adjustment_manager')])]"/>-->
+<!--        </record>-->
+
+
+    </data>
+</odoo>

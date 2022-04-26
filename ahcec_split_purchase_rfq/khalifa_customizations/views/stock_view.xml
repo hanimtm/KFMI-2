@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="inherit_stock_picking_form_view" model="ir.ui.view">
+            <field name="name">inherit.stock.picking.form.view</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <field name="need_approval" invisible="1"/>
+                    <field name="show_production_approval" invisible="1"/>
+                    <button name="action_approve" type="object" string="Production Approval" class="oe_highlight" attrs="{'invisible': [('show_production_approval','=',False)]}" groups="mrp.group_mrp_manager"/>
+                </xpath>
+                <xpath expr="//field[@name='owner_id']" position="after">
+                    <field name="approval_date" invisible="1"/>
+                    <field name="approval_user_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//button[@name='%(stock.act_stock_return_picking)d']"
+                       position="attributes">
+                    <attribute name="groups">khalifa_customizations.allow_inventory_return</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_scrap']" position="attributes">
+                    <attribute name="groups">khalifa_customizations.allow_scrap</attribute>
+                </xpath>
+                <xpath expr="//field[@name='location_id']" position="after">
+                    <field name="customer_warehouse" attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}"/>
+                    <field name="wbs" attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_uom_qty']"
+                       position="after">
+                    <field name="sec_wh_id"/>
+                    <field name="line_no"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_location_form" model="ir.ui.view">
+            <field name="name">view.location.form.need.approval</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='return_location']" position="after">
+                    <field name="need_approval"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_inherit_stock_picking_type_search" model="ir.ui.view">
+            <field name="name">view.inherit.stock.picking.search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='available']" position="after">
+                    <filter name="pre_approval" string="Pre Approval"
+                            domain="[('state', '=', 'approve')]"
+                            help="Pre Approve"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_picking_tree_ready_and_approve"
+                model="ir.actions.act_window">
+            <field name="name">To Approve</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="domain"></field>
+            <field name="context">{'contact_display': 'partner_address',
+                'search_default_available': 1,
+                'search_default_pre_approval': 1}</field>
+            <field name="search_view_id"
+                   ref="stock.view_picking_internal_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No transfer found. Let's create one!
+                </p><p>
+                    Transfers allow you to move products from one location to another.
+                </p>
+            </field>
+       </record>
+
+        <record id="view_inherit_stock_picking_type_kanban" model="ir.ui.view">
+            <field name="name">view.inherit.stock.picking.type.kanban</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.stock_picking_type_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='count_picking_ready']"
+                       position="after">
+                    <field name="count_picking_ready_pre_approve"/>
+                </xpath>
+                <xpath expr="//div[hasclass('o_kanban_primary_left')]"
+                       position="replace">
+                    <div class="col-6 o_kanban_primary_left">
+                        <button class="btn btn-primary"
+                                name="get_action_picking_tree_production_approve" type="object">
+                            <span
+                                    t-if="record.code.raw_value =='incoming'"><t t-esc="record.count_picking_ready_pre_approve.value"/> To Process</span>
+                            <span
+                                    t-if="record.code.raw_value =='outgoing'"><t t-esc="record.count_picking_ready_pre_approve.value"/> To Process</span>
+                            <span
+                                    t-if="record.code.raw_value =='internal'"><t t-esc="record.count_picking_ready_pre_approve.value"/> To Process</span>
+                        </button>
+                    </div>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

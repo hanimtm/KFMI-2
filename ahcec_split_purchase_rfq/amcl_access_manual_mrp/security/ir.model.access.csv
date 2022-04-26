@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mrp_production_manual,mrp.production.manual,mrp.model_mrp_production,amcl_access_manual_mrp.group_allow_manual_manufacture,1,1,1,0
+access_mrp_routing_workcenter_manual,access.mrp.routing.workcenter.manual,mrp.model_mrp_routing_workcenter,amcl_access_manual_mrp.group_allow_manual_manufacture,1,0,0,0
+access_mrp_workcenter_manual,access.mrp.workcenter.manual,mrp.model_mrp_workcenter,amcl_access_manual_mrp.group_allow_manual_manufacture,1,0,0,0
+access_mrp_bom_byproduct_manual,access.mrp.bom.byproduct.manual,mrp.model_mrp_bom_byproduct,amcl_access_manual_mrp.group_allow_manual_manufacture,1,0,0,0
+access_mrp_workcenter_productivity_manual,access.mrp.workcenter.productivity.manual,mrp.model_mrp_workcenter_productivity,amcl_access_manual_mrp.group_allow_manual_manufacture,1,0,0,0
+access_account_move_manual,access.account.move.manual,account.model_account_move,amcl_access_manual_mrp.group_allow_manual_manufacture,1,0,0,0
+access_stock_scrap_manual,access.stock.scrap.manual,mrp.model_stock_scrap,amcl_access_manual_mrp.group_allow_manual_manufacture,1,0,0,0

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_order_form" model="ir.ui.view">
+            <field name="name">view.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <field name="show_request_bom" invisible="1"/>
+                    <field name="bom_request_id" invisible="1"/>
+                    <button name="request_bom" string="Request BOM" type="object" class="btn-primary" attrs="{'invisible':[('show_request_bom','=',False)]}"/>
+                    <button name="action_to_sm_approve" string="Send To SM Approve" type="object" class="btn-primary" attrs="{'invisible': [('state','not in',['draft','bom_requested','sent'])]}"/><!--  -->
+                </xpath>
+                <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale" position="attributes">
+                    <attribute name="statusbar_visible">draft,sent,sale</attribute>
+                </field>
+                <button name="action_cancel" type="object" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'sent','sale']), ('id', '=', False)]}" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft', 'bom_requested', 'sent','sale','sm_approve','approve']), ('id', '=', False)]}</attribute>
+                </button>
+                <button name="action_confirm" id="action_confirm" data-hotkey="v" class="btn-primary" type="object" attrs="{'invisible': [('state', 'not in', ['sent'])]}" position="attributes">
+                    <attribute name="context">{'from_saleorder':True}</attribute>
+                    <attribute name="string">Approve</attribute>
+                    <attribute name="attrs">{'invisible':[(1,'=',1)]}</attribute>
+                    <attribute name="groups">khalifa_customizations.sale_order_approval</attribute>
+                </button>
+                <button name="action_confirm" data-hotkey="v" type="object" attrs="{'invisible': [('state', 'not in', ['draft'])]}" position="attributes">
+                    <attribute name="context">{'from_saleorder':True}</attribute>
+                    <attribute name="string">Approve</attribute>
+                    <attribute name="invisible">1</attribute>
+                </button>
+                <xpath expr="//button[@name='action_cancel']" position="before">
+                    <button name="action_confirm" type="object" string="Approve" class="btn-primary" attrs="{'invisible': [('state','not in',['sm_approve'])]}" context="{'from_saleorder':True}" groups="khalifa_customizations.sale_order_approval"/>
+                </xpath>
+                <xpath expr="//page[@name='order_lines']/field[@name='order_line']//tree//field[@name='name']" position="after">
+                    <field name="non_standard_bom" invisible="1"/>
+                    <field name="bom_id" domain='[("product_id","=",product_id)]'/>
+                    <field name="label" attrs="{'required': [('non_standard_bom','=',True)]}"/>
+                    <field name="drawing"/>
+                    <field name="sec_wh_id"/>
+                    <field name="line_no"/>
+                </xpath>
+                <xpath expr="//page[@name='order_lines']/field[@name='order_line']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ['bom_requested','done','cancel'])]}</attribute>
+                    <attribute name="options">{'no_open':True}</attribute>
+                </xpath>
+                <field name="payment_term_id" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <xpath expr="//sheet//button[@name='preview_sale_order']" position="before">
+                    <button name="action_view_bom_request" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('bom_request_id', '=', False)]}">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">BOM Request</span>
+                            <span class="o_stat_text"></span>
+                        </div>
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="replace"/>
+                <xpath expr="//field[@name='client_order_ref']"
+                       position="replace"/>
+                <field name="partner_shipping_id" position="after">
+                    <field name="client_order_ref" string="P.O. Date"/>
+                </field>
+                <xpath expr="//field[@name='team_id']" position="replace"/>
+                <xpath expr="//group[@name='sale_shipping']" position="replace"/>
+                <field name="payment_term_id" position="after">
+                    <field name="user_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"/>
+                    <field name="team_id" kanban_view_ref="448" options="{'no_create': True}"/>
+                    <field name="warehouse_id" options="{'no_create': True}" groups="stock.group_stock_multi_warehouses" force_save="1"/>
+                    <label for="commitment_date" string="Delivery Date"/>
+                    <div name="commitment_date_div" class="o_row">
+                        <field name="commitment_date" required="1"/>
+                        <span name="expected_date_span" class="text-muted">Expected: <field name="expected_date" widget="date"/></span>
+                    </div>
+                </field>
+                <!-- Adding discount fields -->
+                <field name="note" position="before">
+                    <group class="oe_left oe_inline" name="discount">
+                        <label for="discount_type"/>
+                        <field name="discount_type" nolabel="1" class="oe_subtotal_footer_separator"
+                               attrs="{'readonly': [('state','!=','draft')]}"/>
+                        <label for="discount_rate"/>
+                        <field name="discount_rate" nolabel="1" context="{'discount_rate':discount_rate}"
+                               widget="monetary" class="oe_subtotal_footer_separator"
+                               attrs="{'readonly': [('state','!=','draft')]}"/>
+                    </group>
+                </field>
+                <field name="tax_totals_json" position="after">
+                    <field name="discount" widget="monetary"/>
+                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                    </div>
+                    <field name="net_total" widget="monetary" class="oe_subtotal_footer_separator"/>
+                </field>
+                <xpath expr="//page[@name='order_lines']/field[@name='order_line']//tree//field[@name='product_id']" position="attributes">
+                    <attribute name="context">{'search_alternative_code':True}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_order_form_inherit_sale_stock" model="ir.ui.view">
+            <field name="name">view.order.form.inherit.warehouse</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='warehouse_id']" position="replace"/>
+            </field>
+        </record>
+
+        <record id="view_quotation_tree" model="ir.ui.view">
+            <field name="name">view.quotation.tree.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="total_delivered"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_order_tree" model="ir.ui.view">
+            <field name="name">view.order.tree.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="total_delivered"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

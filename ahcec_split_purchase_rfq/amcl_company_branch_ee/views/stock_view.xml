@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Warehouse -->
+        <record id="inherit_stock_warehouse_form_view" model="ir.ui.view">
+            <field name="name">stock.warehouse.form</field>
+            <field name="model">stock.warehouse</field>
+            <field name="inherit_id" ref="stock.view_warehouse"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name="branch_id" required="1" domain="[('company_id', '=', company_id)]"
+                           groups="amcl_company_branch_ee.group_multi_branches"
+                           options="{'no_create':True,'no_edit':True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Warehouse search view -->
+        <record id="inherit_stock_warehouse_view_search" model="ir.ui.view">
+            <field name="name">stock.warehouse.search</field>
+            <field name="model">stock.warehouse</field>
+            <field name="inherit_id" ref="stock.stock_warehouse_view_search"/>
+            <field name="arch" type="xml">
+                <filter name="inactive" position="after">
+                    <filter name="branch" string="Branch"
+                            context="{'group_by' : 'branch_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+        <!-- Location -->
+        <record id="inherit_stock_location_form_view" model="ir.ui.view">
+            <field name="name">stock.location.form</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="branch_id" required="1" domain="[('company_id', '=', company_id)]"
+                           groups="amcl_company_branch_ee.group_multi_branches"
+                           options="{'no_create':True,'no_edit':True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Warehouse search view -->
+        <record id="inherit_stock_warehouse_view_search" model="ir.ui.view">
+            <field name="name">stock.warehouse.search</field>
+            <field name="model">stock.warehouse</field>
+            <field name="inherit_id" ref="stock.stock_warehouse_view_search"/>
+            <field name="arch" type="xml">
+                <filter name="inactive" position="after">
+                    <filter name="branch" string="Branch"
+                            context="{'group_by' : 'branch_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+        <!-- Location search view -->
+        <record id="inherit_view_location_search" model="ir.ui.view">
+            <field name="name">stock.location.search</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_search"/>
+            <field name="arch" type="xml">
+                <filter name="inactive" position="after">
+                    <filter name="branch" string="Branch"
+                            context="{'group_by' : 'branch_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+        <!-- Picking -->
+        <record id="inherit_stock_picking_form_view" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                    <field name="branch_id" required="1" domain="[('company_id', '=', current_company_id)]"
+                           groups="amcl_company_branch_ee.group_multi_branches"
+                           options="{'no_create':True,'no_edit':True}"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Picking search view -->
+        <record id="inherit_view_picking_internal_search" model="ir.ui.view">
+            <field name="name">stock.picking.internal.search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <filter name="late" position="after">
+                    <filter name="branch" string="Branch"
+                            context="{'group_by' : 'branch_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+        <!-- Stock Move -->
+        <record id="inherit_stock_move_form_view" model="ir.ui.view">
+            <field name="name">stock.move.form</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="origin" required="1" position="after">
+                    <field name="branch_id" groups="amcl_company_branch_ee.group_multi_branches"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Stock Move search view -->
+        <record id="inherit_view_move_search" model="ir.ui.view">
+            <field name="name">stock.move.search</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_search"/>
+            <field name="arch" type="xml">
+                <filter name="by_product" position="after">
+                    <filter name="branch" string="Branch"
+                            context="{'group_by' : 'branch_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="generate_components_form_view" model="ir.ui.view">
+            <field name="name">generate.components.form.view</field>
+            <field name="model">generate.components</field>
+            <field name="arch" type="xml">
+                <form name="generate_file" string="Generate File">
+                    <group>
+                        <group>
+                            <field name="action" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="data_file" attrs="{'invisible': [('action','in', ['dwn_sample'])]}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Download Sample" class="btn-primary"
+                                type="object"
+                                attrs="{'invisible': [('action', '!=', 'dwn_sample')]}"
+                                name="generate_file"/>
+                        <button string="Import" class="btn-primary"
+                                type="object"
+                                attrs="{'invisible': [('action', '!=', 'import')]}"
+                                name="import_data_file"/>
+                        <button string="Cancel" class="btn btn-default"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_generate_components" model="ir.actions.act_window">
+            <field name="name">Generate Components</field>
+            <field name="res_model">generate.components</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="download_file_form_view" model="ir.ui.view">
+            <field name="name">download.file.form.view</field>
+            <field name="model">download.file</field>
+            <field name="arch" type="xml">
+                <form name="download_file" string="Download File">
+                    <group string="Click on the link below to download the sample file.">
+                        <group>
+                            <field name="data_file" filename="file_name" readonly="1"/>
+                            <field name="file_name" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="btn btn-default"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

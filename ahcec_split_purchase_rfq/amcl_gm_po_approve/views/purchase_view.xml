@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.form.gm_approve</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="action_gm_approve" string="Approve" type="object" class="oe_highlight" states="to_gm_approve" groups="amcl_gm_po_approve.group_general_manager"/>
+                </xpath>
+                <xpath expr="//button[@name='button_cancel']" position="attributes">
+                    <attribute name="states">draft,to approve,to_gm_approve,sent,purchase</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

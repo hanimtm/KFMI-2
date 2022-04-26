@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="direct_material_transfer_view" model="ir.ui.view">
+            <field name="name">direct.material.transfer.form</field>
+            <field name="model">direct.material.transfer</field>
+            <field name="arch" type="xml">
+                <form name="direct_material_transfer_view">
+                    <header name="">
+                        <button name="act_done" class="oe_highlight" string="Transfer" type="object" states="draft"
+                                groups="base.group_user"/>
+                        <button name="act_cancel_manager" string="Cancel" type="object" states="done"
+                                groups="base.group_user"/>
+                        <button name="act_reset_draft" string="Set to Draft" type="object" states="cancelled"
+                                groups="base.group_user"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,cancelled"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title" name="h1_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group name="asset_info">
+                            <group string="Location Information" name="location" attrs="{'readonly': [('state', '=', 'done')]}">
+                                <field name="source_location_id"/>
+                                <field name="to_location"/>
+                                <field name="destination_location_id" readonly="1" invisible="1"/>
+                                <field name="source_partner_id"/>
+                                <field name="destination_partner_id"/>
+                                <field name="id" invisible="1"/>
+                            </group>
+                            <group string="Information" name="price_value" attrs="{'readonly': [('state', '=', 'done')]}">
+                                <field name="company_id"/>
+                                <field name="analytic_account_id"/>
+                                <field name="received_user_id"/>
+                                <field name="expense_account" readonly="1" invisible="1"/>
+                                <field name="stock_journal"/>
+                            </group>
+                            <group name="transfer_create" attrs="{'readonly': [('state', '=', 'done')]}">
+                                <field name="create_date"/>
+                                <field name="transferred_date"/>
+                                <field name="account_move" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Transfer Line">
+                                <field name="line_ids"
+                                       attrs="{'readonly': [('state', '=', 'done')]}"
+                                       context="{'default_company_id': company_id, 'default_direct_id': id, 'default_source_location_id': source_location_id, 'default_destination_location_id': destination_location_id}">
+                                    <tree decoration-danger="state != 'done'" decoration-muted="state == 'cancel'"
+                                          string="Lines" editable="bottom">
+                                        <field name="company_id" invisible="1"/>
+                                        <field name="name" invisible="1"/>
+                                        <field name="sequence" invisible="1"/>
+                                        <field name="state" invisible="1" readonly="0"/>
+                                        <field name="product_id"/>
+                                        <field name="product_qty"/>
+                                        <field name="product_uom"/>
+                                        <field name="product_onhand_qty"/>
+                                        <field name="move_id" readonly="1"/>
+                                        <field name="price_unit" invisible="1"/>
+                                        <field name="product_tmpl_id" invisible="1"/>
+                                        <field name="source_location_id" invisible="1"/>
+                                        <field name="destination_location_id" invisible="1"/>
+                                        <field name="partner_id" invisible="1"/>
+                                        <field name="direct_id" invisible="1"/>
+                                        <field name="create_date" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Reason For Transfer" attrs="{'readonly': [('state', '=', 'done')]}">
+                                <field name="reason" placeholder="Reason for transfer..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="direct_material_transfer_view_tree" model="ir.ui.view">
+            <field name="name">direct.material.transfer.list</field>
+            <field name="model">direct.material.transfer</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="source_location_id"/>
+                    <field name="destination_location_id"/>
+                    <field name="source_partner_id"/>
+                    <field name="destination_partner_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="direct_material_transfer_view_search" model="ir.ui.view">
+            <field name="name">direct.material.transfer.filter</field>
+            <field name="model">direct.material.transfer</field>
+            <field name="arch" type="xml">
+                <search string="Direct Material Transfer">
+                    <field name="source_location_id" string="Source Location"/>
+                    <field name="destination_location_id" string="Destination Location"/>
+                    <field name="source_partner_id" string="Source Partner"/>
+                    <field name="destination_partner_id" string="Destination Partner"/>
+                    <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Source Location" name="source_location"
+                                context="{'group_by':'destination_location_id'}"/>
+                        <filter string="Destination Location" name="destination_location_id"
+                                context="{'group_by':'destination_location_id'}"/>
+                        <filter string="Source Partner" name="source_location_id"
+                                context="{'group_by':'source_location_id'}"/>
+                        <filter string="Destination Partner" name="destination_custodian"
+                                context="{'group_by':'destination_partner_id'}"/>
+                        <filter string="Responsible Person" name="responsible_person" context="{'group_by':'user_id'}"/>
+                        <filter string="Status" name="status" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="act_direct_material_transfer" model="ir.actions.act_window">
+            <field name="name">Direct Material Transfer</field>
+            <field name="res_model">direct.material.transfer</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="direct_material_transfer_view_search"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new Direct Material Transfer.
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="act_direct_material_transfer" id="menu_direct_material_transfer"
+                  parent="stock.menu_stock_warehouse_mgmt" sequence="1"/>
+
+        <record model="ir.ui.view" id="stock_location_view">
+        <field name="name">stock.location.form</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='company_id']" position="before">
+                <field name="expense_account" groups="base.group_user"/>
+            </xpath>
+        </field>
+    </record>
+
+    </data>
+</odoo>

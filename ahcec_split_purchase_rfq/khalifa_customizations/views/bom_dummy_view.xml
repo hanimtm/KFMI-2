@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="bom_dummy_form_view" model="ir.ui.view">
+            <field name="name">bom.dummy.form.view</field>
+            <field name="model">bom.dummy</field>
+            <field name="arch" type="xml">
+                <form name="bom_dummy" string="BOM">
+                    <field name="non_standard_bom" invisible="1"/>
+                    <header>
+                        <button name="confirm_bom" string="Confirm" type="object" class="btn-primary" attrs="{'invisible': [('state','not in',['draft','revise'])]}"/>
+                        <button name="approve_bom" string="Approve" type="object" class="btn-primary" attrs="{'invisible': [('state','not in',['confirm'])]}" groups="khalifa_customizations.design_manager"/>
+                        <button name="revise_bom" string="Revise" type="object" attrs="{'invisible': [('state','not in',['confirm'])]}" groups="khalifa_customizations.design_manager"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="product_tmpl_id" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}"/>
+                                <field name="product_id" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}"/>
+                                <label for="quantity" string="Quantity" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}"/>
+                                <div class="o_row">
+                                    <field name="quantity" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}"/>
+                                    <field name="product_uom_id" options="{'no_open':True,'no_create':True}"
+                                           groups="uom.group_uom" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}"/>
+                                </div>
+                                <field name="routing_id" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}"/>
+                            </group>
+                            <group>
+                                <field name="code" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}"/>
+                                <field name="label" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}"/>
+                                <field name="drawing" attrs="{'readonly': [('state', 'not in', ['draft','revise'])], 'required': [('non_standard_bom','=',True)]}"/>
+                                <field name="bom_type" widget="radio" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}"/>
+                                <p colspan="2" class="oe_grey oe_edit_only" attrs="{'invisible': [('bom_type','!=','phantom')]}">
+                                <ul>
+                                    A BoM of type kit is used to split the product into its components.
+                                    <li>
+                                        At the creation of a Manufacturing Order.
+                                    </li>
+                                    <li>
+                                        At the creation of a Stock Transfer.
+                                    </li>
+                                </ul>
+                                </p>
+                                <field name="company_id" groups="base.group_multi_company"
+                                       options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="components" string="Components">
+                                <button name="%(action_generate_components)d" string="Import Components" type="action" class="btn-primary" attrs="{'invisible': [('state','not in',['draft'])]}"/>
+                                <field name="bom_dummy_line_ids" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}" options="{'no_open':True}">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="quantity"/>
+                                        <field name="qty_available"/>
+                                        <field name="qty_reserve"/>
+                                        <field name="purchase_price"/>
+                                        <field name="product_value"/>
+                                        <field name="product_uom_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="miscellaneous" string="Miscellaneous">
+                                <group>
+                                    <group>
+                                        <field name="consumption" attrs="{'invisible': [('bom_type','=','phantom')], 'readonly': [('state', 'not in', ['draft','revise'])]}" widget="radio"/>
+                                    </group>
+                                    <group>
+                                        <field name="picking_type_id" attrs="{'invisible': [('bom_type','=','phantom')], 'readonly': [('state', 'not in', ['draft','revise'])]}" string="Operation" groups="stock.group_adv_location"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

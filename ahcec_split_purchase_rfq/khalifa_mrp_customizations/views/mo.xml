@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_production_form_view" model="ir.ui.view">
+            <field name="name">mrp.production.form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='components_availability']" position="after">
+                    <field name="hide_mark_as_done" invisbile="1"/>
+                </xpath>
+                <xpath expr="//field[@name='move_raw_ids']//tree/field[@name='quantity_done']" position="after">
+                    <field name="quantity_remaining" invisbile="1"/>
+                </xpath>
+                <xpath expr="//header//button[1][@name='button_mark_done']" position="attributes">
+                    <attribute name="attrs">
+                        {'invisible': ['|', '|','|', ('state', 'in', ('draft', 'cancel', 'done', 'to_close')),
+                        ('qty_producing', '=', 0), ('move_raw_ids', '!=', []),('hide_mark_as_done', '=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//header//button[2][@name='button_mark_done']" position="attributes">
+                    <attribute name="attrs">
+                        {'invisible': ['|', '|', '|',('state', 'in', ('draft', 'cancel', 'done', 'to_close')),
+                        ('qty_producing', '=', 0), ('move_raw_ids', '=', []),('hide_mark_as_done', '=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//header//button[3][@name='button_mark_done']" position="attributes">
+                    <attribute name="attrs">
+                        {'invisible': [
+                        '|',
+                        ('move_raw_ids', '=', []),
+                        '&amp;',
+                        '|',
+                        '|',
+                        ('state', 'not in', ('confirmed', 'progress')),
+                        ('qty_producing', '!=', 0),
+                        ('state', '!=', 'to_close'),('hide_mark_as_done', '=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//header//button[4][@name='button_mark_done']" position="attributes">
+                    <attribute name="attrs">
+                        {'invisible': [
+                        '|',
+                        ('move_raw_ids', '!=', []),
+                        '&amp;',
+                        '|',
+                        '|',
+                        ('state', 'not in', ('confirmed', 'progress')),
+                        ('qty_producing', '!=', 0),
+                        ('state', '!=', 'to_close'),('hide_mark_as_done', '=', False)]}
+                    </attribute>
+                </xpath>
+
+
+            </field>
+        </record>
+    </data>
+</odoo>

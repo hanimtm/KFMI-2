@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_manufacturing_order_extended_for_cancel_manufacturing_order">
+        <field name="name">mrp.production.for.cancel.order.view</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+             <xpath expr="//button[@name='action_cancel']" position="before">
+                <button name="action_draft" states="cancel" type="object" string="Set to Draft"/>
+            </xpath>
+            
+            <!-- <xpath expr="//button[@name='button_mark_done']" position="replace">
+                <button name="button_mark_done" attrs="{'invisible': ['|',('state','=','draft'),'|', ('check_to_done', '=', False), ('consumed_less_than_planned', '=', True)]}" string="Mark as Done" type="object" class="oe_highlight"/>
+                    <field name="consumed_less_than_planned" invisible="1"/>
+                    <field name="check_to_done" invisible="1"/>
+                    <button name="button_mark_done" attrs="{'invisible': ['|',('state','=','draft'),'|', ('check_to_done', '=', False), ('consumed_less_than_planned', '=', False)]}" string="Mark as Done" type="object" class="oe_highlight" confirm="You have consumed less material than what was planned. Are you sure you want to close this MO?"/>
+            </xpath> -->
+        </field>
+    </record>
+</odoo>

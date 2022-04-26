@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="normal-a4" model="report.paperformat">
+            <field name="name">Normal A4</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">16</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">2</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+
+    <template id="external_layout_sale">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-call="khalifa_sale_report_customizations.external_layout_standard_sale">
+            <t t-raw="0"/>
+        </t>
+
+    </template>
+
+    <template id="external_layout_standard_sale">
+        <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+            <table style="border:1pt solid white;width:100%;padding:2pt;font-family:'Cairo'n;border-bottom:0pt solid white;"
+                   class="table-condensed">
+                <tr>
+                    <td style="padding:10pt; text-align:left;color:black;width:32.5%;">
+                        <span style="font-size:20px" t-field="company.name"/>
+                        <br/>
+                        <span t-if="company.street">
+                                <span t-field="company.street"/> -
+                            </span>
+                            <span t-if="company.street2">
+                                <span t-field="company.street2"/> -
+                            </span>
+                            <span t-if="company.city">
+                                <span t-field="company.city"/> -
+                            </span>
+                            <span t-if="company.state_id">
+                                <span t-field="company.state_id.name"/> -
+                            </span>
+                            <span t-if="company.zip">
+                                -
+                                <span t-field="company.zip"/> -
+                            </span>
+                            <span t-if="company.country_id">
+                                <span t-field="company.country_id"/>
+                            </span>
+
+                        <br/>
+                        Tel.:<span t-field="company.phone"></span>
+                        Fax.:<span t-field="company.fax"></span>
+                        <br/>
+                        VAT No.:<span t-field="company.vat"/>
+                        <br/>
+                        CR No.:<span t-field="company.company_registry"/>
+                    </td>
+                    <td style="text-align:center;vertical-align:middle;width:35%;">
+                        <span>
+                            <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+                                 style="max-height: 150px;align:left"/>
+                        </span>
+                    </td>
+                    <td style="padding:10pt; text-align:right;width:32.5%;color:black;" class="arabic">
+
+                        <span style="font-size:20px" t-field="company.arabic"/>
+                        <br/>
+                        <span t-if="company.street">
+                                <span t-field="company.street_arabic"/> -
+                            </span>
+                            <span t-if="company.street2">
+                                <span t-field="company.street_arabic2"/> -
+                            </span>
+                            <span t-if="company.city_arabic">
+                                <span t-field="company.city_arabic"/> -
+                            </span>
+                            <span t-if="company.state_arabic">
+                                <span t-field="company.state_arabic"/> -
+                            </span>
+                            <span t-if="company.zip_arabic">
+                                -
+                                <span t-field="company.zip_arabic"/> -
+                            </span>
+                            <span t-if="company.country_arabic">
+                                <span t-field="company.country_arabic"/>
+                            </span>
+
+                        <br/>
+                        <span t-field="company.arabic_phone"></span>:هاتف
+                        <span t-field="company.arabic_fax"></span>:فاكس
+                        <br/>
+                        <span t-field="company.arabic_vat"/> :الرقم الضريبي
+                        <br/>
+                        <span t-field="company.arabic_cr"/> :رقم سجل الشركة
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"
+             t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+             t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <div class="pt-5">
+                <!-- This div ensures that the address is not cropped by the header. -->
+                <t t-call="web.address_layout"/>
+            </div>
+            <t t-raw="0"/>
+        </div>
+
+        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+            <div class="text-center" style="border-top: 1px solid grey;color:#696969;">
+                <div class="text-center">
+                    <img src="/khalifa_sale_report_customizations/static/src/images/footer.png" style="height: 75px;"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="sale.report_saleorder">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="khalifa_sale_report_customizations.report_khalifa_saleorder_document"
+                   t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_khalifa_saleorder_document">
+        <t t-call="khalifa_sale_report_customizations.external_layout_sale">
+            <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>
+            <div class="page" style="font-family:'Cairo'n;">
+                <div class="oe_structure"/>
+                <div class="col-xs-3">
+                    <center>
+                        <table width="20%" style="border-radius: 5px;">
+                            <tr style="border-radius: 5px;">
+                                <td height="30%" class="text-center" style="border-radius: 5px;border:1px solid black">
+                                    <h3>
+                                        <span t-if="doc.state not in ['draft','sent']">Sale Order </span>
+                                    <span t-if="doc.state in ['draft','sent']">Quotation</span>
+                                    </h3>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                </div>
+                <table width="100%"
+                       style="border-spacing: 1em .5em;padding: 0 2em 1em 0;border: 1px solid white;table-layout:fixed;border-collapse:collapse;">
+                    <colgroup>
+                        <col span="1" style="width: 15%;"/>
+                        <col span="1" style="width: 40%;"/>
+                        <col span="1" style="width: 20%;"/>
+                        <col span="1" style="width: 25%;"/>
+                    </colgroup>
+                    <tr>
+                        <th class="text-center" colspan="2" style="border-bottom:1px solid black;">CLIENT DETAILS</th>
+                        <th/>
+                        <th class="text-center" style="border-bottom:1px solid black;">QUOTATION NO.</th>
+                    </tr>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>
+                            <span t-field="doc.partner_id.name"/>
+                        </td>
+                        <td/>
+                        <td class="text-center">
+                            <span t-field="doc.name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>
+                            <span t-if="doc.partner_id.street">
+                                <span t-field="doc.partner_id.street"/>,
+                            </span>
+                            <span t-if="doc.partner_id.street2">
+                                <span t-field="doc.partner_id.street2"/>,
+                            </span>
+                            <span t-if="doc.partner_id.city">
+                                <span t-field="doc.partner_id.city"/>,
+                            </span>
+                            <span t-if="doc.partner_id.state_id">
+                                <span t-field="doc.partner_id.state_id.name"/>,
+                            </span>
+                            <span t-if="doc.partner_id.zip">
+                                -
+                                <span t-field="doc.partner_id.zip"/>,
+                            </span>
+                            <span t-if="doc.partner_id.country_id">
+                                <span t-field="doc.partner_id.country_id"/>
+                            </span>
+                        </td>
+                        <td/>
+                        <th class="text-center" style="border-bottom:1px solid black;">DATE</th>
+                    </tr>
+                    <tr>
+                        <td>ATTN</td>
+                        <td>
+                            <span t-field="doc.attention"/>
+                        </td>
+                        <td/>
+                        <td class="text-center">
+                            <span t-field="doc.date_order" t-options="{'widget': 'date'}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tel</td>
+                        <td>
+                            <span t-field="doc.partner_id.phone"/>
+                        </td>
+                        <td/>
+                        <th class="text-center" style="border-bottom:1px solid black;">RFQ No.</th>
+                    </tr>
+                    <tr>
+                        <td>Mobile</td>
+                        <td>
+                            <span t-field="doc.partner_id.mobile"/>
+                        </td>
+                        <td/>
+                        <td class="text-center">
+                            <span t-field="doc.origin"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email Address</td>
+                        <td>
+                            <span t-field="doc.partner_id.email"/>
+                        </td>
+                        <td/>
+                        <td/>
+                    </tr>
+                </table>
+
+
+                <table style="border: 1px solid black;" width="100%">
+                    <tr>
+                        <th style="border: 1px solid black;width:35%;" name="th_delivery_date" class="text-center">
+                            DELIVERY PERIOD
+                        </th>
+                        <th style="border: 1px solid black;width:25%;" name="th_mode_of_delivery" class="text-center">
+                            MODE OF DELIVERY
+                        </th>
+                        <th style="border: 1px solid black;width:25%;" name="th_mode_of_delivery" class="text-center">
+                            PAYMENT TERMS
+                        </th>
+                        <th style="border: 1px solid black;width:15%;" name="th_mode_of_delivery" class="text-center">
+                            VALIDITY
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black;" class="text-center">
+                            <span t-if="doc.effective_date"
+                                  t-esc="datetime.datetime.strptime(str(o.effective_date), '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y')"/>
+                        </td>
+                        <td style="border: 1px solid black;" class="text-center">
+                            <span t-if="doc.incoterm_id" t-field="doc.incoterm_id.name"></span>
+                        </td>
+                        <td style="border: 1px solid black;" class="text-center">
+                            <span t-if="doc.payment_term_id" t-field="doc.payment_term_id.name"></span>
+                        </td>
+                        <td style="border: 1px solid black;" class="text-center">
+                            <span t-if="doc.currency_id" t-field="doc.validity_date"></span>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <table style="border: 1px solid black;" width="100%">
+                    <tr>
+                        <th style="border: 1px solid black;width:5%;" name="th_item_no" class="text-center">NO.</th>
+                        <th style="border: 1px solid black;width:20%;" name="th_internal_ref" class="text-center">
+                            INTERNAL REF.
+                        </th>
+                        <th style="border: 1px solid black;width:35%;" name="th_description" class="text-center">
+                            DESCRIPTION
+                        </th>
+                        <th style="border: 1px solid black;width:14%;" name="th_quantity" class="text-center">QUANTITY
+                        </th>
+                        <th style="border: 1px solid black;width:7%" name="th_unit" class="text-center">UOM</th>
+                        <th style="border: 1px solid black;width:14%;" name="th_price_unit" class="text-center">UNIT
+                            PRICE
+                        </th>
+                        <th style="border: 1px solid black;width:15%;" name="th_amount" class="text-center">TOTAL
+                            TAXABLE
+                        </th>
+                    </tr>
+                    <tbody>
+                        <t t-set="current_subtotal" t-value="0"/>
+                        <t t-set="item_no" t-value="0"/>
+                        <t t-foreach="doc.order_line" t-as="line">
+                            <t t-set="item_no" t-value="item_no + 1"/>
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
+                               groups="account.group_show_line_subtotals_tax_excluded"/>
+                            <!--                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>-->
+
+                            <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                <t t-if="not line.display_type">
+                                    <td style="border: 1px solid black;" id="item_no" class="text-center">
+                                        <span t-esc="item_no"/>
+                                    </td>
+                                    <td style="border: 1px solid black;" id="product" class="text-center">
+                                        <span t-field="line.product_id.default_code"/>
+                                    </td>
+                                    <td style="border: 1px solid black;" id="product" class="text-center">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <td style="border: 1px solid black;" class="text-center">
+                                        <span t-field="line.product_uom_qty"/>
+                                    </td>
+                                    <td style="border: 1px solid black;" class="text-center">
+                                        <span t-field="line.product_uom.name" groups="uom.group_uom"/>
+                                    </td>
+                                    <td style="border: 1px solid black;" class="text-center">
+                                        <span t-field="line.price_unit"/>
+                                    </td>
+                                    <td style="border: 1px solid black;" class="text-center">
+                                        <span t-field="line.price_subtotal"
+                                              t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                    </td>
+                                </t>
+
+                            </tr>
+
+                        </t>
+                        <tr style="border: 1px solid white;">
+                            <td colspan="6" class="text-right font-weight-bold" style="border-top:none;">
+                                <span>SUBTOTAL</span>
+                            </td>
+                            <td style="border: 1px solid black;" class="text-right">
+                                <span t-esc="current_subtotal"></span>
+                            </td>
+                        </tr>
+                        <tr style="border: 1px solid white;">
+                            <td colspan="6" class="text-right font-weight-bold" style="border-top:none;">
+                                <span>DISCOUNT</span>
+                            </td>
+                            <t t-set="discount" t-value="str(doc.discount)"/>
+                            <td style="border: 1px solid black;" class="text-right">
+                                <span t-esc="discount.split(' ')[0]"></span>
+                            </td>
+                        </tr>
+                        <tr style="border: 1px solid white;">
+                            <td colspan="6" class="text-right font-weight-bold" style="border-top:none;">
+                                <span>SUBTOTAL AFTER DISCOUNT</span>
+                            </td>
+                            <t t-set="subtotal_after_dis" t-value="current_subtotal + float(discount.split(' ')[0])"/>
+                            <td style="border: 1px solid black;" class="text-right">
+                                <span t-esc="subtotal_after_dis"></span>
+                            </td>
+                        </tr>
+                        <tr style="border: 1px solid white;">
+                            <td colspan="6" class="text-right font-weight-bold" style="border-top:none;">
+                                <span>TAX RATE</span>
+                            </td>
+                            <td style="border: 1px solid black;" class="text-right">
+                                <span t-esc="doc._get_vat_text()"></span>
+                            </td>
+                        </tr>
+                        <tr style="border: 1px solid white;">
+                            <td colspan="6" class="text-right font-weight-bold" style="border-top:none;">
+                                <span>TOTAL TAX</span>
+                            </td>
+                            <t t-set="amount_tax" t-value="str(doc.amount_tax)"/>
+                            <td style="border: 1px solid black;" class="text-right">
+                                <span t-esc="amount_tax.split(' ')[0]"></span>
+                            </td>
+                        </tr>
+
+                        <tr style="border: 1px solid white;">
+                            <td colspan="6" class="text-right font-weight-bold" style="border-top:none;">
+                                <span>TOTAL</span>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-field="doc.currency_id.symbol"></span>
+                                <span style="float:right;" t-esc="current_subtotal"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="width:100%;">
+                    <table style="width:100%;">
+                        <tbody>
+                            <tr>
+                                <th style="width:25%;">
+                                    Our bank accounts:
+                                </th>
+                            </tr>
+                            <tr>
+                                <td style="width:25%;">
+                                    <br/>
+                                    Al Rajhi Bank Account: SA82 8000 0450 6080 1005 9595
+                                    <br/>
+                                    NCB Bank Account: SA28 1000 0024 9504 6000 0105
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <br/>
+                    <table style="width:100%;">
+                        <tr>
+                            <th style="width:50%;border-bottom 1px solid black;">
+                                <span>Sales Representative</span>
+                            </th>
+                            <th style="width:50%;border-bottom 1px solid black;">
+                                <span>Sales &amp; Marketing Manager</span>
+                            </th>
+                        </tr>
+                    </table>
+
+
+                <div class="oe_structure"/>
+            </div>
+
+        </t>
+    </template>
+
+
+</odoo>

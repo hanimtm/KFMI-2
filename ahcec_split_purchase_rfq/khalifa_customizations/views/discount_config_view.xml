@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="aces_res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.aces</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[@data-key='account']" position="inside">
+                    <h2>Discount</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-xs-12 col-md-6 o_setting_box" title="These taxes are set in any new product created.">
+                            <div class="o_setting_left_pane" />
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Discount Account</span>
+                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." />
+                                <div class="text-muted"> Default Discount Accounts
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="sales_discount_account_id" class="col-lg-3 o_light_label" />
+                                        <field name="sales_discount_account_id" widget="selection" />
+                                    </div>
+                                    <br />
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="purchase_discount_account_id" class="col-md-3 o_light_label" />
+                                        <field name="purchase_discount_account_id" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

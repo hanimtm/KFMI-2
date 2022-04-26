@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="inherit_company_form" model="ir.ui.view">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="arabic"/>
+                    <field name="header_img"/>
+                    <field name="footer_img"/>
+                </xpath>
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="arabic_vat"/>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Arabic Company Details">
+                        <group>
+                            <group>
+                                <label for="street_arabic" string="Address"/>
+                                <div class="o_address_format">
+                                    <field name="street_arabic" placeholder="شارع..." class="o_address_street"/>
+                                    <field name="street2_arabic" placeholder="شارع 2..." class="o_address_street"/>
+                                    <field name="city_arabic" placeholder="مدينة" class="o_address_city"/>
+                                    <field name="state_arabic" placeholder="حالة"/>
+                                    <field name="zip_arabic" placeholder="أزيز" class="o_address_zip"/>
+                                    <field name="country_arabic" placeholder="بلد"/>
+                                </div>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="res_config_settings_view_form_default_sale_journals" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.default.sale.journals</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='invoicing_settings']" position="inside">
+                    <!-- Adding extra space on the right side in view so both fields are shown side by side with each other. -->
+                    <div class="col-12 col-lg-6 o_setting_box" id="extra_space_right">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="default_cash_journal">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Cash Journal</span>
+                            <div class="text-muted">
+                                Default cash journal to use in customer invoice.
+                            </div>
+                            <div class="text-muted">
+                                <field name="invoice_cash_journal_id"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="default_bank_journal">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Bank Journal</span>
+                            <div class="text-muted">
+                                Default bank journal to use in customer invoice.
+                            </div>
+                            <div class="text-muted">
+                                <field name="invoice_bank_journal_id"/>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="mrp_production_workorder_form_view_inherit" model="ir.ui.view">
+            <field name="name">mrp.workorder.view</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='production_id']" position="after">
+                    <field name="account_move_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mrp_workcenter_view" model="ir.ui.view">
+            <field name="name">mrp.workcenter.form</field>
+            <field name="model">mrp.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='capacity']" position="after">
+                   <group string="Costing Account Information">
+                        <field name="work_in_progress"/>
+                        <field name="labor_cost"/>
+                        <field name="stock_journal"/>
+                   </group>
+                </xpath>
+            </field>
+        </record>
+
+  </data>
+</odoo>

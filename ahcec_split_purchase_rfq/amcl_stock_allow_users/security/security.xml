@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.rule" id="stock.stock_picking_rule">
+            <field name="name">stock_picking multi-company</field>
+            <field name="model_id" search="[('model','=','stock.picking')]" model="ir.model"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="product.product_comp_rule" model="ir.rule">
+            <field name="name">Product multi-company</field>
+            <field name="model_id" ref="model_product_template"/>
+            <field name="domain_force"> ['|',('company_id', 'in', company_ids), ('company_id', '=', False)]</field>
+        </record>
+
+        <record id="allow_user_warehouse" model="ir.rule">
+            <field name="name">Allow User Warehouse</field>
+            <field name="model_id" ref="model_stock_warehouse"/>
+            <field name="groups" eval="[Command.link(ref('stock.group_stock_manager')), Command.link(ref('stock.group_stock_user'))]"/>
+            <field name="domain_force">[('id', 'in', user.allowed_users_warehouse.ids)]</field>
+        </record>
+
+        <record id="allow_admin_warehouse" model="ir.rule">
+            <field name="name">Administrators can all Warehouse.</field>
+            <field name="model_id" ref="model_stock_warehouse"/>
+            <field name="groups" eval="[Command.link(ref('base.group_system'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!--<record id="allow_user_operation" model="ir.rule">
+            <field name="name" >Allow User Operation</field>
+            <field name="model_id" ref="model_stock_picking_type"/>
+            <field name="groups" eval="[Command.link(ref('stock.group_stock_manager'))  ]"/>
+            <field name="domain_force"> [('id', 'in', user.allowed_users_operation.ids)]</field>
+        </record>
+
+        <record id="allow_user_operation_in_warehouse" model="ir.rule">
+            <field name="name" >Allow User in Warehouse</field>
+            <field name="model_id" ref="model_stock_picking_type"/>
+            <field name="groups" eval="[Command.link(ref('stock.group_stock_manager'))  ]"/>
+            <field name="domain_force"> ['|',('warehouse_id', 'in', user.allowed_users_warehouse.ids), ('warehouse_id', 'in', [False])]</field>
+        </record>
+
+        <record id="allow_admin_operation" model="ir.rule">
+            <field name="name">Administrators can all Operation.</field>
+            <field name="model_id" ref="model_stock_picking_type"/>
+            <field name="groups" eval="[Command.link(ref('base.group_system'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>-->
+
+    </data>
+</odoo>
