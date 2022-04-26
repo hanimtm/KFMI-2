@@ -38,6 +38,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="bank_charge_account">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Bank Charge Account</span>
+                            <div class="text-muted">
+                                Default account for registering the bank charges.
+                            </div>
+                            <div class="text-muted">
+                                <field name="bank_charge_account"/>
+                            </div>
+                        </div>
+                    </div>
                 </xpath>
             </field>
         </record>

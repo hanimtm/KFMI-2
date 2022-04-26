@@ -13,10 +13,13 @@
                     </group>
                     <group>
                         <group>
-                            <field name="cash_journal_id" attrs="{'invisible':[('payment_option','in',['bank'])],'required':[('payment_option','in',['cash','mixed'])]}"/>
+                            <field name="cash_journal_id"
+                                   attrs="{'invisible':[('payment_option','in',['bank'])],'required':[('payment_option','in',['cash','mixed'])]}"/>
                             <field name="cash_amount" attrs="{'invisible':[('payment_option','in',['bank'])]}"/>
-                            <field name="bank_payment_option" widget="radio" options="{'horizontal': true}" attrs="{'invisible':[('payment_option','in',['cash'])],'required':[('payment_option','in',['bank','mixed'])]}"/>
-                            <field name="bank_journal_id" attrs="{'invisible':[('payment_option','in',['cash'])],'required':[('payment_option','in',['bank','mixed'])]}"/>
+                            <field name="bank_payment_option" widget="radio" options="{'horizontal': true}"
+                                   attrs="{'invisible':[('payment_option','in',['cash'])],'required':[('payment_option','in',['bank','mixed'])]}"/>
+                            <field name="bank_journal_id"
+                                   attrs="{'invisible':[('payment_option','in',['cash'])],'required':[('payment_option','in',['bank','mixed'])]}"/>
                             <field name="bank_amount" attrs="{'invisible':[('payment_option','in',['cash'])]}"/>
                         </group>
                         <group>
@@ -24,12 +27,52 @@
                             <field name="cash_memo" attrs="{'invisible':[('payment_option','in',['bank'])]}"/>
                             <field name="bank_memo" attrs="{'invisible':[('payment_option','in',['cash'])]}"/>
                         </group>
+                        <group string="Bank Charges"
+                               attrs="{'invisible':[('payment_option','=','cash')]}">
+                            <field name="is_bank_charges"/>
+                            <field name="bank_charges_account" attrs="{'invisible':[('is_bank_charges','=',False)]}"/>
+                            <field name="bank_charges" attrs="{'invisible':[('is_bank_charges','=',False)]}"/>
+                        </group>
                     </group>
                     <footer>
                         <button name="register_payments" string="Create Payment" type="object" class="oe_highlight"/>
                         <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
                     </footer>
                 </form>
+            </field>
+        </record>
+
+        <record id="view_account_payment_form" model="ir.ui.view">
+            <field name="name">account.payment.form.inherited</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='group2']" position="after">
+                    <field name="journal_type" invisible="1"/>
+                    <group string="Bank Charges" name="bank_charge"
+                           attrs="{'invisible':[('journal_type','!=','bank')]}">
+                        <field name="is_bank_charges"/>
+                        <field name="bank_charges_account" attrs="{'invisible':[('is_bank_charges','=',False)]}"/>
+                        <field name="bank_charges" attrs="{'invisible':[('is_bank_charges','=',False)]}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_payment_register_form" model="ir.ui.view">
+            <field name="name">account.payment.register.form.inherited</field>
+            <field name="model">account.payment.register</field>
+            <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='group3']" position="after">
+                    <field name="journal_type" invisible="1"/>
+                    <group string="Bank Charges" name="bank_charge"
+                           attrs="{'invisible':[('journal_type','!=','bank')]}">
+                        <field name="is_bank_charges"/>
+                        <field name="bank_charges_account" attrs="{'invisible':[('is_bank_charges','=',False)]}"/>
+                        <field name="bank_charges" attrs="{'invisible':[('is_bank_charges','=',False)]}"/>
+                    </group>
+                </xpath>
             </field>
         </record>
 
