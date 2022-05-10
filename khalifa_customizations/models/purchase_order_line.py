@@ -19,7 +19,7 @@ class PurchaseOrderLine(models.Model):
             price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
             
             taxes = line.taxes_id.compute_all(price, line.order_id.currency_id, line.product_uom_qty, product=line.product_id, partner=line.order_id.partner_id)
-            print('Pirce Tax :: ', taxes['total_included'] - taxes['total_excluded'])
+            print(taxes['total_excluded'])
             line.update({
                 'price_tax': taxes['total_included'] - taxes['total_excluded'],
                 'price_total': taxes['total_included'],

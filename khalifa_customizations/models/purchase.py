@@ -1,10 +1,30 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
 import odoo.addons.decimal_precision as dp
+import json
 
 
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
+
+    @api.depends('order_line.taxes_id', 'order_line.price_total', 'discount_rate')
+    def _amount_all_new(self):
+        for order in self:
+            amount_total = price_before_discount = amount_discount = amount_untaxed = amount_tax = 0.0
+            for line in order.order_line:
+                line._compute_amount()
+                amount_untaxed += line.price_subtotal
+                amount_tax += line.price_tax
+                amount_discount += line.discount_amount
+                price_before_discount += line.price_before_discount
+            currency = order.currency_id or order.partner_id.property_purchase_currency_id or self.env.company.currency_id
+            order.update({
+                'amount_untaxed': currency.round(amount_untaxed),
+                'amount_tax': currency.round(amount_tax),
+                'price_before_discount': currency.round(price_before_discount),
+                'amount_discount': currency.round(amount_discount),
+                'amount_total': amount_untaxed + amount_tax,
+            })
 
     # discount_type = fields.Selection([('percent', 'Percentage'), ('amount', 'Amount')], string='Discount type',
     #                                  readonly=True,
@@ -13,7 +33,7 @@ class PurchaseOrder(models.Model):
     discount_type = fields.Selection([('fixed_amount', 'Fixed Amount'),
                                       ('percentage_discount', 'Percentage')],
                                      string="Discount Type",
-                                     readonly=True,
+                                     readonly=False,
                                      # states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
                                      )
 
@@ -30,25 +50,6 @@ class PurchaseOrder(models.Model):
     amount_discount = fields.Monetary(string='Discount', store=True, readonly=True, compute='_amount_all_new',
                                       digits=dp.get_precision('Account'), track_visibility='onchange')
     revision = fields.Char(string='Revision')
-
-    @api.depends('order_line.price_total', 'discount_rate')
-    def _amount_all_new(self):
-        for order in self:
-            price_before_discount = amount_discount = amount_untaxed = amount_tax = 0.0
-            for line in order.order_line:
-                amount_untaxed += line.price_subtotal
-                amount_tax += line.price_tax
-                print("Line Tax :: ", line.price_tax)
-                amount_discount += line.discount_amount
-                price_before_discount += line.price_before_discount
-            currency = order.currency_id or order.partner_id.property_purchase_currency_id or self.env.company.currency_id
-            order.update({
-                'amount_untaxed': currency.round(amount_untaxed),
-                'amount_tax': currency.round(amount_tax),
-                'price_before_discount': currency.round(price_before_discount),
-                'amount_discount': currency.round(amount_discount),
-                'amount_total': amount_untaxed + amount_tax,
-            })
 
     @api.onchange('discount_type', 'discount_rate')
     def _onchange_discount(self):
