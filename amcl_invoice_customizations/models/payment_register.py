@@ -1,10 +1,13 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
     bank_charge_line = fields.Boolean('Its a Bank Charge')
+    bank_tax_charge_line = fields.Boolean('Its a Bank Tax Charge')
+
 
 class PaymentRegisterOption(models.TransientModel):
     _name = 'amcl.payment.register'
@@ -16,12 +19,15 @@ class PaymentRegisterOption(models.TransientModel):
         return int(account)
 
     company_id = fields.Many2one('res.company', string="Company", default=lambda self: self.env.company)
-    payment_option = fields.Selection([('cash','Cash'),('bank','Bank'),('mixed','Mixed')], string="Payment Options", default='cash')
-    cash_journal_id = fields.Many2one('account.journal', string='Cash Journal', domain="[('company_id', '=', company_id), ('type','=','cash')]")
+    payment_option = fields.Selection([('cash', 'Cash'), ('bank', 'Bank'), ('mixed', 'Mixed')],
+                                      string="Payment Options", default='cash')
+    cash_journal_id = fields.Many2one('account.journal', string='Cash Journal',
+                                      domain="[('company_id', '=', company_id), ('type','=','cash')]")
     cash_amount = fields.Float(string='Cash Amount')
     bank_payment_option = fields.Selection([('atm', 'ATM'), ('bank_transfer', 'Bank Transfer')],
-                                      string="Bank Payment By", default='atm')
-    bank_journal_id = fields.Many2one('account.journal', string='Bank Journal', domain="[('company_id', '=', company_id), ('type','=','bank')]")
+                                           string="Bank Payment By", default='atm')
+    bank_journal_id = fields.Many2one('account.journal', string='Bank Journal',
+                                      domain="[('company_id', '=', company_id), ('type','=','bank')]")
     bank_amount = fields.Float(string='Bank Amount')
 
     payment_date = fields.Date(string='Payment Date', default=fields.Date.context_today)
@@ -29,8 +35,47 @@ class PaymentRegisterOption(models.TransientModel):
     bank_memo = fields.Char(string='Bank Memo')
 
     is_bank_charges = fields.Boolean('Add Bank Changes')
-    bank_charges_account = fields.Many2one('account.account', string='Bank Charges Account', default=_bank_charge_account,)
+    bank_charges_account = fields.Many2one('account.account', string='Bank Charges Account',
+                                           default=_bank_charge_account, )
     bank_charges = fields.Float(string='Bank Charges')
+    is_bank_tax_applicable = fields.Boolean('Add VAT')
+    bank_tax_id = fields.Many2one('account.tax', 'Tax ID')
+    bank_tax_amount = fields.Float(string='Tax Charges')
+
+    @api.onchange('payment_type', 'is_bank_tax_applicable', 'bank_tax_id')
+    def onchange_payment_type(self):
+        if self.payment_type == 'outbound':
+            res = {'domain': {'bank_tax_id': [('type_tax_use', '=', 'sale')]}}
+        if self.payment_type == 'inbound':
+            res = {'domain': {'bank_tax_id': [('type_tax_use', '=', 'purchase')]}}
+        return res
+
+    def get_tax_vals(self):
+        tax_repartition_lines = self.bank_tax_id.invoice_repartition_line_ids.filtered(
+            lambda x: x.repartition_type == 'tax')
+
+
+
+        taxes_vals = []
+        tax_amount = 0
+        for repartition_line in tax_repartition_lines:
+            amount = self.bank_charges * (self.bank_tax_id.amount / 100) * (repartition_line.factor_percent / 100)
+            tax_amount += amount
+            taxes_vals.append({
+                'name': 'Bank charges - Tax',
+                'amount': amount,
+                'base': self.bank_tax_amount,
+                'account_id': repartition_line.account_id.id,
+            })
+        self.bank_tax_amount = tax_amount
+        return taxes_vals
+
+    @api.onchange('is_bank_tax_applicable', 'bank_tax_id')
+    def onchange_bank_tax(self):
+        if self.is_bank_tax_applicable:
+            self.get_tax_vals()
+        else:
+            self.bank_tax_amount = 0
 
     @api.onchange('payment_option')
     def onchange_payment_option(self):
@@ -43,27 +88,34 @@ class PaymentRegisterOption(models.TransientModel):
 
     def register_payments(self):
         payment_ids = self.env['account.payment.register']
-        if self.payment_option in ['cash','mixed']:
-            values = self.env['account.payment.register'].with_context(active_model=self._context.get('active_model'),active_ids=self._context.get('active_ids')).default_get(['line_ids'])
+        if self.payment_option in ['cash', 'mixed']:
+            values = self.env['account.payment.register'].with_context(active_model=self._context.get('active_model'),
+                                                                       active_ids=self._context.get(
+                                                                           'active_ids')).default_get(['line_ids'])
             values.update({
                 'journal_id': self.cash_journal_id.id,
                 'amount': self.cash_amount,
                 'communication': self.cash_memo
             })
             payment_ids += self.env['account.payment.register'].create(values)
-        if self.payment_option in ['bank','mixed']:
-            values = self.env['account.payment.register'].with_context(active_model=self._context.get('active_model'),active_ids=self._context.get('active_ids')).default_get(['line_ids'])
+        if self.payment_option in ['bank', 'mixed']:
+            values = self.env['account.payment.register'].with_context(active_model=self._context.get('active_model'),
+                                                                       active_ids=self._context.get(
+                                                                           'active_ids')).default_get(['line_ids'])
             bank_amount = self.bank_amount
             values.update({
-                    'journal_id': self.bank_journal_id.id,
-                    'amount': bank_amount,
-                    'communication': self.bank_memo,
-                })
+                'journal_id': self.bank_journal_id.id,
+                'amount': bank_amount,
+                'communication': self.bank_memo,
+            })
             if self.is_bank_charges:
                 values.update({
-                    'is_bank_charges':self.is_bank_charges,
+                    'is_bank_charges': self.is_bank_charges,
                     'bank_charges_account': self.bank_charges_account.id,
                     'bank_charges': self.bank_charges,
+                    'is_bank_tax_applicable': self.is_bank_tax_applicable,
+                    'bank_tax_id': self.bank_tax_id.id,
+                    'bank_tax_amount': self.bank_tax_amount,
                 })
             payment_ids += self.env['account.payment.register'].create(values)
         for payment in payment_ids:
@@ -79,9 +131,46 @@ class PaymentRegister(models.TransientModel):
         return int(account)
 
     is_bank_charges = fields.Boolean('Add Bank Changes')
-    bank_charges_account = fields.Many2one('account.account', string='Bank Charges Account', default=_bank_charge_account)
+    bank_charges_account = fields.Many2one('account.account', string='Bank Charges Account',
+                                           default=_bank_charge_account)
     bank_charges = fields.Float(string='Bank Charges')
     journal_type = fields.Selection(related='journal_id.type', store=True)
+
+    is_bank_tax_applicable = fields.Boolean('Add VAT')
+    bank_tax_id = fields.Many2one('account.tax', 'Tax ID')
+    bank_tax_amount = fields.Float(string='Tax Charges')
+
+    @api.onchange('payment_type', 'is_bank_tax_applicable', 'bank_tax_id')
+    def onchange_payment_type(self):
+        if self.payment_type == 'outbound':
+            res = {'domain': {'bank_tax_id': [('type_tax_use', '=', 'sale')]}}
+        if self.payment_type == 'inbound':
+            res = {'domain': {'bank_tax_id': [('type_tax_use', '=', 'purchase')]}}
+        return res
+
+    def get_tax_vals(self):
+        tax_repartition_lines = self.bank_tax_id.invoice_repartition_line_ids.filtered(
+            lambda x: x.repartition_type == 'tax')
+        taxes_vals = []
+        tax_amount = 0
+        for repartition_line in tax_repartition_lines:
+            amount = self.bank_charges * (self.bank_tax_id.amount / 100) * (repartition_line.factor_percent / 100)
+            tax_amount += amount
+            taxes_vals.append({
+                'name': 'Bank charges - Tax',
+                'amount': amount,
+                'base': self.bank_tax_amount,
+                'account_id': repartition_line.account_id.id,
+            })
+        self.bank_tax_amount = tax_amount
+        return taxes_vals
+
+    @api.onchange('is_bank_tax_applicable', 'bank_tax_id', 'bank_charges')
+    def onchange_bank_tax(self):
+        if self.is_bank_tax_applicable:
+            self.get_tax_vals()
+        else:
+            self.bank_tax_amount = 0
 
     def _create_payment_vals_from_wizard(self):
         payment_vals = {
@@ -98,7 +187,10 @@ class PaymentRegister(models.TransientModel):
             'destination_account_id': self.line_ids[0].account_id.id,
             'is_bank_charges': self.is_bank_charges,
             'bank_charges_account': self.bank_charges_account.id or False,
-            'bank_charges': self.bank_charges or False
+            'bank_charges': self.bank_charges or False,
+            'is_bank_tax_applicable': self.is_bank_tax_applicable,
+            'bank_tax_id': self.bank_tax_id.id or False,
+            'bank_tax_amount': self.bank_tax_amount,
         }
 
         if not self.currency_id.is_zero(self.payment_difference) and self.payment_difference_handling == 'reconcile':
@@ -119,10 +211,52 @@ class AccountPayment(models.Model):
         return int(account)
 
     is_bank_charges = fields.Boolean('Add Bank Changes')
-    bank_charges_account = fields.Many2one('account.account', string='Bank Charges Account', default=_bank_charge_account)
+    bank_charges_account = fields.Many2one('account.account', string='Bank Charges Account',
+                                           default=_bank_charge_account)
     bank_charges = fields.Float(string='Bank Charges')
-    journal_type = fields.Selection(related='journal_id.type',store=True)
+    journal_type = fields.Selection(related='journal_id.type', store=True)
 
+    is_bank_tax_applicable = fields.Boolean('Add VAT')
+    bank_tax_id = fields.Many2one('account.tax', 'Tax ID')
+    bank_tax_amount = fields.Float(string='Tax Charges')
+
+    def get_tax_vals(self):
+        tax_repartition_lines = self.bank_tax_id.invoice_repartition_line_ids.filtered(
+            lambda x: x.repartition_type == 'tax')
+
+        print('tax_repartition_lines :: ', tax_repartition_lines)
+
+        taxes_vals = []
+        tax_amount = 0
+        for repartition_line in tax_repartition_lines:
+            amount = self.bank_charges * (self.bank_tax_id.amount / 100) * (repartition_line.factor_percent / 100)
+            tax_amount += amount
+            taxes_vals.append({
+                'name': 'Bank charges - Tax',
+                'amount': amount,
+                'base': self.bank_tax_amount,
+                'account_id': repartition_line.account_id.id,
+            })
+        self.bank_tax_amount = tax_amount
+        return taxes_vals
+
+    @api.onchange('is_bank_charges', 'is_bank_tax_applicable', 'bank_tax_id', 'bank_charges')
+    def onchange_bank_tax(self):
+        if not self.is_bank_charges:
+            self.move_id.line_ids.filtered(
+                lambda e: e.bank_charge_line is True or e.bank_tax_charge_line is True).unlink()
+        elif not self.is_bank_tax_applicable:
+            self.move_id.line_ids.filtered(lambda e: e.bank_tax_charge_line is True).unlink()
+        elif self.is_bank_charges and self.is_bank_tax_applicable:
+            self.get_tax_vals()
+        else:
+            self.bank_tax_amount = 0
+
+        if self.payment_type == 'outbound':
+            res = {'domain': {'bank_tax_id': [('type_tax_use', '=', 'sale')]}}
+        if self.payment_type == 'inbound':
+            res = {'domain': {'bank_tax_id': [('type_tax_use', '=', 'purchase')]}}
+        return res
 
     def _prepare_move_line_default_vals(self, write_off_line_vals=None):
         self.ensure_one()
@@ -165,7 +299,7 @@ class AccountPayment(models.Model):
         if self.is_internal_transfer:
             if self.payment_type == 'inbound':
                 liquidity_line_name = _('Transfer to %s', self.journal_id.name)
-            else: # payment.payment_type == 'outbound':
+            else:  # payment.payment_type == 'outbound':
                 liquidity_line_name = _('Transfer from %s', self.journal_id.name)
         else:
             liquidity_line_name = self.payment_reference
@@ -175,7 +309,8 @@ class AccountPayment(models.Model):
         payment_display_name = self._prepare_payment_display_name()
 
         default_line_name = self.env['account.move.line']._get_default_line_name(
-            _("Internal Transfer") if self.is_internal_transfer else payment_display_name['%s-%s' % (self.payment_type, self.partner_type)],
+            _("Internal Transfer") if self.is_internal_transfer else payment_display_name[
+                '%s-%s' % (self.payment_type, self.partner_type)],
             self.amount,
             self.currency_id,
             self.date,
@@ -183,7 +318,6 @@ class AccountPayment(models.Model):
         )
 
         line_vals_list = [
-            # Liquidity line.
             {
                 'name': liquidity_line_name or default_line_name,
                 'date_maturity': self.date,
@@ -194,7 +328,6 @@ class AccountPayment(models.Model):
                 'partner_id': self.partner_id.id,
                 'account_id': self.outstanding_account_id.id,
             },
-            # Receivable / Payable.
             {
                 'name': self.payment_reference or default_line_name,
                 'date_maturity': self.date,
@@ -206,32 +339,6 @@ class AccountPayment(models.Model):
                 'account_id': self.destination_account_id.id,
             },
         ]
-        print('Is Bank :: ', self.is_bank_charges)
-        if self.is_bank_charges:
-            line_vals_list.append({
-                "name": 'Bank Charges',
-                "ref": self.ref,
-                "partner_id": self.partner_id.id or False,
-                "journal_id": self.journal_id.id,
-                "account_id": self.journal_id.default_account_id.id,
-                "debit": 0,
-                "credit": self.bank_charges,
-                "date_maturity": self.date,
-                "bank_charge_line": True
-            })
-            line_vals_list.append({
-                    "name": 'Bank Charges',
-                    "ref": self.ref,
-                    "partner_id": self.partner_id.id or False,
-                    "journal_id": self.journal_id.id,
-                    "account_id": self.bank_charges_account.id,
-                    "debit": self.bank_charges,
-                    "credit": 0,
-                    "date_maturity": self.date,
-                    "bank_charge_line": True
-                }
-            )
-
         if not self.currency_id.is_zero(write_off_amount_currency):
             # Write-off line.
             line_vals_list.append({
@@ -246,17 +353,10 @@ class AccountPayment(models.Model):
         return line_vals_list
 
     def _synchronize_from_moves(self, changed_fields):
-        ''' Update the account.payment regarding its related account.move.
-        Also, check both models are still consistent.
-        :param changed_fields: A set containing all modified fields on account.move.
-        '''
         if self._context.get('skip_account_move_synchronization'):
             return
 
         for pay in self.with_context(skip_account_move_synchronization=True):
-
-            # After the migration to 14.0, the journal entry could be shared between the account.payment and the
-            # account.bank.statement.line. In that case, the synchronization will only be made with the statement line.
             if pay.move_id.statement_line_id:
                 continue
 
@@ -278,7 +378,8 @@ class AccountPayment(models.Model):
                         move.display_name,
                     ))
                 if len(liquidity_lines) != 1 and pay.is_bank_charges:
-                    liquidity_lines = liquidity_lines.filtered(lambda e: e.bank_charge_line is False)
+                    liquidity_lines = liquidity_lines.filtered(
+                        lambda e: e.bank_charge_line is False and e.bank_tax_charge_line is False)
 
                 if len(counterpart_lines) != 1:
                     raise UserError(_(
@@ -288,7 +389,10 @@ class AccountPayment(models.Model):
                         move.display_name,
                     ))
 
-                if writeoff_lines and len(writeoff_lines.account_id) != 1:
+                writeoff_lines = writeoff_lines.filtered(
+                    lambda e: e.bank_charge_line is False and e.bank_tax_charge_line is False)
+                if writeoff_lines and not writeoff_lines.bank_charge_line and not writeoff_lines.bank_tax_charge_line and len(
+                        writeoff_lines.account_id) != 1:
                     raise UserError(_(
                         "Journal Entry %s is not valid. In order to proceed, "
                         "all optional journal items must share the same account.",
@@ -335,3 +439,156 @@ class AccountPayment(models.Model):
             move.write(move._cleanup_write_orm_values(move, move_vals_to_write))
             pay.write(move._cleanup_write_orm_values(pay, payment_vals_to_write))
 
+            if self.is_bank_charges and not move.line_ids.filtered(lambda e: e.bank_charge_line is True):
+                move.write({'line_ids': [
+                    (0, 0, {
+                        "name": 'Bank Charges',
+                        "ref": self.ref,
+                        'currency_id': self.currency_id.id,
+                        "partner_id": self.partner_id.id or False,
+                        "journal_id": self.journal_id.id,
+                        "account_id": self.journal_id.default_account_id.id,
+                        "debit": self.bank_charges if self.payment_type == 'inbound' else 0.0,
+                        "credit": self.bank_charges if self.payment_type == 'outbound' else 0.0,
+                        "date_maturity": self.date,
+                        "bank_charge_line": True
+                    }),
+                    (0, 0, {
+                        "name": 'Bank Charges',
+                        "ref": self.ref,
+                        'currency_id': self.currency_id.id,
+                        "partner_id": self.partner_id.id or False,
+                        "journal_id": self.journal_id.id,
+                        "account_id": self.bank_charges_account.id,
+                        "debit": self.bank_charges if self.payment_type == 'outbound' else 0.0,
+                        "credit": self.bank_charges if self.payment_type == 'inbound' else 0.0,
+                        "date_maturity": self.date,
+                        "bank_charge_line": True
+                    }),
+                ]})
+                if self.is_bank_charges and self.is_bank_tax_applicable and not move.line_ids.filtered(
+                        lambda e: e.bank_tax_charge_line is True):
+                    taxes = self.get_tax_vals()
+                    tax_line = []
+                    for tax in self.get_tax_vals():
+                        tax_line += (0, 0, {
+                                "name": 'Bank Charges - VAT',
+                                "ref": self.ref,
+                                'currency_id': self.currency_id.id,
+                                "partner_id": self.partner_id.id or False,
+                                "journal_id": self.journal_id.id,
+                                "account_id": tax['account_id'],
+                                "debit": self.bank_tax_amount if self.payment_type == 'outbound' else 0.0,
+                                "credit": self.bank_tax_amount if self.payment_type == 'inbound' else 0.0,
+                                "date_maturity": self.date,
+                                "bank_tax_charge_line": True
+                        })
+                    move.write({'line_ids': [
+                        (0, 0, {
+                            "name": 'Bank Charges - VAT',
+                            "ref": self.ref,
+                            'currency_id': self.currency_id.id,
+                            "partner_id": self.partner_id.id or False,
+                            "journal_id": self.journal_id.id,
+                            "account_id": self.journal_id.default_account_id.id,
+                            "debit": self.bank_tax_amount if self.payment_type == 'inbound' else 0.0,
+                            "credit": self.bank_tax_amount if self.payment_type == 'outbound' else 0.0,
+                            "date_maturity": self.date,
+                            "bank_tax_charge_line": True
+                        }),
+                        tax_line,
+                    ]})
+
+
+
+    def _synchronize_to_moves(self, changed_fields):
+        if self._context.get('skip_account_move_synchronization'):
+            return
+
+        if not any(field_name in changed_fields for field_name in (
+                'date', 'amount', 'payment_type', 'partner_type', 'payment_reference', 'is_internal_transfer',
+                'currency_id', 'partner_id', 'destination_account_id', 'partner_bank_id',
+                'is_bank_charges', 'bank_charges_account', 'bank_charges', 'journal_type',
+                'is_bank_tax_applicable', 'bank_tax_id', 'bank_tax_amount'
+        )):
+            return
+
+        if any(field_name in changed_fields for field_name in ('is_bank_charges', 'bank_charges_account',
+                                                               'bank_charges', 'journal_type',
+                                                               'is_bank_tax_applicable', 'bank_tax_id',
+                                                               'bank_tax_amount')):
+            self.move_id.line_ids.filtered(
+                lambda e: e.bank_charge_line is True or e.bank_tax_charge_line is True).unlink()
+
+        for pay in self.with_context(skip_account_move_synchronization=True):
+            liquidity_lines, counterpart_lines, writeoff_lines = pay._seek_for_lines()
+
+            # Make sure to preserve the write-off amount.
+            # This allows to create a new payment with custom 'line_ids'.
+
+            if writeoff_lines:
+                counterpart_amount = sum(counterpart_lines.mapped('amount_currency'))
+                writeoff_amount = sum(writeoff_lines.mapped('amount_currency'))
+
+                # To be consistent with the payment_difference made in account.payment.register,
+                # 'writeoff_amount' needs to be signed regarding the 'amount' field before the write.
+                # Since the write is already done at this point, we need to base the computation on accounting values.
+                if (counterpart_amount > 0.0) == (writeoff_amount > 0.0):
+                    sign = -1
+                else:
+                    sign = 1
+                writeoff_amount = abs(writeoff_amount) * sign
+
+                write_off_line_vals = {
+                    'name': writeoff_lines[0].name,
+                    'amount': writeoff_amount,
+                    'account_id': writeoff_lines[0].account_id.id,
+                }
+            else:
+                write_off_line_vals = {}
+
+            line_vals_list = pay._prepare_move_line_default_vals(write_off_line_vals=write_off_line_vals)
+
+            if pay.is_bank_charges:
+                liquidity_lines = liquidity_lines.filtered(
+                    lambda e: e.bank_charge_line is False and e.bank_tax_charge_line is False)
+
+            line_ids_commands = [
+                (1, liquidity_lines.id, line_vals_list[0]),
+                (1, counterpart_lines.id, line_vals_list[1]),
+            ]
+
+            for line in writeoff_lines:
+                line_ids_commands.append((2, line.id))
+
+            for extra_line_vals in line_vals_list[2:]:
+                line_ids_commands.append((0, 0, extra_line_vals))
+
+            # Update the existing journal items.
+            # If dealing with multiple write-off lines, they are dropped and a new one is generated.
+
+            pay.move_id.write({
+                'partner_id': pay.partner_id.id,
+                'currency_id': pay.currency_id.id,
+                'partner_bank_id': pay.partner_bank_id.id,
+                'line_ids': line_ids_commands,
+            })
+
+    def _seek_for_lines(self):
+        self.ensure_one()
+
+        liquidity_lines = self.env['account.move.line']
+        counterpart_lines = self.env['account.move.line']
+        writeoff_lines = self.env['account.move.line']
+
+        for line in self.move_id.line_ids:
+            if line.account_id in self._get_valid_liquidity_accounts():
+                liquidity_lines += line
+            elif line.account_id.internal_type in (
+                    'receivable', 'payable') or line.partner_id == line.company_id.partner_id:
+                counterpart_lines += line
+            else:
+                if not line.bank_charge_line and not line.bank_tax_charge_line:
+                    writeoff_lines += line
+
+        return liquidity_lines, counterpart_lines, writeoff_lines
