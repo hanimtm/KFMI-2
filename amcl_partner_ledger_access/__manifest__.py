@@ -15,6 +15,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/partner.xml',
+        'views/account_report.xml',
     ],
     'application': False,
     'installable': True,
