@@ -101,7 +101,8 @@ class PaymentRequest(models.Model):
     def compute_balance_amount(self):
         """ :return: """
         for rec in self:
-            requests = self.env['payment.request'].search([('lpo_num', '=', rec.lpo_num.id)])
+            requests = self.env['payment.request'].search([
+                ('lpo_num', '=', rec.lpo_num.id), ('lpo_num', '!=', False)])
 
             if len(requests) > 0:
                 total = 0
@@ -115,27 +116,14 @@ class PaymentRequest(models.Model):
     def compute_balance_amount_not_store(self):
         """ :return: """
         for rec in self:
-            _logger.critical('*** 1 ***')
-            _logger.critical(rec.lpo_num.name)
             rec.balance_amount_not_store = 0
             requests = self.env['payment.request'].search([('lpo_num', '=', rec.lpo_num.id)])
 
-            _logger.critical('*** 2 ***')
-            _logger.critical(len(requests))
             if len(requests) > 0:
-                _logger.critical('*** 3 ***')
                 total = 0
                 for request in requests:
-                    _logger.critical('*** 4 ***')
                     total += request.amount
-                    _logger.critical('*** 5 ***')
-                _logger.critical('*** 6 ***')
-                _logger.critical(rec.net_total - total)
                 rec.balance_amount_not_store = rec.net_total - total
-            # else:
-            #     return
-                # _logger.critical('*** 7 ***')
-                # rec.balance_amount - 0.00
 
     @api.model
     def create(self, vals):

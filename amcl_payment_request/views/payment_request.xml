@@ -37,7 +37,7 @@
                         <h2>
                             <field name="name"/>
                         </h2>
-                        
+
                         <group>
                             <group>
                                 <field name="reference" attrs="{'invisible': [('lpo_num', '!=', False)]}"/>
