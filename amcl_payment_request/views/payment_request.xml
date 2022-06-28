@@ -24,7 +24,11 @@
                         <button name="set_to_draft" states="manager_reject,accounts_reject"
                                 groups="purchase.group_purchase_manager,purchase.group_purchase_user"
                                 string="Set To Draft" type="object" class="oe_highlight"/>
-
+                        <button name="btn_create_payment_request"
+                                type="object" class="btn btn-primary"
+                                string="Create Balance Request"
+                                attrs="{'invisible': [('balance_amount_not_store', '=', 0)]}"/>
+                        <!---->
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,manager_approval,accounts_approval,action_department_approve,approved"/>
                     </header>
@@ -33,18 +37,22 @@
                         <h2>
                             <field name="name"/>
                         </h2>
+                        
                         <group>
                             <group>
                                 <field name="reference" attrs="{'invisible': [('lpo_num', '!=', False)]}"/>
-                                <field name="lpo_num" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                                <field name="lpo_num" options="{'no_create': True}"
+                                       attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="payment_term" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="project" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="method_of_payment" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                             </group>
                             <group>
                                 <field name="company" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                                <field name="net_total" readonly="1"/>
                                 <field name="amount" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="balance_amount"/>
+                                <field name="balance_amount_not_store" invisible="1"/>
                                 <field name="currency_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="bank_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="res_partner_bank_id"
@@ -95,7 +103,14 @@
                     <field name="lpo_num"/>
                     <field name="company"/>
                     <field name="payment_term"/>
+                    <field name="net_total"/>
                     <field name="amount"/>
+                    <field name="balance_amount"/>
+                    <field name="balance_amount_not_store" invisible="1"/>
+                    <button name="btn_create_payment_request"
+                            type="object" class="btn btn-primary"
+                            string="Create Balance Request"
+                            attrs="{'invisible': [('balance_amount_not_store', '=', 0)]}"/>
                 </tree>
             </field>
         </record>

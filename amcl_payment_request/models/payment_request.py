@@ -1,5 +1,7 @@
-from odoo import api, fields, models, tools,_
+from odoo import api, fields, models, tools, _
 from num2words import num2words
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class PaymentRequest(models.Model):
@@ -19,7 +21,8 @@ class PaymentRequest(models.Model):
     company = fields.Many2one('res.partner', string="Company")
     payment_term = fields.Many2one('account.payment.term', string="Payment Term")
     amount = fields.Float('Amount')
-    balance_amount = fields.Float('Balance', compute="compute_balance_amount")
+    balance_amount = fields.Float('Balance', compute="compute_balance_amount", store=1)
+    balance_amount_not_store = fields.Float('BNS', compute="compute_balance_amount_not_store")
     prepared = fields.Many2one('res.users', string="Prepared By")
     approved = fields.Many2one('res.users', string="Approved By")
     account_approve = fields.Many2one('res.users', string="Accounts Approved By")
@@ -44,16 +47,95 @@ class PaymentRequest(models.Model):
     method_of_payment = fields.Char('Method Of Payment')
     reason_for_payment = fields.Text('Reason for The Payment')
 
-    @api.depends('amount', 'lpo_num')
+    net_total = fields.Monetary(related='lpo_num.amount_total', store=1, string='Po Origin Value')
+    # is_finish = fields.Boolean(compute='compute_is_finish')
+
+    # @api.depends('lpo_num')
+    # def compute_is_finish(self):
+    #     for rec in self:
+    #         requests = self.env['payment.request'].search([('lpo_num', '=', rec.lpo_num.id)])
+    #         if requests:
+    #             for request in requests:
+    #                 if request.balance_amount == 0:
+    #                     rec.is_finish = True
+    #
+    # def unlink(self):
+    #     res = super(PaymentRequest, self).unlink()
+    #     self.compute_is_finish()
+    #     return res
+    #
+    # def write(self, vals):
+    #     res = super(PaymentRequest, self).write(vals)
+    #     self.compute_is_finish()
+    #     return res
+
+    def btn_create_payment_request(self):
+        print('a')
+        requests = self.env['payment.request'].search([('lpo_num', '=', self.lpo_num.id)])
+        amount = 0
+        if len(requests) > 0:
+            for request in requests:
+                amount += request.amount
+            payment_request = self.env['payment.request'].create({
+                'lpo_num': self.lpo_num.id,
+                'reference': self.reference,
+                'payment_term': self.payment_term.id,
+                'project': self.project.id,
+                'method_of_payment': self.method_of_payment,
+                'company': self.company.id,
+                'prepared': self.env.user.id,
+                'approved': self.env.user.id,
+                'department_manager_comment': self.department_manager_comment,
+                'account_comment': self.account_comment,
+                'purchase_comment': self.purchase_comment,
+                'currency_id': self.currency_id.id,
+                'bank_id': self.bank_id.id,
+                'res_partner_bank_id': self.res_partner_bank_id.id,
+                'bank_country_id': self.bank_country_id.id,
+                'account_approve': self.env.user.id,
+                'amount': self.net_total - amount
+            })
+            return payment_request
+
+    @api.depends('lpo_num', 'amount')
     def compute_balance_amount(self):
-        """
-        :return:
-        """
+        """ :return: """
         for rec in self:
-            if rec.lpo_num:
-                rec.balance_amount = rec.lpo_num.amount_total - rec.amount
+            requests = self.env['payment.request'].search([('lpo_num', '=', rec.lpo_num.id)])
+
+            if len(requests) > 0:
+                total = 0
+                for request in requests:
+                    total += request.amount
+                rec.balance_amount = rec.net_total - total
             else:
                 rec.balance_amount - 0.00
+
+    @api.depends('lpo_num', 'amount')
+    def compute_balance_amount_not_store(self):
+        """ :return: """
+        for rec in self:
+            _logger.critical('*** 1 ***')
+            _logger.critical(rec.lpo_num.name)
+            rec.balance_amount_not_store = 0
+            requests = self.env['payment.request'].search([('lpo_num', '=', rec.lpo_num.id)])
+
+            _logger.critical('*** 2 ***')
+            _logger.critical(len(requests))
+            if len(requests) > 0:
+                _logger.critical('*** 3 ***')
+                total = 0
+                for request in requests:
+                    _logger.critical('*** 4 ***')
+                    total += request.amount
+                    _logger.critical('*** 5 ***')
+                _logger.critical('*** 6 ***')
+                _logger.critical(rec.net_total - total)
+                rec.balance_amount_not_store = rec.net_total - total
+            # else:
+            #     return
+                # _logger.critical('*** 7 ***')
+                # rec.balance_amount - 0.00
 
     @api.model
     def create(self, vals):
@@ -67,8 +149,7 @@ class PaymentRequest(models.Model):
             rec.company = rec.lpo_num and rec.lpo_num.partner_id.id or False
             rec.payment_term = rec.lpo_num and rec.lpo_num.payment_term_id.id or False
             rec.amount = rec.lpo_num and rec.lpo_num.amount_total or 0
-            #rec.project = rec.lpo_num.analytic_id.id
-
+            # rec.project = rec.lpo_num.analytic_id.id
 
     def action_confirm(self):
         self.write({'state': 'manager_approval', 'prepared': self.env.user.id})
@@ -83,13 +164,13 @@ class PaymentRequest(models.Model):
             ids = channel_all_employees['id']
             channel_id = self.env['mail.channel'].search([('id', '=', ids)])
             body = """Hello, Payment Request with number %s Sending to purchase department approval""" % (self.name)
-            channel_id.message_post(body=body, subject='Payment Request',subtype_ids='mail.mt_comment')
-
+            channel_id.message_post(body=body, subject='Payment Request', subtype_ids='mail.mt_comment')
 
     def action_department_approve(self):
         self.write({'state': 'accounts_approval', 'approved': self.env.user.id})
         channel_all_employees = self.env.ref('amcl_payment_request.channel_all_to_approve_payment_request').read()[0]
-        template_new_employee = self.env.ref('amcl_payment_request.email_template_data_to_approve_payment_request').read()[0]
+        template_new_employee = \
+        self.env.ref('amcl_payment_request.email_template_data_to_approve_payment_request').read()[0]
         # raise ValidationError(_(template_new_employee))
         if template_new_employee:
             # MailTemplate = self.env['mail.template']
@@ -116,7 +197,6 @@ class PaymentRequest(models.Model):
             body = """This payment request %s get rejected by the purchase department manager""" % (self.name)
             channel_id.message_post(body=body, subject='Payment Request', subtype_ids='mail.mt_comment')
 
-
     def action_accounts_approve(self):
         self.write({'state': 'approved', 'account_approve': self.env.user.id})
         channel_all_employees = self.env.ref('amcl_payment_request.channel_all_payment_request').read()[0]
@@ -131,7 +211,6 @@ class PaymentRequest(models.Model):
             channel_id = self.env['mail.channel'].search([('id', '=', ids)])
             body = """This payment request %s is approved by the accounts team""" % (self.name)
             channel_id.message_post(body=body, subject='Payment Request', subtype_ids='mail.mt_comment')
-
 
     def action_accounts_reject(self):
         self.write({'state': 'accounts_reject'})
@@ -148,9 +227,8 @@ class PaymentRequest(models.Model):
             body = """This payment request %s is rejected by the accounts team""" % (self.name)
             channel_id.message_post(body=body, subject='Payment Request', subtype_ids='mail.mt_comment')
 
-    #@api.multi
     def set_to_draft(self):
-        self.write({'state':'draft','account_approve':False,'approved':False})
+        self.write({'state': 'draft', 'account_approve': False, 'approved': False})
 
     def get_num2words(self, number=0):
         """
