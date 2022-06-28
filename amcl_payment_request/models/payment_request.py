@@ -85,15 +85,16 @@ class PaymentRequest(models.Model):
                 'company': self.company.id,
                 'prepared': self.env.user.id,
                 'approved': self.env.user.id,
-                'department_manager_comment': self.department_manager_comment,
-                'account_comment': self.account_comment,
+                'department_manager_comment': '',
+                'account_comment': '',
                 'purchase_comment': self.purchase_comment,
                 'currency_id': self.currency_id.id,
                 'bank_id': self.bank_id.id,
                 'res_partner_bank_id': self.res_partner_bank_id.id,
                 'bank_country_id': self.bank_country_id.id,
                 'account_approve': self.env.user.id,
-                'amount': self.net_total - amount
+                'amount': self.net_total - amount,
+                'state': 'draft'
             })
             return payment_request
 
