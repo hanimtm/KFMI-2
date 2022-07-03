@@ -8,10 +8,15 @@
             <xpath expr="//notebook" position="inside">
                 <page string="More Details">
                     <group>
-                        <field name="attention" attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
-                        <field name="approved_by" attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
-                        <field name="vat_text" attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
-                        <field name="vat_arabic_text" attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
+                        <field name="attention"
+                               attrs="{'readonly': [('state','!=','draft')]}"/>
+                        <field name="approved_by"
+                               attrs="{'readonly': [('state','!=','draft')]}"/>
+                        <field name="vat_text"
+                               attrs="{'readonly': [('state','!=','draft')]}"/>
+<!--                        'required': [('move_type','=','out_invoice')],-->
+                        <field name="vat_arabic_text"
+                               attrs="{'readonly': [('state','!=','draft')]}"/>
                     </group>
                     <group>
                         <field name="amount_text"/>
@@ -20,7 +25,7 @@
                 </page>
 
             </xpath>
-           <xpath expr="//field[@name='line_ids']//field[@name='discount']" position="after">
+            <xpath expr="//field[@name='line_ids']//field[@name='discount']" position="after">
                 <field name='discount_amount' invisible='1'/>
                 <field name='price_before_discount' invisible='1'/>
             </xpath>
@@ -37,18 +42,25 @@
                 <field name='tax_amount' invisible='1'/>
                 <field name='vat_text' invisible='1'/>
             </xpath>
-                <xpath expr="//group[@class='oe_subtotal_footer oe_right']//field[@name='tax_totals_json']" position="before">
+            <xpath expr="//group[@class='oe_subtotal_footer oe_right']//field[@name='tax_totals_json']"
+                   position="before">
                 <field name="price_before_discount"/>
                 <field name="amount_tax" invisible="1"/>
                 <field name="discount" class="oe_subtotal_footer_separator"/>
             </xpath>
             <xpath expr="//field[@name='invoice_date']" position="after">
-                <field name="invoice_date_time" attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
-                <field name="delivery_date" attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
-                <field name="po_number" attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
-                <field name="po_date" attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
-                <field name="wbs" attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
-                <field name="gdn" attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
+                <field name="invoice_date_time"
+                       attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
+                <field name="delivery_date"
+                       attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
+                <field name="po_number"
+                       attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
+                <field name="po_date"
+                       attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
+                <field name="wbs"
+                       attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
+                <field name="gdn"
+                       attrs="{'required': [('move_type','=','out_invoice')],'readonly': [('state','!=','draft')]}"/>
             </xpath>
         </field>
     </record>
