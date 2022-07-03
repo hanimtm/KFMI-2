@@ -208,7 +208,7 @@
                     </table>
                     <div width="100%">
                         <img src="/saudi_vat_invoice_print/static/src/images/footer.png"
-                        style="width:100%; height:100px"/>
+                             style="width:100%; height:100px"/>
                     </div>
                     <center>
                         <h6>
@@ -255,8 +255,8 @@
                         </center>
 
                         <!--                        <div style="100%">-->
-                        <div class="row" style="border: 1px solid black;  margin-right:2px; margin-left:2px;">
-                            <div class="col-9" style="margin-right:-30px;">
+                        <div class="row" style="border: 1px solid black;  margin-right:1px; margin-left:1px;">
+                            <div class="col-10" style="margin-right:-30px;">
                                 <table width="100%"
                                        style="border-spacing: 1em .5em;padding: 0 2em 1em 0;margin-left:-15px;table-layout:fixed;border-collapse:collapse;">
                                     <tr>
@@ -272,24 +272,6 @@
                                             <t t-if="doc.move_type == 'out_invoice'">رقم الفاتورة</t>
                                             <t t-if="doc.move_type == 'out_refund'">رقم الإشعار</t>
                                         </td>
-                                        <!--                                        <t t-if="doc.move_type == 'out_invoice'">-->
-                                        <!--                                            <td rowspan="5">-->
-                                        <!--                                                &lt;!&ndash;                                        <center>&ndash;&gt;-->
-                                        <!--                                                <img t-att-src="'/report/barcode/?type=QR&amp;width=400&amp;height=400&amp;value=' +doc.generate_tlv_code()"-->
-                                        <!--                                                     style="height:100px; width:100px;"/>-->
-                                        <!--                                                &lt;!&ndash;                                        </center>&ndash;&gt;-->
-                                        <!--                                            </td>-->
-                                        <!--                                        </t>-->
-
-                                        <!--                                <t t-if="doc.move_type == 'in_invoice'">-->
-                                        <!--                                    <td rowspan="7">-->
-                                        <!--&lt;!&ndash;                                        <center>&ndash;&gt;-->
-
-                                        <!--                                            <img t-att-src="'/report/barcode/?type=QR&amp;width=400&amp;height=400&amp;value=' +doc.generate_tlv_code()"-->
-                                        <!--                                                 style="height:100px; width:100px;"/>-->
-                                        <!--&lt;!&ndash;                                        </center>&ndash;&gt;-->
-                                        <!--                                    </td>-->
-                                        <!--                                </t>-->
                                     </tr>
 
                                     <tr>
@@ -373,130 +355,91 @@
                                         <!--                                    <td style="padding:1px;" class="text-right"/>-->
                                         <!--                                </tr>-->
                                     </t>
-                                    <tr>
-                                        <td style="font-size:16; padding:1px;background-color:#606060!important;padding-left:20px;border-right:none;color:white"
-                                            class="text-left">
-                                            Buyer
-                                        </td>
-                                        <td style="padding:1px;background-color:#606060!important;" class="text-center">
 
-                                        </td>
-                                        <td style=" font-size:16; padding:1px;background-color:#606060!important;padding-right:20px;border-right:none;color:white"
-                                            class="text-right">العميل
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" style="padding:1px;">
-                                            <table border="0" width="100%"> <!-- if you want border set it to 1 -->
-                                                <tr>
-                                                    <td class="text-left">
-                                                        <span style="font-size:16px">Buyer :</span>
-                                                        <span style="font-size:16px" t-field="doc.partner_id"/>
-                                                    </td>
-                                                    <td class="text-right" style="direction: rtl;">
 
-                                                        <span style=" font-size:16px;">
-                                                            العميل :
-                                                        </span>
-                                                        <span style="font-size:16px;"
-                                                              t-field="doc.partner_id.arabic"/>
-
-                                                    </td>
-                                                </tr>
-
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <!--                            <tr>-->
-                                    <!--                                <td style="padding:1px;" class="text-left">Building no</td>-->
-                                    <!--                                <td style="padding:1px;" class="text-center">-->
-                                    <!--                                    <span t-field="doc.partner_id.street"/>-->
-                                    <!--                                </td>-->
-                                    <!--                                <td style="padding:1px;" class="text-right">رقم المبني</td>-->
-                                    <!--                            </tr>-->
-                                    <!--                            <tr>-->
-                                    <!--                                <td style="padding:1px;" class="text-left">Street Name</td>-->
-                                    <!--                                <td style="padding:1px;" class="text-center">-->
-                                    <!--                                    <span t-field="doc.partner_id.street2"/>-->
-                                    <!--                                </td>-->
-                                    <!--                                <td style="padding:1px;" class="text-right">اسم الشارع</td>-->
-                                    <!--                            </tr>-->
-                                    <!--                            <tr>-->
-                                    <!--                                <td style="padding:1px;" class="text-left">District</td>-->
-                                    <!--                                <td style="padding:1px;" class="text-center">-->
-                                    <!--                                    <span t-field="doc.partner_id.district"/>-->
-                                    <!--                                </td>-->
-                                    <!--                                <td style="padding:1px;" class="text-right">المنطقة</td>-->
-                                    <!--                            </tr>-->
-                                    <!--                    -->
-                                    <!--                            <tr>-->
-                                    <!--                                <td style="padding:1px;" class="text-left">Additional No</td>-->
-                                    <!--                                <td style="padding:1px;" class="text-center">-->
-                                    <!--                                    <span t-field="doc.partner_id.additional_no"/>-->
-                                    <!--                                </td>-->
-                                    <!--                                <td style="padding:1px;" class="text-right">رقم إضافي</td>-->
-                                    <!--                            </tr>-->
-                                    <tr>
-                                        <td style="padding:1px; font-size:14px;" class="text-left">City</td>
-                                        <td style="padding:1px; font-size:14px;" class="text-center">
-                                            <span t-field="doc.partner_id.city"/>
-                                        </td>
-                                        <td style="padding:1px; font-size:14px;" class="text-right">مدينة</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:1px; font-size:14px;" class="text-left">Country</td>
-                                        <td style="padding:1px; font-size:14px;" class="text-center">
-                                            <span t-field="doc.partner_id.country_id"/>
-                                        </td>
-                                        <td style="padding:1px; font-size:14px;" class="text-right">الدوله</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:1px; font-size:14px;" class="text-left">P.O. Box</td>
-                                        <td style="padding:1px; font-size:14px;" class="text-center">
-                                            <span t-field="doc.partner_id.zip"/>
-                                        </td>
-                                        <td style="padding:1px; font-size:14px;" class="text-right">رمز بريدي</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td style="padding:1px; font-size:14px;" class="text-left">Phone</td>
-                                        <td style="padding:1px; font-size:14px;" class="text-center">
-                                            <span t-field="doc.partner_id.phone"/>
-                                        </td>
-                                        <td style="padding:1px; font-size:14px;" class="text-right">هاتف</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td style="padding:1px; font-size:14px;" class="text-left">VAT ID</td>
-                                        <td style="padding:1px; font-size:14px;" class="text-center">
-                                            <span t-field="doc.partner_id.vat"/>
-                                        </td>
-                                        <td style="padding:1px; font-size:14px;" class="text-right">الرقم الضريبي</td>
-                                    </tr>
-                                    <!--                            <tr>-->
-                                    <!--                                <td style="padding:1px;" class="text-left">Attention</td>-->
-                                    <!--                                <td style="padding:1px;" class="text-center">-->
-                                    <!--                                    <b>-->
-                                    <!--                                        <span t-field="doc.attention.name"/>-->
-                                    <!--                                    </b>-->
-                                    <!--                                </td>-->
-                                    <!--                                <td style="padding:1px;" class="text-right">عنايه</td>-->
-                                    <!--                            </tr>-->
                                 </table>
                             </div>
-                            <div class="col-3" style="border-left:1px solid black;">
-                                <center>
+                            <div class="col-2" style="border-left:1px solid black;">
+<!--                                <center>-->
                                     <img t-att-src="'/report/barcode/?type=QR&amp;width=500&amp;height=500&amp;value=' +doc.generate_tlv_code()"
-                                         style="height:180px; width:180px; margin-top:50px; margin-left:25px;"/>
-                                </center>
+                                         style="height:120px; width:120px; margin-left:18px;"/>
+<!--                                </center>-->
                             </div>
                         </div>
 
-                        <!--                            <div style="20%">-->
-                        <!--                                <img t-att-src="'/report/barcode/?type=QR&amp;width=400&amp;height=400&amp;value=' +doc.generate_tlv_code()"-->
-                        <!--                                     style="height:90px"/>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
+                        <table width="100%" style="padding: 0 2em 1em 0;border: 1px solid black; ">
+                            <tr>
+                                <td style="font-size:16px; padding:1px;background-color:#606060!important;padding-left:20px;border-right:none;color:white"
+                                    class="text-left">
+                                    Buyer
+                                </td>
+                                <td style="padding:1px;background-color:#606060!important;" class="text-center">
+
+                                </td>
+                                <td style=" font-size:16px; padding:1px;background-color:#606060!important;padding-right:20px;border-right:none;color:white"
+                                    class="text-right">العميل
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:1px;">
+                                    <table border="0" width="100%"> <!-- if you want border set it to 1 -->
+                                        <tr>
+                                            <td class="text-left">
+                                                <span style="font-size:16px">Buyer :</span>
+                                                <span style="font-size:16px" t-field="doc.partner_id"/>
+                                            </td>
+                                            <td class="text-right" style="direction: rtl;">
+
+                                                <span style=" font-size:16px;">
+                                                    العميل :
+                                                </span>
+                                                <span style="font-size:16px;"
+                                                      t-field="doc.partner_id.arabic"/>
+
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:1px; font-size:14px;" class="text-left">City</td>
+                                <td style="padding:1px; font-size:14px;" class="text-center">
+                                    <span t-field="doc.partner_id.city"/>
+                                </td>
+                                <td style="padding:1px; font-size:14px;" class="text-right">مدينة</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:1px; font-size:14px;" class="text-left">Country</td>
+                                <td style="padding:1px; font-size:14px;" class="text-center">
+                                    <span t-field="doc.partner_id.country_id"/>
+                                </td>
+                                <td style="padding:1px; font-size:14px;" class="text-right">الدوله</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:1px; font-size:14px;" class="text-left">P.O. Box</td>
+                                <td style="padding:1px; font-size:14px;" class="text-center">
+                                    <span t-field="doc.partner_id.zip"/>
+                                </td>
+                                <td style="padding:1px; font-size:14px;" class="text-right">رمز بريدي</td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:1px; font-size:14px;" class="text-left">Phone</td>
+                                <td style="padding:1px; font-size:14px;" class="text-center">
+                                    <span t-field="doc.partner_id.phone"/>
+                                </td>
+                                <td style="padding:1px; font-size:14px;" class="text-right">هاتف</td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:1px; font-size:14px;" class="text-left">VAT ID</td>
+                                <td style="padding:1px; font-size:14px;" class="text-center">
+                                    <span t-field="doc.partner_id.vat"/>
+                                </td>
+                                <td style="padding:1px; font-size:14px;" class="text-right">الرقم الضريبي</td>
+                            </tr>
+                        </table>
 
                         <table width="100%"
                                style="border-spacing: 1em .5em;padding: 0 2em 1em 0;border: 1px solid black;">
