@@ -18,7 +18,7 @@
             <field name="page_width">0</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">40</field>
-            <field name="margin_bottom">41</field>
+            <field name="margin_bottom">42</field>
             <field name="margin_left">2</field>
             <field name="margin_right">2</field>
             <field name="header_line" eval="False"/>
@@ -189,7 +189,7 @@
                                     <center>
                                         <h6>
                                             <img src="/saudi_vat_invoice_print/static/src/images/rajhi.png"
-                                                 style="height: 30px; width:60px;"/> &#160; &#160;
+                                                 style="height: 25px; width:50px;"/> &#160; &#160;
                                             SA82 8000 0450 6080 1005 9595
                                         </h6>
                                     </center>
@@ -198,7 +198,7 @@
                                     <center>
                                         <h6>
                                             <img src="/saudi_vat_invoice_print/static/src/images/snb.jpg"
-                                                 style="height: 30px; width:60px;"/> &#160; &#160;
+                                                 style="height: 25px; width:50px;"/> &#160; &#160;
                                             SA28 1000 0024 9504 6000 0105
                                         </h6>
                                     </center>
