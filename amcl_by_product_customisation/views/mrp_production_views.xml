@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- MRP Production -->
+        <record id="mrp_production_form_view_inherit_by_product" model="ir.ui.view">
+            <field name="name">mrp.production.form.view.inherit.by.product</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='finished_products']" position="attributes">
+                    <attribute name="string">Out-Products</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_byproduct_ids']" position="attributes">
+                    <attribute name="context">{
+                        'default_date': date_planned_finished,
+                        'default_date_deadline': date_deadline,
+                        'default_location_id': production_location_id,
+                        'default_location_dest_id': location_src_id,
+                        'default_state': 'draft',
+                        'default_production_id': id,
+                        'default_picking_type_id': picking_type_id,
+                        'default_company_id': company_id, 'total_qty': product_qty}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_byproduct_ids']/tree/field[@name='product_uom_qty']" position="before">
+                    <field name="produce_percentage" context="{'update_percentage': True}" sum="Total Percentage"/>
+                </xpath>
+                <xpath expr="//field[@name='move_byproduct_ids']/tree/field[@name='product_uom_qty']" position="attributes">
+                    <attribute name="context">{'update_qty': True}</attribute>
+                    <attribute name="sum">Total Quantity</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

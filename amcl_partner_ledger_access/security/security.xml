@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_view_partner_ledger" model="res.groups">
+        <field name="name">Allow Partner Ledger</field>
+        <field name="comment">Allow Partner Ledger</field>
+    </record>
+</odoo>

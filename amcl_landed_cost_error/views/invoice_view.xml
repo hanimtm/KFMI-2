@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="stock_landed_costs.account_view_move_form_inherited" model="ir.ui.view">
+            <field name="groups_id" eval="[(6, 0, [ref('purchase.group_purchase_user'), ref('base.group_user')])]"/>
+        </record>
+
+
+        <record id="view_move_form_stock_landed_costs" model="ir.ui.view">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="stock_landed_costs.account_view_move_form_inherited"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_view_landed_costs']" position="attributes">
+                    <attribute name="groups">account.group_account_invoice,purchase.group_purchase_user,base.group_user</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_create_landed_costs']" position="attributes">
+                    <attribute name="groups">account.group_account_invoice,purchase.group_purchase_user,base.group_user</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

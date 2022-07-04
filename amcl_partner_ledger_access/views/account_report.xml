@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="search_template_extra_options" inherit_id="account_reports.search_template_extra_options">
+        <xpath expr="//div[@class='dropdown-menu o_filter_menu']/a[@data-filter='all_entries']" position="attributes">
+            <attribute name="groups">account.group_account_readonly,amcl_partner_ledger_access.group_view_partner_ledger</attribute>
+        </xpath>
+    </template>
+</odoo>
