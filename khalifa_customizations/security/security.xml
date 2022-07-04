@@ -2,6 +2,17 @@
 <odoo>
     <data noupdate="0">
 
+        <!-- Khalifa Other Group -->
+        <record model="ir.module.category" id="khalifa_other_group">
+            <field name="name">Other</field>
+        </record>
+
+
+        <record id="allow_unbuild" model="res.groups">
+            <field name="name">Allow UnBuild</field>
+            <field name="category_id" ref="khalifa_customizations.khalifa_other_group"/>
+        </record>
+
         <record model="ir.module.category" id="khalifa_design">
             <field name="name">Design</field>
         </record>
@@ -66,33 +77,29 @@
             <field name="perm_unlink" eval="False"/>
         </record>
 
-        <!-- Khalifa Other Group -->
-        <record model="ir.module.category" id="khalifa_other_group">
-            <field name="name">Other</field>
-        </record>
-
+        
         <!-- Allow Product Creation Group -->
         <record id="allow_product_creation" model="res.groups">
             <field name="name">Allow Product Creation</field>
-            <field name="category_id" ref="khalifa_other_group"/>
+            <field name="category_id" ref="khalifa_customizations.khalifa_other_group"/>
         </record>
 
         <!-- Allow Scrap -->
         <record id="allow_scrap" model="res.groups">
             <field name="name">Allow Scrap</field>
-            <field name="category_id" ref="khalifa_other_group"/>
+            <field name="category_id" ref="khalifa_customizations.khalifa_other_group"/>
         </record>
 
         <!-- Inventory Adjustment Manager -->
         <record id="allow_inventory_adjustment_manager" model="res.groups">
             <field name="name">Inventory Adjustment Manager</field>
-            <field name="category_id" ref="khalifa_other_group"/>
+            <field name="category_id" ref="khalifa_customizations.khalifa_other_group"/>
         </record>
 
         <!-- Allow Return -->
         <record id="allow_inventory_return" model="res.groups">
             <field name="name">Allow Inventory Return</field>
-            <field name="category_id" ref="khalifa_other_group"/>
+            <field name="category_id" ref="khalifa_customizations.khalifa_other_group"/>
         </record>
 
         <!-- Khalifa Product Group -->

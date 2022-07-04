@@ -154,4 +154,5 @@ class StockPickingType(models.Model):
 
     def get_action_picking_tree_production_approve(self):
         return self._get_action('khalifa_customizations.action_picking_tree_ready_and_approve')
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

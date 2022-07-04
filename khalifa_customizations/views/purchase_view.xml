@@ -7,16 +7,21 @@
             <field name="model">purchase.order</field>
             <field name="inherit_id" ref="purchase.purchase_order_form"/>
             <field name="arch" type="xml">
-                <group class="oe_subtotal_footer oe_right" position="before">
-                    <group class="oe_left oe_inline" name="discount">
-                        <label for="discount_type"/>
-                        <field name="discount_type" nolabel="1" class="oe_subtotal_footer_separator"
-                               attrs="{'readonly': [('state','!=','draft')]}"/>
-                        <label for="discount_rate"/>
-                        <field name="discount_rate" nolabel="1" widget="monetary" class="oe_subtotal_footer_separator"
-                               attrs="{'readonly': [('state','!=','draft')]}"/>
-                    </group>
-                </group>
+                 <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="before">
+                    <field name="price_before_discount"/>
+                 </xpath>   
+                 <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="after">
+                    <field name="discount" invisible="1"/>
+                    <field name="discount_amount" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='notes']" position="before">
+					    <group name="discount" colspan="2">
+                            <field name="discount_type"/>
+                            <field name="discount_rate"/>
+                        </group>
+
+				</xpath>
+
                 <field name="notes" position="replace">
                     <group>
                         <field name="notes" class="oe_inline" placeholder="Define your terms and conditions ..."/>
@@ -25,11 +30,10 @@
                 <xpath expr="//field[@name='partner_ref']" position="after">
                     <field name="revision"/>
                 </xpath>
-                <field name="tax_totals_json" position="after">
-                    <field name="discount" widget="monetary"/>
-                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
-                    </div>
-                    <field name="net_total" widget="monetary" class="oe_subtotal_footer_separator"/>
+                <field name="tax_totals_json" position="before">
+                    <field name="price_before_discount" widget="monetary"/>
+                    <field name="amount_discount" widget="monetary"/>
+                    <div class="oe_subtotal_footer_separator oe_inline o_td_label"/>
                 </field>
             </field>
         </record>

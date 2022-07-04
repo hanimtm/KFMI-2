@@ -85,4 +85,14 @@ class ProductProduct(models.Model):
             result.append(_name_get(mydict))
         return result
 
+    def get_product_multiline_description_sale(self):
+        """
+        Override method to change description in sale order line
+        """
+        print ('self.display_name', self.name)
+        name = self.name
+        if self.description_sale:
+            name += '\n' + self.description_sale
+        return name
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
