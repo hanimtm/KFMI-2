@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="daily_production_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.internal_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div width="100%">
+                            <center>
+                                <p><h2>تقرير الإنتاج اليومي</h2></p>
+                                <p><h2>Daily Production Report</h2></p>
+                            </center>
+                        </div>
+                        <br/>
+                        <div class="row mt32 mb32">
+                            <div class="col-3">
+                                <strong>Date - التاريخ </strong><br/>
+                                <span t-field="o.date_planned_start"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Job # - رقم التشغيلة</strong><br/>
+                                <span t-field="o.name"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div width="100%">
+                            <center><h3>Input - الادخالات </h3></center>
+                        </div>
+                        <table class="table table-sm" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>No# - الرقم</th>
+                                    <th width="50%">Description - التفاصيل</th>
+                                    <th class="text-center">Quantity / Ton - الكمية /طن</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="input_count" t-value="1"/>
+                                <t t-if="o.move_raw_ids">
+                                    <tr t-foreach="o.move_raw_ids" t-as="raw_line">
+                                        <td>
+                                            <span t-esc="input_count"/>
+                                            <t t-set="input_count" t-value="input_count+1"/>
+                                        </td>
+                                        <td>
+                                            <t t-if="raw_line.product_id">
+                                                <span t-field="raw_line.product_id.name"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="raw_line.product_uom_qty"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <div width="100%">
+                            <center><h3>Output - المخرجات</h3></center>
+                        </div>
+                        <table class="table table-sm" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>No# - الرقم</th>
+                                    <th width="40%">Description - التفاصيل</th>
+                                    <th class="text-center">Percentage - النسبة المئوية</th>
+                                    <th class="text-center">Quantity / Ton - الكمية /طن</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="output_count" t-value="1"/>
+                                <t t-if="o.move_raw_ids">
+                                    <tr t-foreach="o.move_byproduct_ids" t-as="by_raw_line">
+                                        <td>
+                                            <span t-esc="output_count"/>
+                                            <t t-set="output_count" t-value="output_count+1"/>
+                                        </td>
+                                        <td>
+                                            <t t-if="by_raw_line.product_id">
+                                                <span t-field="by_raw_line.product_id.name"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="by_raw_line.produce_percentage"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="by_raw_line.product_uom_qty"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <div class="row">
+                            <div class="col-3">
+                                <strong>Prepare By :</strong><br/>
+                                <strong>اعدت بواسطة</strong>
+                            </div>
+                            <div class="col-6"></div>
+                            <div class="col-3">
+                                <strong>Site Supervisor:</strong><br/>
+                                <strong>مشرف الموقع</strong>
+                            </div>
+                        </div>
+                        <div class="oe_structure"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
