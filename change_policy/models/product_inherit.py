@@ -4,7 +4,7 @@ from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 
 
-class ProductTemplate(models.Model):
+class ProductTemplateInherit(models.Model):
     _inherit = 'product.template'
 
     def change_policy(self):
