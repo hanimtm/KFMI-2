@@ -1,7 +1,7 @@
 from odoo import fields, models
 import logging
-_logger = logging.getLogger(__name__)
 from odoo.exceptions import ValidationError
+_logger = logging.getLogger(__name__)
 
 
 class ProductTemplate(models.Model):
