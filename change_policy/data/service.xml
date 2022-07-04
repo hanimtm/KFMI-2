@@ -8,7 +8,5 @@
         <field name="state">code</field>
         <field name="code">action = records.change_policy()</field>
         <field name="groups_id"  eval="[(4, ref('base.group_system'))]"/>
-<!--        <field name="confirm">Are you sure about the save process ??</field>-->
-<!--        groups="base.group_system"-->
     </record>
 </odoo>
