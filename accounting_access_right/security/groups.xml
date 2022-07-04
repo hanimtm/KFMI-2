@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="0">
+
+        <record model="ir.module.category" id="kfmi_accounting_group">
+            <field name="name">Accounting</field>
+        </record>
+
+        <record id="id_group_accounting_customer_invoice" model="res.groups">
+            <field name="name">Customer Invoice</field>
+            <field name="comment">The users can see Customer Invoice</field>
+            <field name="category_id" ref="kfmi_accounting_group"/>
+        </record>
+
+        <record id="id_group_accounting_vendor_bill" model="res.groups">
+            <field name="name">Vendor Bill</field>
+            <field name="comment">The users can see Vendor Bill</field>
+            <field name="category_id" ref="kfmi_accounting_group"/>
+        </record>
+    </data>
+</odoo>

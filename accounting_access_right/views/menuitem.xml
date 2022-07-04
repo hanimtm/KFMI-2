@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.menu" id="account_reports.menu_action_account_report_aged_payable">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('accounting_access_right.id_group_accounting_vendor_bill')])]"/>
+    </record>
+
+    <record model="ir.ui.menu" id="account.menu_finance_payables">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('accounting_access_right.id_group_accounting_vendor_bill')])]"/>
+    </record>
+
+    <record model="ir.ui.menu" id="account.menu_finance_receivables">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('accounting_access_right.id_group_accounting_customer_invoice')])]"/>
+    </record>
+
+    <record model="ir.ui.menu" id="account_reports.menu_action_account_report_aged_receivable">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('accounting_access_right.id_group_accounting_customer_invoice')])]"/>
+    </record>
+
+</odoo>
