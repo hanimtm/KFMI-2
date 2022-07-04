@@ -1,6 +1,7 @@
 from odoo import fields, models
 import logging
 _logger = logging.getLogger(__name__)
+from odoo.exceptions import ValidationError
 
 
 class ProductTemplate(models.Model):
@@ -13,5 +14,5 @@ class ProductTemplate(models.Model):
             elif product.invoice_policy == 'delivery':
                 product.write({'invoice_policy': 'order'})
             else:
-                raise UserWarning('WARNING')
+                raise ValidationError("WARNING: There is one or multi product hasn't invoice policy")
 

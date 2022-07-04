@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     'name': 'Change Policy',
     'category': 'Product',
@@ -16,4 +15,3 @@
     'application': True,
 }
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
