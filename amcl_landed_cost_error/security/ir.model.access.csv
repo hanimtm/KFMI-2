@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_landed_cost_user",stock.landed.cost user,stock_landed_costs.model_stock_landed_cost,purchase.group_purchase_user,1,1,1,1
+access_stock_landed_cost_lines_user,stock.landed.cost.lines user,stock_landed_costs.model_stock_landed_cost_lines,purchase.group_purchase_user,1,1,1,1
+access_stock_valuation_adjustment_lines",stock.valuation.adjustment.lines user,stock_landed_costs.model_stock_valuation_adjustment_lines,purchase.group_purchase_user,1,1,1,1
