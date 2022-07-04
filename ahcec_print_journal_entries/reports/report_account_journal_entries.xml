@@ -2,44 +2,45 @@
 <odoo>
     <data>
         <template id="template_print_account_journal_entries_document">
-   			<t t-set="doc" t-value="doc.with_context({'lang':doc.partner_id.lang})"/>          
+            <t t-set="doc" t-value="doc.with_context({'lang':doc.partner_id.lang})"/>
             <t t-call="web.external_layout">
-                 <div class="page">
-   		            <div class="oe_structure"/>			            
-                     
-                         <p>
-                             <h3 class="text-center">
-                                 Journal Entry
-                             </h3>
-                         </p>
-						 <br/>
-                         
-                         <div class="row col-sm-12">
-                            <div t-if="doc.name" class="col-6">
-                                <strong>Journal Entry # : </strong>
-                                <span t-field="doc.name"/>
-                            </div>
-                            <div t-if="doc.ref" class="col-6">
-                                <strong>Reference : </strong>
-                                <span t-field="doc.ref"/>
-                            </div>                            
-						 </div>						
-                         
-                         <div class="row col-sm-12">
-                            <div t-if="doc.date" class="col-6">
-                                <strong>Date : </strong>
-                                <span t-field="doc.date"/>
-                            </div>                            
-                            <div t-if="doc.journal_id" class="col-6">
-                                <strong>Journal : </strong>
-                                <span t-field="doc.journal_id"/>
-                            </div>
-						 </div>						
- 						 <br/>
- 						 
-                         <table class="table table-responsive" style="border:1px solid black;width:100%">
+                <div class="page" style="font-size:12px;">
+                    <div class="oe_structure"/>
+
+                    <p>
+                        <h3 class="text-center">
+                            Journal Entry
+                        </h3>
+                    </p>
+                    <br/>
+
+                    <div class="row col-sm-12">
+                        <div t-if="doc.name" class="col-6">
+                            <strong>Journal Entry # :</strong>
+                            <span t-field="doc.name"/>
+                        </div>
+                        <div t-if="doc.ref" class="col-6">
+                            <strong>Reference :</strong>
+                            <span t-field="doc.ref"/>
+                        </div>
+                    </div>
+
+                    <div class="row col-sm-12">
+                        <div t-if="doc.date" class="col-6">
+                            <strong>Date :</strong>
+                            <span t-field="doc.date"/>
+                        </div>
+                        <div t-if="doc.journal_id" class="col-6">
+                            <strong>Journal :</strong>
+                            <span t-field="doc.journal_id"/>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <table class="table table-sm o_main_table" style="border:1px solid black;width:100%">
+                        <thead>
                             <tr>
-	                            <th style="text-align:center;border-bottom: 1px solid black;">Sr</th>                            
+                                <th style="text-align:center;border-bottom: 1px solid black;">Sr</th>
                                 <th style="text-align:center;border-bottom: 1px solid black;">Account</th>
                                 <th style="text-align:center;border-bottom: 1px solid black;">Partner</th>
                                 <th style="text-align:center;border-bottom: 1px solid black;">Label</th>
@@ -48,70 +49,108 @@
                                 <th style="text-align:center;border-bottom: 1px solid black;">Credit</th>
                                 <th style="text-align:center;border-bottom: 1px solid black;">Due Date</th>
                             </tr>
-	                    	<t t-set="no" t-value="1" />                            
-                            
+                        </thead>
+                        <t t-set="no" t-value="1"/>
+                        <tbody class="invoice_tbody">
                             <t t-foreach="doc.line_ids" t-as="line">
                                 <tr>
-	                                <td><span t-esc="no"/></td>
-	                                <td><span t-field="line.account_id"/></td>
-	                                <td><span t-field="line.partner_id"/></td>
-	                                <td><span t-field="line.name"/></td>
-	                                <td><span t-field="line.analytic_account_id"/></td>
-	                                <td><span t-field="line.debit"/></td>
-	                                <td><span t-field="line.credit"/></td>
-	                                <td><span t-field="line.date_maturity"/></td>
+                                    <td>
+                                        <span t-esc="no"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.account_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.partner_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.analytic_account_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.debit"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.credit"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.date_maturity"/>
+                                    </td>
                                 </tr>
-	    	                    <t t-set="no" t-value="no + 1"/>                            
+                                <t t-set="no" t-value="no + 1"/>
                             </t>
-                            <tr>
-                            	<td style="border-top:1px solid black;"></td>
-                            	<td style="text-align:center;border-top:1px solid black;"><strong>Total</strong></td>
-                            	<td style="border-top:1px solid black;"></td>
-                            	<td style="border-top:1px solid black;"></td>
-                            	<td style="border-top:1px solid black;"></td>
-                            	<td style="border-top:1px solid black;">
-									<t t-set="reg" t-value="0"/>
-									<t t-foreach="doc.line_ids" t-as="i"> 
-										<span t-if="i.debit"><t t-set="reg" t-value="reg+i.debit"/></span> 
-									</t>
-							  		<span t-esc="reg" />                             	
-                            	</td>
-                            	<td style="border-top:1px solid black;">
-									<t t-set="reg" t-value="0"/>
-									<t t-foreach="doc.line_ids" t-as="i"> 
-										<span t-if="i.credit"><t t-set="reg" t-value="reg+i.credit"/></span> 
-									</t>
-							  		<span t-esc="reg"/>                            	
-                            	</td>
-                            	<td style="border-top:1px solid black;"></td>
-                            </tr>
-                          </table>
-                          <p class="row">
- 						  	<div t-if="doc.narration" class="col-xs-6">
-		                        <strong><span>Internal Note : </span></strong>
-        	                    <span t-field="doc.narration"/>        	                     
-                            </div>
-                          </p>
-	            </div>
-			</t>
- 		</template>
-				  		
-		<template id="template_print_account_journal_entries">
-		    <t t-call="web.html_container">
-		        <t t-foreach="docs" t-as="doc">
-		            <t t-call="ahcec_print_journal_entries.template_print_account_journal_entries_document" t-lang="doc.partner_id.lang"/>
-		        </t>
-		    </t>
-		</template>
-				  								
-        <report
-            id="report_print_account_journal_entries"
-            model="account.move"
-            report_type="qweb-pdf"
-            string="Journal Entries"
-            name="ahcec_print_journal_entries.template_print_account_journal_entries"
-            file="ahcec_print_journal_entries.template_print_account_journal_entries"
-         />
-    
+                        </tbody>
+                        <tr>
+                            <td style="border-top:1px solid black;"/>
+                            <td style="text-align:center;border-top:1px solid black;">
+                                <strong>Total</strong>
+                            </td>
+                            <td style="border-top:1px solid black;"/>
+                            <td style="border-top:1px solid black;"/>
+                            <td style="border-top:1px solid black;"/>
+                            <td style="border-top:1px solid black;">
+                                <t t-set="reg" t-value="0"/>
+                                <t t-foreach="doc.line_ids" t-as="i">
+                                    <span t-if="i.debit">
+                                        <t t-set="reg" t-value="reg+i.debit"/>
+                                    </span>
+                                </t>
+                                <span t-esc="reg"/>
+                            </td>
+                            <td style="border-top:1px solid black;">
+                                <t t-set="reg" t-value="0"/>
+                                <t t-foreach="doc.line_ids" t-as="i">
+                                    <span t-if="i.credit">
+                                        <t t-set="reg" t-value="reg+i.credit"/>
+                                    </span>
+                                </t>
+                                <span t-esc="reg"/>
+                            </td>
+                            <td style="border-top:1px solid black;"/>
+                        </tr>
+                    </table>
+                    <p class="row">
+                        <div t-if="doc.narration" class="col-xs-6">
+                            <strong>
+                                <span>Internal Note :</span>
+                            </strong>
+                            <span t-field="doc.narration"/>
+                        </div>
+                    </p>
+                </div>
+            </t>
+        </template>
+
+        <template id="template_print_account_journal_entries">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="ahcec_print_journal_entries.template_print_account_journal_entries_document"
+                       t-lang="doc.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+<!--        <report-->
+<!--                id="report_print_account_journal_entries"-->
+<!--                model="account.move"-->
+<!--                report_type="qweb-pdf"-->
+<!--                string="Journal Entries"-->
+<!--                name="ahcec_print_journal_entries.template_print_account_journal_entries"-->
+<!--                file="ahcec_print_journal_entries.template_print_account_journal_entries"-->
+<!--        />-->
+
+        <record id="report_print_account_journal_entry" model="ir.actions.report">
+            <field name="name">Journal Entries</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ahcec_print_journal_entries.template_print_account_journal_entries</field>
+            <field name="report_file">ahcec_print_journal_entries.template_print_account_journal_entries</field>
+            <field name="print_report_name">'Journal Entry - %s' % object.name</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_type">report</field>
+        </record>
+
     </data>
 </odoo>    
