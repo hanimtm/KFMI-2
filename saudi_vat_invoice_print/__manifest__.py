@@ -8,7 +8,7 @@
         'views/res_company.xml',
         'views/invoice.xml',
         'views/res_partner.xml',
-        'reports/report_saudi_invoice.xml',
+        'reports/report_saudi_invoice3.xml',
     ],
     'assets': {
         'web.report_assets_pdf': [

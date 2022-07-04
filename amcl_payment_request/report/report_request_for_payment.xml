@@ -4,14 +4,16 @@
     <template id="rfp_custom_external_layout_header">
         <div class="header">
             <div class="row">
-                <table class="table-sm o_main_table" style="width:100%;text-transform: uppercase;" >
+                <table class="table-sm o_main_table" style="width:100%;text-transform: uppercase;">
                     <thead>
                         <tr>
                             <th style="float:left;">
-                                <img src="/amcl_payment_request/static/description/header.png" alt="Logo" style="max-width: 70%;"/>
+                                <img src="/amcl_payment_request/static/description/header.png" alt="Logo"
+                                     style="max-width: 70%;"/>
                             </th>
                             <th style="float:right;margin-top:-100px;font-size:25px;" class="text-center">
-                                <span>PAYMENT REQUEST</span><br/>
+                                <span>PAYMENT REQUEST</span>
+                                <br/>
                                 <span>طلب الدفع</span>
                             </th>
                         </tr>
@@ -23,30 +25,33 @@
 
     <template id="rfp_custom_external_layout_footer">
         <div class="footer o_standard_footer" style="width:100%;font-size:12px;">
-<!--            <div style="width:100%;">-->
-<!--                <div style="width:25%;float:left;">-->
-<!--&lt;!&ndash;                    <span class="text-center">Approval of the GM</span><br/>&ndash;&gt;-->
-<!--                    <span class="text-center">Approval of the GM</span>-->
-<!--                </div>-->
-<!--                <div style="width:25%;float:left;">-->
-<!--&lt;!&ndash;                    <span class="text-center">Accountant Audit</span><br/>&ndash;&gt;-->
-<!--                    <span class="text-center">Accountant Audit</span>-->
-<!--                </div>-->
-<!--                <div style="width:25%;float:left;">-->
-<!--&lt;!&ndash;                    <span class="text-center">Approved By Dept. Manager</span><br/>&ndash;&gt;-->
-<!--                    <span class="text-center">Approved By Dept. Manager</span>-->
-<!--                </div>-->
-<!--                <div style="width:25%;float:left;">-->
-<!--&lt;!&ndash;                    <span class="text-center">Prepared By</span><br/>&ndash;&gt;-->
-<!--                    <span class="text-center">Prepared By</span>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <div style="width:100%;">-->
+            <!--                <div style="width:25%;float:left;">-->
+            <!--&lt;!&ndash;                    <span class="text-center">Approval of the GM</span><br/>&ndash;&gt;-->
+            <!--                    <span class="text-center">Approval of the GM</span>-->
+            <!--                </div>-->
+            <!--                <div style="width:25%;float:left;">-->
+            <!--&lt;!&ndash;                    <span class="text-center">Accountant Audit</span><br/>&ndash;&gt;-->
+            <!--                    <span class="text-center">Accountant Audit</span>-->
+            <!--                </div>-->
+            <!--                <div style="width:25%;float:left;">-->
+            <!--&lt;!&ndash;                    <span class="text-center">Approved By Dept. Manager</span><br/>&ndash;&gt;-->
+            <!--                    <span class="text-center">Approved By Dept. Manager</span>-->
+            <!--                </div>-->
+            <!--                <div style="width:25%;float:left;">-->
+            <!--&lt;!&ndash;                    <span class="text-center">Prepared By</span><br/>&ndash;&gt;-->
+            <!--                    <span class="text-center">Prepared By</span>-->
+            <!--                </div>-->
+            <!--            </div>-->
             <hr style="height:2px; width:100%; border-width:0; color:black; background-color:black"/>
             <br/>
             <div class="text-center" style="border: 1px solid black;border-left:none;border-right:none;">
-                <span>P.O. BOX 355 927 RIYADH 11383   Email: info@alkhalefahfactory.com   Tel. No. +966 11 2650211   Fax. No.: +966 11 2650229</span>
+                <span>P.O. BOX 355 927 RIYADH 11383 Email: info@alkhalefahfactory.com Tel. No. +966 11 2650211 Fax. No.:
+                    +966 11 2650229
+                </span>
             </div>
-            <div class="text-center" style="border: 1px solid black;background-color:#ffe599;border-left:none;border-right:none;">
+            <div class="text-center"
+                 style="border: 1px solid black;background-color:#ffe599;border-left:none;border-right:none;">
                 <span>FM-KFMI 03-01-02;Iss.1 Rv0,01/2021</span>
             </div>
         </div>
@@ -55,9 +60,9 @@
     <template id="rfp_custom_external_layout">
         <!-- Multicompany -->
         <div class="article">
-            <t t-call="amcl_payment_request.rfp_custom_external_layout_header" />
+            <t t-call="amcl_payment_request.rfp_custom_external_layout_header"/>
             <t t-raw="0"/>
-            <t t-call="amcl_payment_request.rfp_custom_external_layout_footer" />
+            <t t-call="amcl_payment_request.rfp_custom_external_layout_footer"/>
         </div>
     </template>
 
@@ -76,11 +81,11 @@
                     <div class="col-8 border-bottom border-dark mt-1" style="width:100%">
                         <t t-esc="o.name"/>
                         <br/>
-                        <strong>P.O # / Reference</strong>
+                        <strong>P.O # / Reference &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; P.O Origin Value</strong>
                     </div>
                     <div class="col-8 border-bottom border-dark mt-1" style="width:100%">
                         <t t-if="o.lpo_num">
-                            <t t-esc="o.lpo_num.name"/>
+                            <t t-esc="o.lpo_num.name"/> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <t t-esc="o.net_total"/>
                         </t>
                         <t t-else="">
                             <t t-esc="o.reference"/>
@@ -137,13 +142,16 @@
             </table>
 
             <center>
-                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;width:80%">
+                <table class="table table-sm o_main_table table-bordered"
+                       style="border: 1px solid black;margin-top:8px;width:80%">
                     <thead>
                         <tr>
-                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_currency" class="text-left">
+                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_currency"
+                                class="text-left">
                                 Currency
                             </th>
-                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_currency" class="text-right">
+                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_currency"
+                                class="text-right">
                                 العمله
                             </th>
                         </tr>
@@ -160,13 +168,16 @@
 
             <!-- Account -->
             <center>
-                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;width:80%">
+                <table class="table table-sm o_main_table table-bordered"
+                       style="border: 1px solid black;margin-top:8px;width:80%">
                     <thead>
                         <tr>
-                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_currency" class="text-left">
+                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_currency"
+                                class="text-left">
                                 BENEFICIARY ACCOUNT NUMBER
                             </th>
-                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_currency" class="text-right">
+                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_currency"
+                                class="text-right">
                                 رقم حساب المستفيد
                             </th>
                         </tr>
@@ -184,13 +195,16 @@
             </center>
 
             <center>
-                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;width:80%">
+                <table class="table table-sm o_main_table table-bordered"
+                       style="border: 1px solid black;margin-top:8px;width:80%">
                     <thead>
                         <tr>
-                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_ac_mo" class="text-left">
+                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_ac_mo"
+                                class="text-left">
                                 BANK NAME
                             </th>
-                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_ac_no" class="text-right">
+                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_ac_no"
+                                class="text-right">
                                 اسم البنك
                             </th>
                         </tr>
@@ -208,13 +222,16 @@
             </center>
 
             <center>
-                <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;width:80%">
+                <table class="table table-sm o_main_table table-bordered"
+                       style="border: 1px solid black;margin-top:8px;width:80%">
                     <thead>
                         <tr>
-                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_ac_mo" class="text-left">
+                            <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_ac_mo"
+                                class="text-left">
                                 BENEFICIARY NAME
                             </th>
-                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_ac_no" class="text-right">
+                            <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_ac_no"
+                                class="text-right">
                                 اسم المستفيد
                             </th>
                         </tr>
@@ -223,14 +240,14 @@
                         <tr>
                             <td style="border: 1px solid black;width:50%;border-right:0px;" class="text-left">
                                 <t t-if="o.res_partner_bank_id and o.res_partner_bank_id.partner_id">
-<!--                                    <t t-if="o.res_partner_bank_id.acc_holder_name">-->
-<!--                                        <t t-esc="o.res_partner_bank_id.acc_holder_name"/>-->
-<!--                                    </t>-->
-<!--                                    <t t-else="">-->
-<!--                                        <t t-if="o.res_partner_bank_id.partner_id">-->
-                                            <t t-esc="o.res_partner_bank_id.partner_id.name"/>
-<!--                                        </t>-->
-<!--                                    </t>-->
+                                    <!--                                    <t t-if="o.res_partner_bank_id.acc_holder_name">-->
+                                    <!--                                        <t t-esc="o.res_partner_bank_id.acc_holder_name"/>-->
+                                    <!--                                    </t>-->
+                                    <!--                                    <t t-else="">-->
+                                    <!--                                        <t t-if="o.res_partner_bank_id.partner_id">-->
+                                    <t t-esc="o.res_partner_bank_id.partner_id.name"/>
+                                    <!--                                        </t>-->
+                                    <!--                                    </t>-->
                                 </t>
                             </td>
                             <td style="border: 1px solid black;width:50%;border-left:0px;" class="text-right">
@@ -243,30 +260,33 @@
                 </table>
             </center>
 
-<!--            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:100%">-->
-<!--                <thead>-->
-<!--                    <tr>-->
-<!--                        <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">-->
-<!--                            In The Order of / في ترتيب-->
-<!--                        </th>-->
-<!--                    </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                    <tr>-->
-<!--                        <td style="border: 1px solid black;" class="text-center">-->
-<!--                            a-->
-<!--                        </td>-->
-<!--                    </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
+            <!--            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:20px;width:100%">-->
+            <!--                <thead>-->
+            <!--                    <tr>-->
+            <!--                        <th style="border: 1px solid black;width:15%;" name="th_amount_in_world" class="text-center">-->
+            <!--                            In The Order of / في ترتيب-->
+            <!--                        </th>-->
+            <!--                    </tr>-->
+            <!--                </thead>-->
+            <!--                <tbody>-->
+            <!--                    <tr>-->
+            <!--                        <td style="border: 1px solid black;" class="text-center">-->
+            <!--                            a-->
+            <!--                        </td>-->
+            <!--                    </tr>-->
+            <!--                </tbody>-->
+            <!--            </table>-->
 
-            <table class="table table-sm o_main_table table-bordered" style="border: 1px solid black;margin-top:8px;width:100%">
+            <table class="table table-sm o_main_table table-bordered"
+                   style="border: 1px solid black;margin-top:8px;width:100%">
                 <thead>
                     <tr>
-                        <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_ac_mo" class="text-left">
+                        <th style="border: 1px solid black;width:50%;border-right:0px;" name="th_ac_mo"
+                            class="text-left">
                             Reason for The Payment
                         </th>
-                        <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_ac_no" class="text-right">
+                        <th style="border: 1px solid black;width:50%;border-left:0px;" name="th_ac_no"
+                            class="text-right">
                             الغرض من الدفع
                         </th>
                     </tr>
@@ -281,7 +301,7 @@
                         </td>
                     </tr>
                     <tr>
-<!--                        <td style="border: 1px solid black;width:70%"/>-->
+                        <!--                        <td style="border: 1px solid black;width:70%"/>-->
                         <td style="border: 1px solid black;" class="text-center">
                             <t t-if="o.lpo_num">
                                 <t t-if="o.lpo_num.invoice_ids">
@@ -293,42 +313,46 @@
                 </tbody>
             </table>
 
-<!--            <div style="width:100%;">-->
-<!--                <div style="width:25%;float:left;">-->
-<!--&lt;!&ndash;                    <span class="text-center">Approval of the GM</span><br/>&ndash;&gt;-->
-<!--                    <span class="text-center"></span>-->
-<!--                </div>-->
-<!--                <div style="width:25%;float:left;">-->
-<!--&lt;!&ndash;                    <span class="text-center">Accountant Audit</span><br/>&ndash;&gt;-->
-<!--                    <span class="text-center"></span>-->
-<!--                </div>-->
-<!--                <div style="width:25%;float:left;">-->
-<!--&lt;!&ndash;                    <span class="text-center">Approved By Dept. Manager</span><br/>&ndash;&gt;-->
-<!--                    <span class="text-center">A</span>-->
-<!--                </div>-->
-<!--                <div style="width:25%;float:left;">-->
-<!--&lt;!&ndash;                    <span class="text-center">Prepared By</span><br/>&ndash;&gt;-->
-<!--                    <span class="text-center"></span>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <div style="width:100%;">-->
+            <!--                <div style="width:25%;float:left;">-->
+            <!--&lt;!&ndash;                    <span class="text-center">Approval of the GM</span><br/>&ndash;&gt;-->
+            <!--                    <span class="text-center"></span>-->
+            <!--                </div>-->
+            <!--                <div style="width:25%;float:left;">-->
+            <!--&lt;!&ndash;                    <span class="text-center">Accountant Audit</span><br/>&ndash;&gt;-->
+            <!--                    <span class="text-center"></span>-->
+            <!--                </div>-->
+            <!--                <div style="width:25%;float:left;">-->
+            <!--&lt;!&ndash;                    <span class="text-center">Approved By Dept. Manager</span><br/>&ndash;&gt;-->
+            <!--                    <span class="text-center">A</span>-->
+            <!--                </div>-->
+            <!--                <div style="width:25%;float:left;">-->
+            <!--&lt;!&ndash;                    <span class="text-center">Prepared By</span><br/>&ndash;&gt;-->
+            <!--                    <span class="text-center"></span>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <table class="table table-sm o_main_table mt-1" style="width:100%">
                 <thead>
                     <tr>
                         <th style="width:25%;" class="text-center border-0 border-bottom border-dark p-0">
-                            <span> إعتماد المدير العام</span><br/>
+                            <span>إعتماد المدير العام</span>
+                            <br/>
                             Approval of the GM
                         </th>
                         <th style="width:25%;" class="text-center border-0  border-bottom border-dark p-0">
-                            <span>مراجعة الإدارة المالية</span><br/>
+                            <span>مراجعة الإدارة المالية</span>
+                            <br/>
                             Accountant Audit
                         </th>
                         <th style="width:25%;" class="text-center border-0 border-bottom border-dark p-0">
-                            <span> الموافقه من قبل مدير الإدارة</span><br/>
+                            <span>الموافقه من قبل مدير الإدارة</span>
+                            <br/>
                             Approved By Dept. Manager
                         </th>
                         <th style="width:25%;" class="text-center border-0 border-bottom border-dark p-0">
-                            <span>معد الطلب</span><br/>
+                            <span>معد الطلب</span>
+                            <br/>
                             Prepared By
                         </th>
                     </tr>
@@ -336,12 +360,16 @@
                 <tbody>
                     <tr>
                         <td style="border: 1px solid black;" class="text-center pt-4 pb-4">
+
                         </td>
                         <td style="border: 1px solid black;" class="text-center pt-4 pb-4">
+                            <t t-esc="o.account_approve.name"/>
                         </td>
                         <td style="border: 1px solid black;" class="text-center pt-4 pb-4">
+                            <t t-esc="o.approved.name"/>
                         </td>
                         <td style="border: 1px solid black;" class="text-center pt-4 pb-4">
+                            <t t-esc="o.prepared.name"/>
                         </td>
                     </tr>
                 </tbody>
@@ -353,7 +381,7 @@
     <template id="report_request_for_payment_new">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="amcl_payment_request.report_request_for_payment_document" />
+                <t t-call="amcl_payment_request.report_request_for_payment_document"/>
             </t>
         </t>
     </template>
