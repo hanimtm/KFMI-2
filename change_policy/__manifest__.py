@@ -9,7 +9,7 @@
     'author': 'Ibrahim Kaddour',
     'depends': ['base', 'product'],
     'data': [
-        'security/ir.model.csv',
+        'security/ir.model.access.csv',
         'data/service.xml',
     ],
     'installable': True,
