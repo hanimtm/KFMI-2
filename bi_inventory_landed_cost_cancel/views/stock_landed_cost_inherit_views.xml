@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="stock_landed_cost_inherit_view_form" model="ir.ui.view" >
+        <field name="name">stock.landed.cost.form</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button string="Move" type="object"
+                    name="action_view_moves"
+                    class="oe_stat_button" icon="fa-edit" groups="stock.group_stock_manager"
+                    attrs="{'invisible': [('state', 'not in', ['done']), ('account_move_id', '=', False)]}">
+                </button>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="button_done_cancel" string="Cancel" states="done" type="object"/> 
+                <button name="button_set_draft" class="oe_highlight" string="Set to Draft" states="cancel" type="object"/> 
+            </xpath>
+        </field>
+    </record>
+</odoo>
