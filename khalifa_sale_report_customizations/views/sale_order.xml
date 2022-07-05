@@ -10,9 +10,11 @@
                 <xpath expr="//field[@name='origin']" position="replace"/>
                 <xpath expr="//field[@name='partner_shipping_id']" position="after">
                     <field name="origin" string="RFQ No."/>
-                    <field name="delivery_period"/>
-                    <field name="incoterm_id"/>
-                    <field name="attention"/>
+                    <field name="rfq_attachment_name" invisible="1"/>
+                    <field name="rfq_attachment" filename="rfq_attachment_name"/>
+                    <field name="delivery_period" invisible="1"/>
+                    <field name="incoterm_id" required="1"/>
+                    <field name="attention" required="1"/>
                 </xpath>
             </field>
         </record>

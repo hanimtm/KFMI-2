@@ -14,7 +14,6 @@
         # 'security/ir.model.access.csv',
         'report/saleorder_report_customizations.xml',
         'views/sale_order.xml',
-        'views/company.xml',
     ],
     'assets': {
         'web.report_assets_pdf': [
