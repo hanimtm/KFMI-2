@@ -171,7 +171,8 @@ class Sale(models.Model):
                     'drawing': line.drawing,
                     'sec_wh_id': line.sec_wh_id and line.sec_wh_id.id,
                     'line_no': line.line_no,
-                    'quantity': line.product_uom_qty,
+                    # 'quantity': line.product_uom_qty,
+                    'quantity': 1,
                     'product_uom_id': line.product_uom.id,
                     'order_line_id': line.id
                 }))
