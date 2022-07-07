@@ -47,3 +47,6 @@ access_allow_edit_product_product,access_allow_edit_product_product,product.mode
 
 access_bom_request_sale,access.bom.request.sale,model_bom_request,sales_team.group_sale_salesman,1,1,1,0
 access_sec_wh_sale,access.sec.wh.sale,khalifa_customizations.model_sec_wh,sales_team.group_sale_salesman,1,1,1,0
+
+access_bom_excel_report,access.bom_excel_report,model_bom_excel_report,,1,1,1,1
+

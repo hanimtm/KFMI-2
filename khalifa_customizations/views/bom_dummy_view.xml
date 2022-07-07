@@ -50,6 +50,7 @@
                         <notebook>
                             <page name="components" string="Components">
                                 <button name="%(action_generate_components)d" string="Import Components" type="action" class="btn-primary" attrs="{'invisible': [('state','not in',['draft'])]}"/>
+                                <button name="action_download_components" string="Export Components" type="object" class="btn-primary"/>
                                 <field name="bom_dummy_line_ids" attrs="{'readonly': [('state', 'not in', ['draft','revise'])]}" options="{'no_open':True}">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -77,6 +78,24 @@
                 </form>
             </field>
         </record>
+
+        <record id="view_bom_export_xls" model="ir.ui.view">
+			<field name="name">bom.excel.report.xls</field>
+			<field name="model">bom.excel.report</field>
+			<field name="arch" type="xml">
+				<form string="BOM Components">
+					<group>
+						<group>
+							<field name="file_name"/>
+							<field name="excel_file"/>
+						</group>
+					</group>
+					<footer>
+						<button string="Cancel" class="btn-default" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
 
     </data>
 </odoo>
