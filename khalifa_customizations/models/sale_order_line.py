@@ -75,7 +75,7 @@ class Sale(models.Model):
             byproduct_cost_portion += cost_share
         return byproduct_cost_portion
 
-    @api.depends('product_id')
+    @api.depends('product_id','bom_id','order_id')
     def compute_bom_cost(self):
         """
         Compute BOM Cost
@@ -83,7 +83,10 @@ class Sale(models.Model):
         """
         for order_line in self:
             bom_cost = 0
-            bom = self.env['mrp.bom']._bom_find(order_line.product_id)[order_line.product_id]
+            if order_line.bom_id:
+                bom = order_line.bom_id
+            else:
+                bom = self.env['mrp.bom']._bom_find(order_line.product_id)[order_line.product_id]
             if bom:
                 operations = self._get_operation_line(order_line.product_id, bom, float_round(
                     1, precision_rounding=1,  rounding_method='UP'))
