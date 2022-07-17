@@ -11,7 +11,7 @@ class Sale(models.Model):
     total_delivered = fields.Float(string='Delivered', compute='get_total_delivered')
     state = fields.Selection(selection_add=[('bom_requested', 'BOM Requested'),('dm_approve', 'To DM Approve'),('sm_approve', 'To SM Approve'),('sent', 'Quotation Sent'),('approve','Approved'),('sale','Sales Order')])
     discount_type = fields.Selection([('percentage', 'Percentage'), ('amount', 'Amount')], string='Discount Type',
-                                     readonly=True, states={'draft': [('readonly', False)]}, default='percent')
+                                     readonly=True, states={'draft': [('readonly', False)]}, default='percentage')
     discount_rate = fields.Float(string="Discount Rate")
     amount_discount = fields.Monetary(string="Discount", compute='_compute_net_total')
     price_before_discount = fields.Monetary('Price B/f Disc', compute='_compute_net_total', store=True)

@@ -16,7 +16,7 @@ class AccountMove(models.Model):
             return self.env.company.account_purchase_tax_id or False
 
     discount_type = fields.Selection([('percentage', 'Percentage'), ('amount', 'Amount')], string='Discount Type',
-                                     readonly=True, states={'draft': [('readonly', False)]}, default='percent')
+                                     readonly=True, states={'draft': [('readonly', False)]}, default='percentage')
     discount_rate = fields.Float('Discount Amount', digits=(16, 2), readonly=True,
                                  states={'draft': [('readonly', False)]})
     amount_discount = fields.Monetary(string='Discount', store=True, readonly=True, tracking=True,

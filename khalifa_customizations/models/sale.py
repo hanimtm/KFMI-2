@@ -33,7 +33,7 @@ class Sale(models.Model):
                                       ('percentage_discount', 'Percentage')],
                                      string='Discount type',
                                      readonly=True,
-                                     states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+                                     # states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
                                      default='percentage_discount')
     discount_rate = fields.Float('Discount Rate', digits=dp.get_precision('Account'),
                                  readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]})
