@@ -147,11 +147,22 @@ class AccountInvoice(models.Model):
                     line._onchange_price_subtotal()
 
             inv._compute_tax_totals_json()
-    #
 
     def button_dummy(self):
         self.supply_rate()
         return True
+
+    def _post(self, soft=True):
+        if self._context.get('move_reverse_cancel'):
+            return super()._post(soft)
+
+        # Create additional COGS lines for customer invoices.
+        for move in self:
+            move.env['account.move.line'].create(self._stock_account_prepare_anglo_saxon_out_lines_vals())
+        posted = super()._post(soft)
+        posted._stock_account_anglo_saxon_reconcile_valuation()
+
+        return posted
 
 
 class AccountInvoiceLine(models.Model):
