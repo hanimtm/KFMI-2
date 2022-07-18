@@ -28,7 +28,7 @@ class Sale(models.Model):
     show_request_bom = fields.Boolean(string='Show Request BOM', compute="set_show_request_bom")
     bom_request_id = fields.Many2one('bom.request', string='BOM Request', copy=False)
     total_delivered = fields.Float(string='Delivered', compute='get_total_delivered')
-    state = fields.Selection(selection_add=[('bom_requested', 'BOM Requested'),('dm_approve', 'To DM Approve'),('sm_approve', 'To SM Approve'),('sent', 'Quotation Sent'),('approve','Approved'),('sale','Sales Order')])
+    state = fields.Selection(selection_add=[('bom_requested', 'BOM Requested'),('dm_approve', 'To DM Approve'),('sm_approve', 'To SM Approve'),('ready_to_confirm', 'Ready to Confirm'),('sent', 'Quotation Sent'),('approve','Approved'),('sale','Sales Order')])
     discount_type = fields.Selection([('fixed_amount', 'Fixed Amount'),
                                       ('percentage_discount', 'Percentage')],
                                      string='Discount type',
@@ -57,18 +57,22 @@ class Sale(models.Model):
             total_delivered += line.qty_delivered
         self.total_delivered = total_delivered
 
-    def action_confirm(self):
-        if not self.env.user.has_group('khalifa_customizations.sale_order_approval'):
-            raise ValidationError(_("You are not allow to do this operation."))
-        # check if user is accounting manager or admin if yes then skip
-        acc_advisor = self.env.user.has_group('account.group_account_manager')
-        admin = self.env.user.has_group('base.group_erp_manager')
-        if not (acc_advisor or admin):
-            self.validate_customer()
-        # do not confirm if the product in order lines is non-standard bom product
-        self.validate_order_line()
-        res = super().action_confirm()
-        return res
+    # def action_confirm(self):
+    #     if not self.env.user.has_group('khalifa_customizations.sale_order_approval'):
+    #         raise ValidationError(_("You are not allow to do this operation."))
+    #     # check if user is accounting manager or admin if yes then skip
+    #     acc_advisor = self.env.user.has_group('account.group_account_manager')
+    #     admin = self.env.user.has_group('base.group_erp_manager')
+    #     if not (acc_advisor or admin):
+    #         self.validate_customer()
+    #     # do not confirm if the product in order lines is non-standard bom product
+    #     self.validate_order_line()
+    #     res = super().action_confirm()
+    #     return res
+
+    def confirm_by_manager(self):
+        for rec in self:
+            rec.state = 'ready_to_confirm'
 
     def action_cancel(self):
         res = super().action_cancel()

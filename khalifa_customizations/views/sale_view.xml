@@ -13,25 +13,24 @@
                     <button name="request_bom" string="Request BOM" type="object" class="btn-primary" attrs="{'invisible':[('show_request_bom','=',False)]}"/>
                     <button name="action_to_sm_approve" string="Send To SM Approve" type="object" class="btn-primary" attrs="{'invisible': [('state','not in',['draft','bom_requested','sent'])]}"/><!--  -->
                 </xpath>
+                <xpath expr="//header" position="inside">
+                    <button name="confirm_by_manager" string="Manager Approval" type="object" class="oe_highlight"
+                                states="sm_approve" groups="khalifa_customizations.sale_order_approval"/>
+                    <button name="action_confirm" string="Confirm" type="object" class='oe_highlight'
+                                attrs="{'invisible': [('state', 'not in', ['ready_to_confirm'])]}"
+                                groups="khalifa_customizations.sale_order_approval"/>
+                </xpath>
                 <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale" position="attributes">
-                    <attribute name="statusbar_visible">draft,sent,sale</attribute>
+                    <attribute name="statusbar_visible">draft,sent,sm_approve,ready_to_confirm,sale</attribute>
                 </field>
                 <button name="action_cancel" type="object" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'sent','sale']), ('id', '=', False)]}" position="attributes">
-                    <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft', 'bom_requested', 'sent','sale','sm_approve','approve']), ('id', '=', False)]}</attribute>
+                    <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft', 'bom_requested', 'sent','sale','sm_approve','ready_to_confirm','approve']), ('id', '=', False)]}</attribute>
                 </button>
-                <button name="action_confirm" id="action_confirm" data-hotkey="v" class="btn-primary" type="object" attrs="{'invisible': [('state', 'not in', ['sent'])]}" position="attributes">
-                    <attribute name="context">{'from_saleorder':True}</attribute>
-                    <attribute name="string">Approve</attribute>
-                    <attribute name="attrs">{'invisible':[(1,'=',1)]}</attribute>
-                    <attribute name="groups">khalifa_customizations.sale_order_approval</attribute>
-                </button>
-                <button name="action_confirm" data-hotkey="v" type="object" attrs="{'invisible': [('state', 'not in', ['draft'])]}" position="attributes">
-                    <attribute name="context">{'from_saleorder':True}</attribute>
-                    <attribute name="string">Approve</attribute>
+                <xpath expr="//form[1]/header[1]/button[@name='action_confirm'][1]" position="attributes">
                     <attribute name="invisible">1</attribute>
-                </button>
-                <xpath expr="//button[@name='action_cancel']" position="before">
-                    <button name="action_confirm" type="object" string="Approve" class="btn-primary" attrs="{'invisible': [('state','not in',['sm_approve'])]}" context="{'from_saleorder':True}" groups="khalifa_customizations.sale_order_approval"/>
+                </xpath>
+                <xpath expr="//form[1]/header[1]/button[@name='action_confirm'][2]" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </xpath>
                 <xpath expr="//page[@name='order_lines']/field[@name='order_line']//tree//field[@name='name']" position="after">
                     <field name="non_standard_bom" invisible="1"/>
