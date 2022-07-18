@@ -10,7 +10,6 @@ class AccountMove(models.Model):
     def _default_petty_cash_journal(self):
         company_id = self.env.company.id
         return self.env['account.journal'].search([
-            ('type', '=', 'general'),
             ('company_id', '=', company_id),
             ('is_a_petty_cash', '=', True),
         ], limit=1)
@@ -62,12 +61,10 @@ class AccountMove(models.Model):
     @api.onchange('employee_id')
     def onchange_employee_id(self):
         petty_cash_journal_id = self.env['account.journal'].search([
-                                ('type', '=', 'general'),
                                 ('company_id', '=', self.env.company.id),
                                 ('is_a_petty_cash', '=', True),
                             ])
-        print(petty_cash_journal_id)
-        self.write({'petty_cash_journal_id': petty_cash_journal_id.id or False})
+        self.write({'petty_cash_journal_id': petty_cash_journal_id[0].id or False})
 
     @api.onchange('payment_option')
     def onchange_payment_option(self):
@@ -156,6 +153,9 @@ class AccountMove(models.Model):
                     }),
                 ],
             })
+
+
+
             self.cash_payment_id = cash_journal.id
             self.cash_payment_id._post()
             (self + self.cash_payment_id).line_ids \
