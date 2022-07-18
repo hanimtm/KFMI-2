@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="set_to_draft" model="ir.actions.server">
+            <field name="name">Set to Draft</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    for rec in records:
+                        if rec.payment_state == 'not_paid' and rec.state == 'posted':
+                            action = rec.button_draft()
+            </field>
+    </record>
+
+    </data>
+</odoo>
